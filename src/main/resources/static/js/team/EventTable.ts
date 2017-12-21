@@ -13,7 +13,9 @@ class EventTable {
         this.clear();
         var self = this;
         events.forEach(function(event, index) {
-            self.addEvent(event, myTeamId);            
+            if (new EventTypeUtil().isPrintableEvent(event)) {
+                self.addEvent(event, myTeamId);
+            }
         });
     }
 
@@ -72,9 +74,14 @@ class EventTable {
 }
 
 class EventTypeUtil {
-    private HIGH_PRIORITY_EVENTS = ['GOAL', 'ASSIST', 'BONUS', "PENALTY_SAVES", "PENALTY_MISSED"];
+    private HIGH_PRIORITY_EVENTS = ['GOAL', 'ASSIST', 'BONUS', "PENALTY_SAVES", "PENALTY_MISSED", "OWN_GOALS"];
+    private PRINTABLE_EVENTS = ['GOAL', 'ASSIST', 'BONUS', "PENALTY_SAVES", "PENALTY_MISS", "CLEAN_SHEET", "YELLOW_CARD", "RED_CARD", "GOALS_CONCEDED", "SAVES", "OWN_GOALS", "AUTOSUB"];
     
     public isHighPriorityEvent(event) : boolean {
         return this.HIGH_PRIORITY_EVENTS.indexOf(event.type) >= 0;
+    }
+
+    public isPrintableEvent(event) : boolean {
+        return this.PRINTABLE_EVENTS.indexOf(event.type) >= 0;
     }
 }
