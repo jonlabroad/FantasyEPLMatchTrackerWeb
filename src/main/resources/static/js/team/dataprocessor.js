@@ -9,6 +9,7 @@ $(document).ready(function() {
 	var gameweek = getParameterByName('gameweek');
 	readTeamData(teamId, gameweek);
 
+	var teamPicks = [new PickList(1, "team1-table"), new PickList(2, "team2-table")];
 	var eventTable = new EventTable("events");
 		
 	function processMatchInfo(matchInfo) {
@@ -41,8 +42,7 @@ $(document).ready(function() {
 		$(`#team${teamNum}-name`).text("#" + team.standing.rank + " " + team.standing.entry_name);
 		$(`#team${teamNum}-record`).text(getRecord(team));
 		$(`#team${teamNum}-score`).text(getScore(team, teamNum));
-		addPicks(team, teamNum);
-		
+		teamPicks[teamNum-1].addPicks(team.picks);		
 	}
 	
 	function getTeamsArray(matchInfo) {
@@ -65,111 +65,6 @@ $(document).ready(function() {
 			return `(${subScore}) ${startingScore}`
 		}
 		return `${startingScore} (${subScore})`
-	}
-	
-	function addPicks(team, teamNum) {
-		var tableSel = `team${teamNum}-table`;
-		var picks = team.picks;
-		var squadNum = 1;
-		for (var id in picks) {
-			var pick = picks[id];
-			var pickSel = `#team${teamNum}-pick${squadNum}`
-			$(`${pickSel}`).addClass(getPlayerClasses(pick));
-			$(`${pickSel}-role`).text(getRankText(pick)) 
-			$(`${pickSel}-name`).text(getName(pick))
-			appendPickData(teamNum, squadNum, pick);
-			
-			squadNum++;
-		}
-	}
-	
-	function appendPickData(teamId, pickNum, pick) {
-		addExplainElement(teamId, pickNum, pick, "minutes");
-		addExplainElement(teamId, pickNum, pick, "goals_scored");
-		addExplainElement(teamId, pickNum, pick, "assists");
-		addExplainElement(teamId, pickNum, pick, "clean_sheets");
-		addExplainElement(teamId, pickNum, pick, "saves");
-		addExplainElement(teamId, pickNum, pick, "own_goals");
-		addExplainElement(teamId, pickNum, pick, "yellow_cards");
-		addExplainElement(teamId, pickNum, pick, "red_cards");
-		addExplainElement(teamId, pickNum, pick, "penalties_missed");
-		addExplainElement(teamId, pickNum, pick, "penalties_saved");
-		addExplainElement(teamId, pickNum, pick, "goals_conceded");
-		addExplainElement(teamId, pickNum, pick, "bonus");	
-	}
-	
-	function getPlayerClasses(pick) {
-		var classes = "";
-		var rawPick = pick.pick;
-		if (rawPick.is_captain) {
-			classes = classes + " text-captain";
-		}
-		if (rawPick.is_vice_captain) {
-			classes = classes + " text-vice-captain";
-		}
-		return classes;
-	}
-	
-	function getRankText(pick) {
-		var rank = "";
-		if (pick.pick.is_captain) {
-			rank = "(C) ";
-		}
-		else if(pick.pick.is_vice_captain) {
-			rank = "(VC) "
-		}
-		return rank;
-	}
-	
-	function getName(pick) {
-		return pick.footballer.rawData.footballer.web_name;
-	}
-	
-	function addExplainElement(teamId, pickNum, pick, elementName) {
-		var explain = getExplainElement(pick, elementName);
-		if (explain) {
-			var explainString = getExplainString(explain, elementName);
-			$(`#team${teamId}-pick${pickNum}-icons`).append(`${explainString} `);
-		}
-	}
-	
-	function getExplainString(element, elementName) {
-		switch (elementName) {
-			case "minutes":
-				return `${element.value}Min`;
-			case "goals_scored":
-				return `${element.value}GS`;
-			case "bonus":
-				return `${element.points}B`;
-			case "clean_sheets":
-				return "CS";
-			case "assists":
-				return `${element.value}A`;
-			case "yellow_cards":
-				return `${element.value}YC`;
-			case "red_cards":
-				return `${element.value}RC`;
-			case "penalties_missed":
-				return `${element.value}PKM`;
-			case "goals_conceded":
-				return `${element.value}GC`;
-			case "saves":
-				return `${element.value}S`;
-			case "penalties_saved":
-				return `${element.value}PKS`;
-			case "own_goals":
-				return `${element.value}OG`;
-			default:
-				return "";
-		}
-	}
-	
-	function getExplainElement(pick, elementName) {
-		explain = pick.footballer.rawData.details.explain[0].explain[elementName];
-		if (explain && explain.value > 0) {
-			return explain;
-		}
-		return null;
 	}
 	
 	function readTeamData(teamId, gameweek) {
