@@ -1,0 +1,270 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>FPL Matchtracker</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel='stylesheet' href='css/bootstrap/bootstrap.min.css'/>
+    <link rel='stylesheet' href='css/matchup.css'/>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript" src="js/team/EventTable.js"></script>
+	<script type="text/javascript" src="js/team/dataprocessor.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="jumbotron text-center">
+		<div class="row">
+			<div class="col-2 float-left">
+					<img src="img/wenger-ozil-face.jpg" class="wenger-face"/>
+				</div>
+				<div class="col">
+					<h1>FPL LIVE Matchtracker</h1>
+					<p>Feel the agony of defeat as soon as possible</p>
+				</div>
+				<div class="col-2"></div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container">
+		<div class="row">
+			<div class="col-6">	
+				<h3 id="team1-name" class="text-center"></h3>
+			</div>
+			<div class="col-6">	
+				<h3 id="team2-name" class="text-center"></h3>
+			</div>			
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-6">	
+ 				<p id="team1-record" class="text-center"></p>
+			</div>
+			<div class="col-6">	
+ 				<p id="team2-record" class="text-center"></p>
+			</div>
+		</div>	
+	</div>
+	
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<h1 id="team1-score" class="text-right team-score"></h1>
+			</div>
+			<div class="text-center col-1">
+				<h1> - </h1>
+			</div>
+			<div class="col">
+				<h1 id="team2-score" class="text-left team-score"></h1>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container">
+		<div class="row text-center">
+			<div class="col-4" id="team1-highlight">
+				<img src="" class="team-highlight" id="team1-highlight-img"/>
+			</div>
+				<div class="col-4 scrollable event-scrollable text-center">
+					<table id="events" class="table table-responsive table-sm events-table">
+					</table>
+				</div>
+			<div class="col-4" id="team2-highlight">
+				<img src="" class="team-highlight" id="team2-highlight-img"/>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<table id="team1-table" class="table table-picks">
+					<tbody>
+						<tr id="team1-pick1" class="starter-pick">
+							<td id="team1-pick1-role"></td>
+							<td id="team1-pick1-name"></td>
+							<td id="team1-pick1-points"></td>
+							<td id="team1-pick1-icons"></td>
+						</tr>
+						<tr id="team1-pick2" class="starter-pick">
+							<td id="team1-pick2-role"></td>
+							<td id="team1-pick2-name"></td>
+							<td id="team1-pick2-points"></td>
+							<td id="team1-pick2-icons"></td>
+						</tr>
+						<tr id="team1-pick3" class="starter-pick">
+							<td id="team1-pick3-role"></td>
+							<td id="team1-pick3-name"></td>
+							<td id="team1-pick3-points"></td>
+							<td id="team1-pick3-icons"></td>
+						</tr>
+						<tr id="team1-pick4" class="starter-pick">
+							<td id="team1-pick4-role"></td>
+							<td id="team1-pick4-name"></td>
+							<td id="team1-pick4-points"></td>
+							<td id="team1-pick4-icons"></td>
+						</tr>
+						<tr id="team1-pick5" class="starter-pick">
+							<td id="team1-pick5-role"></td>
+							<td id="team1-pick5-name"></td>
+							<td id="team1-pick5-points"></td>
+							<td id="team1-pick5-icons"></td>
+						</tr>
+						<tr id="team1-pick6" class="starter-pick">
+							<td id="team1-pick6-role"></td>
+							<td id="team1-pick6-name"></td>
+							<td id="team1-pick6-points"></td>
+							<td id="team1-pick6-icons"></td>
+						</tr>
+						<tr id="team1-pick7" class="starter-pick">
+							<td id="team1-pick7-role"></td>
+							<td id="team1-pick7-name"></td>
+							<td id="team1-pick7-points"></td>
+							<td id="team1-pick7-icons"></td>
+						</tr>
+						<tr id="team1-pick8" class="starter-pick">
+							<td id="team1-pick8-role"></td>
+							<td id="team1-pick8-name"></td>
+							<td id="team1-pick8-points"></td>
+							<td id="team1-pick8-icons"></td>
+						</tr>
+						<tr id="team1-pick9" class="starter-pick">
+							<td id="team1-pick9-role"></td>
+							<td id="team1-pick9-name"></td>
+							<td id="team1-pick9-points"></td>
+							<td id="team1-pick9-icons"></td>
+						</tr>
+						<tr id="team1-pick10" class="starter-pick">
+							<td id="team1-pick10-role"></td>
+							<td id="team1-pick10-name"></td>
+							<td id="team1-pick10-points"></td>
+							<td id="team1-pick10-icons"></td>
+						</tr>
+						<tr id="team1-pick11" class="starter-pick">
+							<td id="team1-pick11-role"></td>
+							<td id="team1-pick11-name"></td>
+							<td id="team1-pick11-points"></td>
+							<td id="team1-pick11-icons"></td>
+						</tr>
+						<tr id="team1-pick12" class="sub-pick">
+							<td id="team1-pick12-role"></td>
+							<td id="team1-pick12-name"></td>
+							<td id="team1-pick12-points"></td>
+							<td id="team1-pick12-icons"></td>
+						</tr>
+						<tr id="team1-pick13" class="sub-pick">
+							<td id="team1-pick13-role"></td>
+							<td id="team1-pick13-name"></td>
+							<td id="team1-pick13-points"></td>
+							<td id="team1-pick13-icons"></td>
+						</tr>
+						<tr id="team1-pick14" class="sub-pick">
+							<td id="team1-pick14-role"></td>
+							<td id="team1-pick14-name"></td>
+							<td id="team1-pick14-points"></td>
+							<td id="team1-pick14-icons"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col">
+				<table id="team2-table" class="table table-picks">
+					<tbody>
+						<tr id="team2-pick1" class="starter-pick">
+							<td id="team2-pick1-role"></td>
+							<td id="team2-pick1-name"></td>
+							<td id="team2-pick1-points"></td>
+							<td id="team2-pick1-icons"></td>
+						</tr>
+						<tr id="team2-pick2" class="starter-pick">
+							<td id="team2-pick2-role"></td>
+							<td id="team2-pick2-name"></td>
+							<td id="team2-pick2-points"></td>
+							<td id="team2-pick2-icons"></td>
+						</tr>
+						<tr id="team2-pick3" class="starter-pick">
+							<td id="team2-pick3-role"></td>
+							<td id="team2-pick3-name"></td>
+							<td id="team2-pick3-points"></td>
+							<td id="team2-pick3-icons"></td>
+						</tr>
+						<tr id="team2-pick4" class="starter-pick">
+							<td id="team2-pick4-role"></td>
+							<td id="team2-pick4-name"></td>
+							<td id="team2-pick4-points"></td>
+							<td id="team2-pick4-icons"></td>
+						</tr>
+						<tr id="team2-pick5" class="starter-pick">
+							<td id="team2-pick5-role"></td>
+							<td id="team2-pick5-name"></td>
+							<td id="team2-pick5-points"></td>
+							<td id="team2-pick5-icons"></td>
+						</tr>
+						<tr id="team2-pick6" class="starter-pick">
+							<td id="team2-pick6-role"></td>
+							<td id="team2-pick6-name"></td>
+							<td id="team2-pick6-points"></td>
+							<td id="team2-pick6-icons"></td>
+						</tr>
+						<tr id="team2-pick7" class="starter-pick">
+							<td id="team2-pick7-role"></td>
+							<td id="team2-pick7-name"></td>
+							<td id="team2-pick7-points"></td>
+							<td id="team2-pick7-icons"></td>
+						</tr>
+						<tr id="team2-pick8" class="starter-pick">
+							<td id="team2-pick8-role"></td>
+							<td id="team2-pick8-name"></td>
+							<td id="team2-pick8-points"></td>
+							<td id="team2-pick8-icons"></td>
+						</tr>
+						<tr id="team2-pick9" class="starter-pick">
+							<td id="team2-pick9-role"></td>
+							<td id="team2-pick9-name"></td>
+							<td id="team2-pick9-points"></td>
+							<td id="team2-pick9-icons"></td>
+						</tr>
+						<tr id="team2-pick10" class="starter-pick">
+							<td id="team2-pick10-role"></td>
+							<td id="team2-pick10-name"></td>
+							<td id="team2-pick10-points"></td>
+							<td id="team2-pick10-icons"></td>
+						</tr>
+						<tr id="team2-pick11" class="starter-pick">
+							<td id="team2-pick11-role"></td>
+							<td id="team2-pick11-name"></td>
+							<td id="team2-pick11-points"></td>
+							<td id="team2-pick11-icons"></td>
+						</tr>
+						<tr id="team2-pick12" class="sub-pick">
+							<td id="team2-pick12-role"></td>
+							<td id="team2-pick12-name"></td>
+							<td id="team2-pick12-points"></td>
+							<td id="team2-pick12-icons"></td>
+						</tr>
+						<tr id="team2-pick13" class="sub-pick">
+							<td id="team2-pick13-role"></td>
+							<td id="team2-pick13-name"></td>
+							<td id="team2-pick13-points"></td>
+							<td id="team2-pick13-icons"></td>
+						</tr>
+						<tr id="team2-pick14" class="sub-pick">
+							<td id="team2-pick14-role"></td>
+							<td id="team2-pick14-name"></td>
+							<td id="team2-pick14-points"></td>
+							<td id="team2-pick14-icons"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>			
+		</div>
+	</div>
+	<p> </p>
+	<p> </p>
+	<p> </p>
+	<p> </p>
+	<p> </p>
+	<p> </p>		
+</body>
+</html>

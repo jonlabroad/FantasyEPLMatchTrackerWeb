@@ -1,0 +1,69 @@
+.starter-pick {
+}
+
+.sub-pick {
+	font-style: italic;
+	background-color: #e6e6e6
+}
+
+.event-scrollable {
+	height: 300px;
+	overflow-y: auto;
+}
+
+.event-scrollable table {
+	margin: auto;
+	width: auto;
+	padding: 1px;
+}
+
+.event-important {
+	font-weight: bold
+}
+
+.event-common {
+	background-color: #F2F093
+}
+
+.event-mine {
+	background-color: #98e698
+}
+
+.event-theirs {
+	background-color: #F2B8AE
+}
+
+.table-picks tr td {
+	padding: 2px;
+	font-size: 14px
+}
+
+.table {
+	margin: auto;
+	width: auto;
+}
+
+.table-picks {
+	margin: auto;
+	width: auto;
+	padding: 1px
+}
+
+.events-table tr td {
+	padding: 2px;
+	font-size: 12px
+}
+
+.text-captain {
+	font-weight: bold
+}
+
+.wenger-face {
+	max-height: 80%;
+	max-width: 80%;
+}
+
+.team-highlight {
+	max-height: 100%;
+	max-width: 100%;
+}
