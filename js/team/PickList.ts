@@ -8,13 +8,15 @@ class PickList {
     }
 
     public addPicks(picks: any[]) {
-        var self = this;
+		var self = this;
         picks.forEach(function(pick, index: number) {
             var pickNum = index + 1;
             var pickElement = self.selectPick(pickNum);
             self.addPlayerClasses(pickElement, pick);
-            self.addRole(pickNum, pick);
-            self.addName(pickNum, pick);
+			self.addRole(pickNum, pick);
+			self.addPoints(pickNum, pick);
+			self.addName(pickNum, pick);
+			self.clearIcons(pickNum);
             self.addIcons(pickNum, pick);
         });
     }
@@ -34,6 +36,10 @@ class PickList {
 		this.addIconType(pickNum, pick, "bonus");	
     }
 
+	private clearIcons(pickNum: number) {
+		this.selectPickIcons(pickNum).empty();
+	}
+
     private addIconType(pickNum: number, pick, explainName: string) {
 		var explain = this.getExplainElement(pick, explainName);
 		if (explain) {
@@ -52,6 +58,10 @@ class PickList {
         }
     }
 
+	private addPoints(pickNum: number, pick) {
+		this.selectPickPoints(pickNum).text(this.getPoints(pick));
+	}
+
     private addName(pickNum: number, pick) {
         this.selectPickName(pickNum).text(this.getName(pick));
     }
@@ -62,6 +72,10 @@ class PickList {
 	
 	private getName(pick) {
 		return pick.footballer.rawData.footballer.web_name;
+	}
+
+	private getPoints(pick) {
+		return pick.score;
 	}
 
 	private getRankText(pick) {
@@ -86,6 +100,10 @@ class PickList {
     private selectPickRole(pick: number) : JQuery {
         return $(`#team${this._teamNum}-pick${pick}-role`);
     }
+
+	private selectPickPoints(pick: number) : JQuery {
+		return $(`#team${this._teamNum}-pick${pick}-points`);
+	}
 
     private selectPick(pick: number) : JQuery {
         return $(`#team${this._teamNum}-pick${pick}`);

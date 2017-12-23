@@ -11,12 +11,6 @@
 	overflow-y: auto;
 }
 
-.event-scrollable table {
-	margin: auto;
-	width: auto;
-	padding: 1px;
-}
-
 .event-important {
 	font-weight: bold
 }
@@ -38,20 +32,22 @@
 	font-size: 14px
 }
 
-.table {
-	margin: auto;
-	width: auto;
-}
-
 .table-picks {
 	margin: auto;
 	width: auto;
 	padding: 1px
 }
 
+.events-table {
+	margin: auto;
+	float: none;
+	width: 100%
+}
+
 .events-table tr td {
 	padding: 2px;
-	font-size: 12px
+	font-size: 12px;
+	width: 100%;
 }
 
 .text-captain {
@@ -66,4 +62,29 @@
 .team-highlight {
 	max-height: 100%;
 	max-width: 100%;
+}
+
+.invisible {
+	visibility: hidden;
+}
+
+.highlight-text {
+	position: absolute;
+	margin: auto;
+	top: 80%;
+	left: 0;
+	width: 100%;
+	font-size: 16px;
+	font-weight: bold
+}
+
+.highlight-background {
+	position: absolute;
+	margin: auto;
+	left: 0;
+	top: 80%;
+	height: 24px;
+	width: 100%;
+	background-color: #b3b3b3;
+	opacity: 0.9
 }

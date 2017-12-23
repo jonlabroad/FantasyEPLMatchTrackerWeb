@@ -12,11 +12,15 @@ class EventTable {
     public fillEventTable(events: any[], myTeamId: number) {
         this.clear();
         var self = this;
+
+        events = new EventFilter(events).filter();
+
         events.forEach(function(event, index) {
             if (new EventTypeUtil().isPrintableEvent(event)) {
                 self.addEvent(event, myTeamId);
             }
         });
+        this.scrollToBottom();
     }
 
     public addEvent(event, myTeamId: number) {
@@ -38,7 +42,17 @@ class EventTable {
 			}
 		}
 		return null;
-	}
+    }
+    
+    public getLatestAnyEvent(teamId: number, events: any[]) : any {
+		var reversedEvents = events.slice(0).reverse();
+		for (var i in reversedEvents) {
+			if (reversedEvents[i].teamId == teamId || reversedEvents[i].teamId < 0) {
+				return reversedEvents[i];
+			}
+		}
+		return null;       
+    }
 
     private createElement(event) : JQuery {
         var newElement = $(this.getEventString(event));
@@ -64,8 +78,17 @@ class EventTable {
         }
     }
 
+    private scrollToBottom() {
+        var scrollable: JQuery = this.selectScrollable();
+        scrollable.scrollTop(scrollable[0].scrollHeight);
+    }
+   
     private selectTable(subtag = "") : JQuery {
         return $(`#${this._tableId} ${subtag}`);
+    }
+
+    private selectScrollable(subtag = "") : JQuery {
+        return $(`#${this._tableId}-scrollable`);
     }
 
     private getEventString(event): string {
@@ -84,4 +107,29 @@ class EventTypeUtil {
     public isPrintableEvent(event) : boolean {
         return this.PRINTABLE_EVENTS.indexOf(event.type) >= 0;
     }
+}
+
+class EventFilter {
+	private _events = [];
+
+	constructor(events: any[]) {
+		this._events = events;
+	}
+
+	public filter() : any[] {
+		var newEvents = [];
+		var self = this;
+		this._events.forEach(function(event, index) {
+			if (self.doFilterNegativePoints(event, "BONUS")) {
+				return;
+			}
+
+			newEvents.push(event);
+		});
+		return newEvents;
+	}
+
+	public doFilterNegativePoints(event, type: string) : any {
+		return event && event.typeString === "BONUS" && event.pointDifference < 0;
+	}
 }
