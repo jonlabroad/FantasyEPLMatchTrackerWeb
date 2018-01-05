@@ -37,7 +37,7 @@ export default class GameweekSelector extends React.Component<GameweekSelectorPr
         return (
             <span>
                 <label className="" htmlFor="gameweek-sel">Gameweek:</label>
-                <select className="form-control-inline gameweek-selector" onChange={this.props.onChange}>
+                <select className="form-control-inline gameweek-selector" value={this.props.config.gameweek} onChange={this.props.onChange}>
                 {this.renderOptions()}
                 </select>
             </span>

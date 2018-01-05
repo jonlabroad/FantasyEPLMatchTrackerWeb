@@ -120,7 +120,7 @@ export default class PickListElement extends React.Component<PickListElementProp
     }
 
     private getPoints() : number {
-        return this.props.pick.points;
+        return this.props.pick.score;
     }
 
     private getTeamCode() : number {
