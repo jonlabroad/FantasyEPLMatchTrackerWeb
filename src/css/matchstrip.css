@@ -1,0 +1,93 @@
+.match-strip-container {
+    padding: 0px;
+    margin-left: 0px;
+    margin-right: 0px;   
+}
+
+.match-strip-row {
+    padding: 0px;
+    margin-left: 0px;
+    margin-right: 0px;  
+    border-left: 0px; 
+    border-right: 0px;
+}
+
+.match-strip {
+    align-items: center;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+}
+
+.match-strip-height {
+    height: 70px
+}
+
+.match-strip .score {
+    color: #1d1e1f;
+    display: block;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1;
+    position: relative;
+}
+
+.match-strip .sub-score {
+    color: #1d1e1f;
+    display: block;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1;
+    min-width: 40px;
+    position: relative;
+}
+
+.match-strip .team-name {
+    color: #1d1e1f;
+    display: inline-block;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.match-time {
+    color: #48494a;
+    display: block;
+    font-size: 12px;
+    line-height: 1;
+    min-width: 130px;
+    padding: 2px 0;
+}
+
+.kit-shirt {
+    width: 30px;
+    height: 100%;
+}
+
+.kit-shirt-sleeves {
+    width: 10px;
+    height: 100%;
+}
+
+.kit-shorts {
+    width: 20px;
+    height: 100%;
+}
+
+.kit-socks-base-top {
+    width: 8px;
+    height: 100%;
+}
+
+.kit-socks-base-bottom {
+    width: 20px;
+    height: 100%;
+}
+
+.kit-socks-secondary {
+    width: 5px;
+    height: 100%;
+}

@@ -1,0 +1,32 @@
+.team-highlight {
+    position: relative;
+    background-color: #ffffffd0;
+    background-size: 33%;
+    background-repeat: repeat;
+}
+
+.team-highlight img {
+	max-height: 100%;
+    max-width: 100%;
+}
+
+.highlight-text {
+	position: absolute;
+	margin: auto;
+	top: 80%;
+	left: 0;
+	width: 100%;
+	font-size: 14px;
+	font-weight: bold
+}
+
+.highlight-background {
+	position: absolute;
+	margin: auto;
+	left: 0;
+	top: 80%;
+	height: 10%;
+	width: 100%;
+	background-color: #b3b3b3;
+	opacity: 0.9
+}
