@@ -3,16 +3,12 @@ import * as ReactDOM from "react-dom";
 
 import Selection from "../models/Selection";
 
-export interface GameweekSelectorState {
-    config : Selection
-}
-
 export interface GameweekSelectorProps {
     onChange : any
     config : Selection
 }
 
-export default class GameweekSelector extends React.Component<GameweekSelectorProps, GameweekSelectorState> {
+export default class GameweekSelector extends React.Component<GameweekSelectorProps, {}> {
     constructor(props : any) {
         super(props);
         this.state = {

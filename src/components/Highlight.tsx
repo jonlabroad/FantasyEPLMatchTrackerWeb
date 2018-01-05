@@ -8,7 +8,7 @@ export interface HighlightProps {
     events : any[]
 }
 
-export default class Highlight extends React.Component<HighlightProps, HighlightProps> {
+export default class Highlight extends React.Component<HighlightProps, {}> {
     protected photoRoot : string = 'https://platform-static-files.s3.amazonaws.com/premierleague/photos/players/110x140/p';
     private HIGH_PRIORITY_EVENTS = ['GOAL', 'ASSIST', 'BONUS', "PENALTY_SAVES", "PENALTY_MISSED", "OWN_GOALS"];
     
@@ -18,9 +18,9 @@ export default class Highlight extends React.Component<HighlightProps, Highlight
     }
 
     protected getLatestHighPriorityEvent() {
-        var reversedEvents = this.state.events.slice(0).reverse();
+        var reversedEvents = this.props.events.slice(0).reverse();
         for (var i in reversedEvents) {
-            if (reversedEvents[i].teamId == this.state.team.id || reversedEvents[i].teamId < 0) {
+            if (reversedEvents[i].teamId == this.props.team.id || reversedEvents[i].teamId < 0) {
                 if (this.isHighPriorityEvent(reversedEvents[i])) {
                     return reversedEvents[i];
                 }
@@ -94,7 +94,7 @@ export default class Highlight extends React.Component<HighlightProps, Highlight
     }
 
     private getPhotoId(event : any) {
-        var team = this.state.team;
+        var team = this.props.team;
         for (var i in team.picks) {
             if (team.picks[i].footballer.rawData.footballer.id == event.footballerId) {
                 return team.picks[i].footballer.rawData.footballer.photo;

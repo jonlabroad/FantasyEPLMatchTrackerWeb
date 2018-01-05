@@ -3,25 +3,19 @@ import * as ReactDOM from "react-dom";
 
 import Selection from "../models/Selection";
 
-export interface DifferentialsSelectorState {
-    config : Selection
-}
-
 export interface DifferentialsSelectorProps {
     onChange : any
     config : Selection
 }
 
-export default class DifferentialsSelector extends React.Component<DifferentialsSelectorProps, DifferentialsSelectorState> {   
+export default class DifferentialsSelector extends React.Component<DifferentialsSelectorProps, {}> {   
     constructor(props : any) {
         super(props);
-        this.state = {
-            config: props.config
-        };
+        this.state = {};
     }
 
     protected getChecked() : boolean {
-        return this.state.config.differentialsOnly;
+        return this.props.config.differentialsOnly;
     }
 
     render() {

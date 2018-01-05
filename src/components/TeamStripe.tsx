@@ -5,7 +5,7 @@ export interface TeamStripeProps {
     team : any
 }
 
-export default class TeamStripe extends React.Component<TeamStripeProps, TeamStripeProps> {
+export default class TeamStripe extends React.Component<TeamStripeProps, {}> {
     protected defaultKit = {
         kit_shirt_type: "plain",
         kit_shirt_base: "#e8e8e8",
@@ -26,7 +26,7 @@ export default class TeamStripe extends React.Component<TeamStripeProps, TeamStr
     }
 
     protected getKit() : any {
-        if (!this.props.team.entry.entry["kitParsed"]) {
+        if (!this.props.team.entry || !this.props.team.entry.entry || !this.props.team.entry.entry["kitParsed"]) {
             return this.defaultKit;
         }
         return this.props.team.entry.entry.kitParsed;

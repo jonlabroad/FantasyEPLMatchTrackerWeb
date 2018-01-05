@@ -7,7 +7,7 @@ export interface PickListProps {
     picks : any[];
 }
 
-export default class PickList extends React.Component<PickListProps, PickListProps> {
+export default class PickList extends React.Component<PickListProps, {}> {
     constructor(props : any) {
         super(props);
         this.state = {
@@ -18,13 +18,13 @@ export default class PickList extends React.Component<PickListProps, PickListPro
     render() {
         var starterPicks : Array<any> = new Array<any>();
         var subPicks : Array<any> = new Array<any>();
-        for (var i in this.state.picks) {
-            var pick = this.state.picks[i];
+        for (var i in this.props.picks) {
+            var pick = this.props.picks[i];
             var element = <PickListElement
                 key={i}
-                pick = {this.state.picks[i]}
+                pick = {this.props.picks[i]}
             />
-            if (this.state.picks[i].pick.position <= 11) {
+            if (this.props.picks[i].pick.position <= 11) {
                 starterPicks.push(element);
             }
             else {

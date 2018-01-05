@@ -5,7 +5,7 @@ export interface TeamRecordProps {
     standing : any
 }
 
-export default class TeamRecord extends React.Component<TeamRecordProps, TeamRecordProps> {
+export default class TeamRecord extends React.Component<TeamRecordProps, {}> {
     constructor(props : any) {
         super(props);
         this.state = {
@@ -14,7 +14,7 @@ export default class TeamRecord extends React.Component<TeamRecordProps, TeamRec
     }
 
     render() {
-        var standing = this.state.standing;    
+        var standing = this.props.standing;    
         return (
             <span className="team-record">
                 {`${standing.matches_won}W-${standing.matches_drawn}D-${standing.matches_lost}L`}

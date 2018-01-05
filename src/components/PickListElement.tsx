@@ -7,10 +7,10 @@ export interface PickListElementProps {
     pick : any;
 }
 
-export default class PickListElement extends React.Component<PickListElementProps, PickListElementProps> {
+export default class PickListElement extends React.Component<PickListElementProps, {}> {
     constructor(props : any) {
         super(props);
-        this.state = props;
+        this.state = {};
     }
 
     protected getIcons(explains : any) : string {
@@ -36,7 +36,10 @@ export default class PickListElement extends React.Component<PickListElementProp
             var explain = this.getExplainElement(explains[i], fieldName);
             if (explain) {
                 if (!combinedExplain) {
-                    combinedExplain = explain;
+                    combinedExplain = {
+                        points: explain.points,
+                        value: explain.value
+                    }
                 }
                 else {
                     combinedExplain.points += explain.points;
@@ -94,34 +97,34 @@ export default class PickListElement extends React.Component<PickListElementProp
     }
     
     private getExplains() : any {
-        return this.state.pick.footballer.rawData.explains;
+        return this.props.pick.footballer.rawData.explains;
     }
 
     private getName() : string {
-        return this.state.pick.footballer.rawData.footballer.web_name;
+        return this.props.pick.footballer.rawData.footballer.web_name;
     }
 
     private isStarter() : boolean {
-        return this.state.pick.pick.position <= 11;
+        return this.props.pick.pick.position <= 11;
     }
 
     private getRole() : string {
         var rank = "";
-        if (this.state.pick.pick.is_captain) {
+        if (this.props.pick.pick.is_captain) {
             rank = "(C)";
         }
-        else if(this.state.pick.pick.is_vice_captain) {
+        else if(this.props.pick.pick.is_vice_captain) {
             rank = "(VC)"
         }
         return rank;
     }
 
     private getPoints() : number {
-        return this.state.pick.points;
+        return this.props.pick.points;
     }
 
     private getTeamCode() : number {
-        return this.state.pick.footballer.rawData.footballer.team_code;
+        return this.props.pick.footballer.rawData.footballer.team_code;
     }
 
     private getStarterClass() : string {
@@ -137,7 +140,7 @@ export default class PickListElement extends React.Component<PickListElementProp
     }
 
     private getFixtureStatusClass() : string {
-        var pick = this.state.pick;
+        var pick = this.props.pick;
         if (pick.footballer.isCurrentlyPlaying) {
             return "current-fixture-pick";
         }

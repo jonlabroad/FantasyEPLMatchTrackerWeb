@@ -13,7 +13,7 @@ export interface TeamSelectorProps {
     config : Selection
 }
 
-export default class TeamSelector extends React.Component<TeamSelectorProps, TeamSelectorState> {
+export default class TeamSelector extends React.Component<TeamSelectorProps, {}> {
     constructor(props : any) {
         super(props);
         this.state = {
@@ -42,7 +42,7 @@ export default class TeamSelector extends React.Component<TeamSelectorProps, Tea
         return (
             <span>
                 <label className="" htmlFor="team-sel">Team:</label>
-                <select className="form-control-inline team-selector" value={this.state.config.teamName} onChange={this.props.onChange}>
+                <select className="form-control-inline team-selector" value={this.props.config.teamName} onChange={this.props.onChange}>
                 {this.renderOptions()}
                 </select>
             </span>

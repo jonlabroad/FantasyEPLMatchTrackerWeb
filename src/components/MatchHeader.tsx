@@ -7,18 +7,16 @@ import TeamStripe from "./TeamStripe";
 import Selection from "../models/Selection";
 
 export interface MatchHeaderState {
-    matchInfo : any;
 }
 
 export interface MatchHeaderProps {
     matchInfo : any;
 }
 
-export default class MatchHeader extends React.Component<MatchHeaderProps, MatchHeaderState> {   
+export default class MatchHeader extends React.Component<MatchHeaderProps, {}> {   
     constructor(props : any) {
         super(props);
         this.state = {
-            matchInfo: props.matchInfo
         };
     }
 
@@ -31,7 +29,7 @@ export default class MatchHeader extends React.Component<MatchHeaderProps, Match
     }
 
     render() {
-        var teamsArray = this.getTeamsArray(this.state.matchInfo.teams);
+        var teamsArray = this.getTeamsArray(this.props.matchInfo.teams);
         return (
         <div className="container align-items-center">
             <div className="row d-flex align-items-center match-strip">

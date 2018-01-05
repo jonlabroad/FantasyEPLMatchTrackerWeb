@@ -7,12 +7,12 @@ export interface EventTableProps {
     eventList : any[];
 }
 
-export default class EventTable extends React.Component<EventTableProps, EventTableProps> {
+export default class EventTable extends React.Component<EventTableProps, {}> {
     protected bottomScrollElement : Element;
 
     constructor(props : EventTableProps) {
         super(props);
-        this.state = props;
+        this.state = {};
     }
 
     public scrollToBottom() {
@@ -31,8 +31,8 @@ export default class EventTable extends React.Component<EventTableProps, EventTa
 
     renderElements() {
         var elements = new Array<any>();
-        for (var i in this.state.eventList) {
-            var event = this.state.eventList[i];
+        for (var i in this.props.eventList) {
+            var event = this.props.eventList[i];
             elements.push(this.renderElement(i, event));
         }
         return elements;
