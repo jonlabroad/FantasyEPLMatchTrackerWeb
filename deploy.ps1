@@ -1,1 +1,1 @@
-aws s3 sync src s3://fplmatchtrackerweb --acl public-read
+aws s3 sync dist s3://fplmatchtrackerweb --acl public-read

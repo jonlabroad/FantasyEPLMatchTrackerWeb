@@ -2,17 +2,23 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import PickListElement from "./PickListElement"
+import Selection from "../models/Selection";
 
 export interface PickListProps {
-    picks : any[];
+    picks : any;
+    differentials : any;
+    config : Selection;
 }
 
 export default class PickList extends React.Component<PickListProps, {}> {
     constructor(props : any) {
         super(props);
         this.state = {
-            picks: props.picks
         }
+    }
+
+    protected isDifferential(elementId : number) {
+        return this.props.differentials.indexOf(elementId) >= 0;
     }
 
     render() {
@@ -20,6 +26,9 @@ export default class PickList extends React.Component<PickListProps, {}> {
         var subPicks : Array<any> = new Array<any>();
         for (var i in this.props.picks) {
             var pick = this.props.picks[i];
+            if (this.props.config.differentialsOnly && !this.isDifferential(pick.footballer.rawData.footballer.id)) {
+                continue;
+            }
             var element = <PickListElement
                 key={i}
                 pick = {this.props.picks[i]}

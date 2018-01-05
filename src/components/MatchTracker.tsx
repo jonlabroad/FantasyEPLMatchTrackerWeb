@@ -84,9 +84,20 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
     }
 
     protected gameweekChanged(event : any) {
-        if (this.selection !== event.target.value) {
+        if (this.selection.gameweek !== event.target.value) {
             this.selection.gameweek = event.target.value;
             this.readMatchInfo();
+        }
+    }
+
+    protected differentialsChanged(event : any) {
+        if (this.selection.differentialsOnly !== event.target.checked) {
+            this.selection.differentialsOnly = event.target.checked;
+            this.setState({
+                standings: this.state.standings,
+                selection: this.selection,
+                matchInfo: this.state.matchInfo
+            });
         }
     }
 
@@ -134,7 +145,11 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
         }
         else {
             if (this.componentMounted) {
-                this.setState(this.state);
+                this.setState({
+                    matchInfo: this.state.matchInfo,
+                    standings: this.state.standings,
+                    selection: this.state.selection
+                });
             }
         }
       }
@@ -187,7 +202,7 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
                 <div className="col-3">
                   <DifferentialsSelector
                     config = {this.selection}
-                    onChange = {() => {}}
+                    onChange = {this.differentialsChanged.bind(this)}
                   />
                 </div>
               </div>
@@ -215,7 +230,9 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
                 <div className="row no-gutters">
                   <div className="col-4">
                     <div className="main-element">
-                      <PickList picks={teams[0].picks}/>
+                      <PickList picks={teams[0].picks}
+                                config={this.state.selection}
+                                differentials={this.state.matchInfo.differentials}/>
                     </div>
                   </div>
                   <div className="col-4 no-gutters">
@@ -231,7 +248,10 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
                   </div>
                   <div className="col-4">
                     <div className="main-element">
-                        <PickList picks={teams[1].picks}/>
+                        <PickList picks={teams[1].picks}
+                                  config={this.state.selection}
+                                  differentials={this.state.matchInfo.differentials}
+                        />
                     </div>
                   </div>
                 </div>
