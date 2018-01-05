@@ -14,6 +14,7 @@ import GameweekSelector from "./GameweekSelector";
 import DifferentialsSelector from "./DifferentialsSelector";
 import Highlight from "./Highlight";
 import Selection from "../models/Selection";
+import MatchInfoCache from "../MatchInfoCache";
 import { TeamStarterScore, TeamSubScore } from "./TeamScore";
 
 export interface MatchTrackerProps {
@@ -22,14 +23,15 @@ export interface MatchTrackerProps {
 export interface MatchTrackerState {
     matchInfo : any;
     standings : any;
+    selection : any;
 }
 
 export default class MatchTracker extends React.Component<MatchTrackerProps, MatchTrackerState> {
     protected leagueId : number = 31187;
     protected eplClient : EPLClient = new EPLClient();
     protected componentMounted : boolean = false;
-    protected matchInfoCache : any = {};
-    protected lastMatchInfoRead : any = {};
+    protected matchInfoCache : MatchInfoCache = new MatchInfoCache();
+    protected lastMatchInfoRead : MatchInfoCache = new MatchInfoCache();
     protected selection : Selection = {
         gameweek: 22,
         differentialsOnly: false,
@@ -41,7 +43,13 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
         super(props);
         this.state = {
             matchInfo : null,
-            standings : null
+            standings : null,
+            selection : {
+                gameweek: 22,
+                differentialsOnly: false,
+                teamName: "The Vardy Boys",
+                teamId: 2365803
+            }
         }
     }
 
@@ -69,25 +77,28 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
     protected teamNameChanged(event : any) {
         var oldSelection = this.selection;
         if (oldSelection.teamName !== event.target.value) {
-            this.selection = {
-                gameweek: this.selection.gameweek,
-                differentialsOnly: this.selection.differentialsOnly,
-                teamName: event.target.value,
-                teamId: this.findTeamStandingByName(event.target.value).entry
-            }
+            this.selection.teamName = event.target.value;
+            this.selection.teamId = this.findTeamStandingByName(event.target.value).entry;
+            this.readMatchInfo();
+        }
+    }
+
+    protected gameweekChanged(event : any) {
+        if (this.selection !== event.target.value) {
+            this.selection.gameweek = event.target.value;
             this.readMatchInfo();
         }
     }
 
     protected readMatchInfo() {
         var now = new Date();
-        var lastRead = this.lastMatchInfoRead[this.selection.teamId];
+        var lastRead = this.lastMatchInfoRead.get(this.selection.teamId, this.selection.gameweek);
         if (!lastRead || (now.getTime() - lastRead.getTime()) > 60000) {
-            this.lastMatchInfoRead[this.selection.teamId] = now;
+            this.lastMatchInfoRead.update(this.selection.teamId, this.selection.gameweek, now);
             this.eplClient.readTeamData(this.leagueId, this.selection.teamId, this.selection.gameweek, this.processMatchInfo.bind(this));
         }
         else {
-            this.processMatchInfo(this.matchInfoCache[this.selection.teamId]);
+            this.processMatchInfo(this.matchInfoCache.get(this.selection.teamId, this.selection.gameweek));
         }
       }
     
@@ -108,15 +119,23 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
       }
 
     protected processMatchInfo(data : any) {
-        for (var key in data.teams) {
-            this.matchInfoCache[key] = data;
+        if (data) {
+            for (var key in data.teams) {
+                this.matchInfoCache.update(parseInt(key), this.selection.gameweek, data);
+            }
+            
+            if (this.componentMounted) {
+                this.setState({
+                    matchInfo: data,
+                    standings: this.state.standings,
+                    selection: this.selection
+                });
+            }
         }
-        
-        if (this.componentMounted) {
-            this.setState({
-                matchInfo: data,
-                standings: this.state.standings
-            });
+        else {
+            if (this.componentMounted) {
+                this.setState(this.state);
+            }
         }
       }
       
@@ -162,7 +181,7 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
                 <div className="col-3">
                   <GameweekSelector
                     config = {this.selection}
-                    onChange = {() => {}}
+                    onChange = {this.gameweekChanged.bind(this)}
                   />
                 </div>
                 <div className="col-3">
