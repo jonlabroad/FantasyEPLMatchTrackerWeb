@@ -1,27 +1,57 @@
-.current-fixture-pick {
+@keyframes currently-playing {
+	0% { background-color: rgb(236, 238, 239) }
+	50% { background-color: #c2c2c2 }
+	100% { background-color: rgb(236, 238, 239) }
+}
+
+.pick-badge img {
+	height: 25px;
+	width: 25px;
+}
+
+.pick-badge {
+	text-align: center;
+	width: 1%;
+}
+
+.pick-points {
+	text-align: center;
+	width: 10%
+}
+
+.pick-name {
+	padding-left: 5px;
+	width: 20%;
+}
+
+.table-picks tr td {
+	font-family: "BentonSans",-apple-system,"Roboto",Helvetica,Arial,sans-serif;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	padding-left: 3px;
+	padding-right: 3px;
+	font-size: 12px;
+	vertical-align: middle;
+}
+
+.fixture-status {
+	width: 2px;
+	padding: 0px;
+	margin: 0px;
+}
+
+.pick-not-in-fixture > td:nth-child(2) {
+
+}
+
+.pick-in-fixture > td:nth-child(2) {
 	animation-name: currently-playing;
 	animation-duration: 3s;	
 	animation-iteration-count: infinite;
 }
 
-.completed-fixture-pick {
-	background-color: #c2c2c2;
-}
-
-@keyframes currently-playing {
-	0% { background-color: #ffffff }
-	50% { background-color: #c2c2c2 }
-	100% { background-color: #ffffff }
-}
-
-.pick-badge {
-	height: 25px;
-	width: 25px;
-}
-
-.table-picks tr td {
-	padding: 2px;
-	font-size: 12px;
+.pick-fixture-complete > td:nth-child(2) {
+	background-color: #8fcc5d;
 }
 
 .table-picks {

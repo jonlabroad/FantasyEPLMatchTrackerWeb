@@ -142,10 +142,10 @@ export default class PickListElement extends React.Component<PickListElementProp
     private getFixtureStatusClass() : string {
         var pick = this.props.pick;
         if (pick.footballer.isCurrentlyPlaying) {
-            return "current-fixture-pick";
+            return "pick-in-fixture";
         }
         if (pick.footballer.isDonePlaying) {
-            return "completed-fixture-pick";
+            return "pick-fixture-complete";
         }
     }
 
@@ -156,19 +156,20 @@ export default class PickListElement extends React.Component<PickListElementProp
         var badgeLink = this.getBadgeLink();
         return (
             <tr className={`${starterClassName} ${captainClassName} ${fixtureStatusClassName}`}>
-                <td>
+                <td className="pick-badge">
                     <img className="pick-badge" src={badgeLink}/>
                 </td>
-                <td>
+                <td className="pick-points">
                     {this.getPoints()}
                 </td>
-                <td>
-                    {this.getRole()}
-                </td>
-                <td>
+                <td className="pick-name">
                     {this.getName()}
+                    <span> </span>
+                    <span className="pick-role">
+                        {this.getRole()}
+                    </span>
                 </td>
-                <td>
+                <td className="pick-explains">
                     {this.getIcons(this.getExplains())}
                 </td>
             </tr>

@@ -9,7 +9,6 @@ export default class TeamRecord extends React.Component<TeamRecordProps, {}> {
     constructor(props : any) {
         super(props);
         this.state = {
-            standing: props.standing
         }
     }
 

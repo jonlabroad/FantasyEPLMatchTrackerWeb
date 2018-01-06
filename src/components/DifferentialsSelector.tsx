@@ -20,9 +20,9 @@ export default class DifferentialsSelector extends React.Component<Differentials
 
     render() {
         return (
-            <div className="form-check-inline">
-				<label className="form-check-label">differentials only</label>
+            <div className="form-check-inline navbar-control">
     			<input className="form-check-input" type="checkbox" onChange={this.props.onChange} value="" id="diff-only"/>
+                <label className="form-check-label">differentials only</label>
 			</div>	
         );
     }

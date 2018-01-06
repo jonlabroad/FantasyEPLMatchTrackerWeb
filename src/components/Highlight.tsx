@@ -10,8 +10,8 @@ export interface HighlightProps {
 
 export default class Highlight extends React.Component<HighlightProps, {}> {
     protected photoRoot : string = 'https://platform-static-files.s3.amazonaws.com/premierleague/photos/players/110x140/p';
-    private HIGH_PRIORITY_EVENTS = ['GOAL', 'ASSIST', 'BONUS', "PENALTY_SAVES", "PENALTY_MISSED", "OWN_GOALS"];
-    
+    private HIGH_PRIORITY_EVENTS = ['GOAL', 'ASSIST', 'BONUS', "PENALTY_SAVES", "PENALTY_MISSED", "OWN_GOALS", "CLEAN_SHEET"];
+
     constructor(props : any) {
         super(props);
         this.state = props;

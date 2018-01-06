@@ -2,7 +2,8 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 export interface TeamStripeProps {
-    team : any
+    team : any,
+    reverse : boolean
 }
 
 export default class TeamStripe extends React.Component<TeamStripeProps, {}> {
@@ -62,9 +63,33 @@ export default class TeamStripe extends React.Component<TeamStripeProps, {}> {
         return this.getStyle(this.getKit().kit_shirt_sleeves);
     }    
 
+    protected getPolygon() : JSX.Element {
+        if (!this.props.reverse) {
+            return (
+                <svg className="kit-overlay" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 80">
+                    <polygon className="" points="0 80 80 80 0 0 0 80"></polygon>
+                </svg>
+            );
+        }
+        return (
+            <svg className="kit-overlay" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 80">
+                <polygon className="" points="0 80 80 80 0 0 0 80"></polygon>
+            </svg>
+        );
+    }
+
+    protected getElements() : Array<JSX.Element> {
+        var elements = new Array<JSX.Element>();
+
+
+        return elements;
+
+    }
+
     render() {
         return (
-            <div className="d-flex">
+            <span>
+            <div className="d-flex" style={this.props.reverse ? {flexDirection:"row-reverse"} : {}}>
                 <div className="kit-shirt" style={this.getShirtStyle()}>
                 </div>
                 <div className="kit-shirt-sleeves" style={this.getSleevesStyle()}>
@@ -80,6 +105,7 @@ export default class TeamStripe extends React.Component<TeamStripeProps, {}> {
                 <div className="kit-socks-base-bottom" style={this.getSocksStyle()}>
                 </div>
             </div>
+            </span>
         );
     }
 }

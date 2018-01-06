@@ -174,40 +174,33 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
 
       protected renderNavBar() {
         return (
-          <nav className="navbar navbar-expand-sm bg-mine navbar-dark">
-                  <a className="navbar-brand" href="#">FPL Live Matchtracker</a>
-              </nav>
+          <nav className="navbar navbar-toggleable-xl navbar-inline bg-mine navbar-dark">
+            <a className="navbar-brand" href="#">FPL Live Matchtracker</a>
+            <form className="navbar-form form-inline navbar-control">
+                {this.renderSelectors()}
+            </form>
+          </nav>
         );
       }
     
       protected renderSelectors() : JSX.Element {
         var standings = this.state.standings;
         if (standings) {
-          return <div className="container">
-            <div className="row">
-              <div className="col-1"></div>
-                <div className="col-4">
+          return <div>
                     <TeamSelector
                       config = {this.selection}
                       standings = {this.state.standings}
                       onChange = {this.teamNameChanged.bind(this)}
                     />
-                </div>
-                <div className="col-3">
                   <GameweekSelector
                     config = {this.selection}
                     onChange = {this.gameweekChanged.bind(this)}
                   />
-                </div>
-                <div className="col-3">
                   <DifferentialsSelector
                     config = {this.selection}
                     onChange = {this.differentialsChanged.bind(this)}
                   />
                 </div>
-              </div>
-            <div className="col-1"></div>
-          </div>
         }
       }
     
@@ -217,15 +210,9 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
           var teams = this.getTeamsArray(matchInfo);
           return (
             <div>
-            <div className="container-fluid match-strip-container mx-auto no-gutters">
-              <div className="row-fluid">
-                <div className="main-element match-strip-row">
-                  <MatchHeader  
-                    matchInfo={this.state.matchInfo}
-                  />
-                </div>
-              </div>
-            </div>
+              <MatchHeader  
+                matchInfo={this.state.matchInfo}
+              />
               <div className="container">
                 <div className="row no-gutters">
                   <div className="col-4">
@@ -265,7 +252,6 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
         return (
             <div>
               {this.renderNavBar()}
-              {this.renderSelectors()}
               {this.renderMatchInfo()}
             </div>
         );
