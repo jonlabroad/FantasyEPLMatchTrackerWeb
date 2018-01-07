@@ -53,6 +53,10 @@ export default class MatchHeader extends React.Component<MatchHeaderProps, {}> {
                     </div>
                     <div className="col-8 d-flex justify-content-center align-items-center">
                         <div className="team-name-box text-center">
+                            <TeamRank
+                                team={teamsArray[0]}
+                            />
+                            <span> </span>
                             <TeamName 
                                 team={teamsArray[0]}
                             />
@@ -89,6 +93,10 @@ export default class MatchHeader extends React.Component<MatchHeaderProps, {}> {
                             />
                         </div>
                         <div className="team-name-box text-center">
+                            <TeamRank
+                                team={teamsArray[1]}
+                            />
+                            <span> </span>
                             <TeamName 
                                 team={teamsArray[1]}
                             />

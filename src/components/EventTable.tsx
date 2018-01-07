@@ -49,7 +49,7 @@ export default class EventTable extends React.Component<EventTableProps, {}> {
     render() {
         var eventClassName = "";
         return <div className="scrollable event-scrollable">
-                <table className={`table events-table ${eventClassName}`}>
+                <table className={`table table-sm table-striped events-table ${eventClassName}`}>
                     <tbody>
                     {this.renderElements()}
                     </tbody>

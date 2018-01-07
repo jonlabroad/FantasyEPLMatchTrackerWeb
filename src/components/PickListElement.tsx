@@ -2,6 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import BadgeProvider from "../BadgeProvider";
+import IconProvider from "../IconProvider";
 
 export interface PickListElementProps {
     pick : any;
@@ -13,24 +14,25 @@ export default class PickListElement extends React.Component<PickListElementProp
         this.state = {};
     }
 
-    protected getIcons(explains : any) : string {
-        var icons : string = "";
-        icons += this.getIcon(explains, "minutes") + " ";
-		icons += this.getIcon(explains, "goals_scored") + " ";
-		icons += this.getIcon(explains, "assists") + " ";
-		icons += this.getIcon(explains, "clean_sheets") + " ";
-		icons += this.getIcon(explains, "saves") + " ";
-		icons += this.getIcon(explains, "own_goals") + " ";
-		icons += this.getIcon(explains, "yellow_cards") + " ";
-		icons += this.getIcon(explains, "red_cards") + " ";
-		icons += this.getIcon(explains, "penalties_missed") + " ";
-		icons += this.getIcon(explains, "penalties_saved") + " ";
-		icons += this.getIcon(explains, "goals_conceded") + " ";
-		icons += this.getIcon(explains, "bonus") + " ";	
+    protected getIcons(explains : any) : JSX.Element {
+        var icons = <span>
+            {this.getIcon(explains, "minutes")}
+            {this.getIcon(explains, "goals_scored")}
+            {this.getIcon(explains, "assists")}
+            {this.getIcon(explains, "clean_sheets")}
+            {this.getIcon(explains, "saves")}
+            {this.getIcon(explains, "own_goals")}
+            {this.getIcon(explains, "yellow_cards")}
+            {this.getIcon(explains, "red_cards")}
+            {this.getIcon(explains, "penalties_missed")}
+            {this.getIcon(explains, "penalties_saved")}
+            {this.getIcon(explains, "goals_conceded")}
+            {this.getIcon(explains, "bonus")}	
+        </span>
         return icons;
     }
 
-    protected getIcon(explains : any, fieldName : string) : string {
+    protected getIcon(explains : any, fieldName : string) : JSX.Element {
         var combinedExplain : any = null;
         for (var i in explains) {
             var explain = this.getExplainElement(explains[i], fieldName);
@@ -48,9 +50,9 @@ export default class PickListElement extends React.Component<PickListElementProp
             }
         }
         if (combinedExplain) {
-            return this.getExplainString(combinedExplain, fieldName);
+            return this.getExplainIcons(combinedExplain, fieldName);
         }
-        return "";
+        return null;
     }
     
 	private getExplainElement(explains : any, elementName: string) {
@@ -64,6 +66,46 @@ export default class PickListElement extends React.Component<PickListElementProp
 		}
 		return null;
 	}
+
+    private getExplainIcons(explain : any, explainName : string) : JSX.Element {
+        var iconFiles : Array<string> = new Array<string>();
+        if (explainName === 'minutes') {
+            iconFiles.push(explain.value < 60 ? IconProvider.getIcon(explainName) :IconProvider.getIcon("minutes_60"));
+        }
+        else if (explainName === 'bonus') {
+            for (var n = 0; n < explain.points; n++) {
+                iconFiles.push(IconProvider.getIcon(explainName));
+            }
+        }
+        else {
+            for (var n = 0; n < explain.value; n++) {
+                iconFiles.push(IconProvider.getIcon(explainName));
+            }
+        }
+
+        var icons = new Array<JSX.Element>();
+        for (var i in iconFiles) {
+            icons.push(this.renderIconElement(iconFiles[i], explain, explainName, `${explainName}${i}`));
+        }
+
+        return (
+            <span className="pick-icon">
+                {icons}
+            </span>
+        );
+    }
+
+    private renderIconElement(iconFile : string, explain : any, explainName : string, key : string) : JSX.Element {
+        return ( <span key={key}>
+                    <img 
+                        data-toggle="tooltip"
+                        title={explain.value + " " + explainName.replace("_"," ") + ": " + explain.points + "pts"}
+                        src={`img/icon/${iconFile}`}
+                        alt={explainName}/>
+                    <span> </span>
+                </span>
+        );
+    }
 
 	private getExplainString(explain : any, explainName : string) : string {
 		switch (explainName) {

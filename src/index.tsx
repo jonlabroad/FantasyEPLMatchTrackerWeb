@@ -9,5 +9,4 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
-
 //setInterval(readMatchInfo, 120000);

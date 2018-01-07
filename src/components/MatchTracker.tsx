@@ -15,6 +15,7 @@ import DifferentialsSelector from "./DifferentialsSelector";
 import Highlight from "./Highlight";
 import Selection from "../models/Selection";
 import MatchInfoCache from "../MatchInfoCache";
+import Url from "../Url";
 import { TeamStarterScore, TeamSubScore } from "./TeamScore";
 
 export interface MatchTrackerProps {
@@ -33,10 +34,11 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
     protected matchInfoCache : MatchInfoCache = new MatchInfoCache();
     protected lastMatchInfoRead : MatchInfoCache = new MatchInfoCache();
     protected selection : Selection = {
-        gameweek: 22,
-        differentialsOnly: false,
-        teamName: "The Vardy Boys",
-        teamId: 2365803
+        gameweek: parseInt(Url.getParameterByName("gameweek", "22")),
+        differentialsOnly: Url.getParameterByName("differentials", "false") == 'true',
+        teamName: "",
+        teamId: parseInt(Url.getParameterByName("team", "2365803")),
+        cup: Url.getParameterByName("cup", "false") == 'true'
     }
 
     constructor(props : any) {
@@ -45,12 +47,14 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
             matchInfo : null,
             standings : null,
             selection : {
-                gameweek: 22,
-                differentialsOnly: false,
-                teamName: "The Vardy Boys",
-                teamId: 2365803
+                gameweek: parseInt(Url.getParameterByName("gameweek", "22")),
+                differentialsOnly: Url.getParameterByName("differentials", "false") == 'true',
+                teamName: "",
+                teamId: parseInt(Url.getParameterByName("team", "2365803")),
+                cup: Url.getParameterByName("cup", "false") == 'true'
             }
         }
+        this.setUrl();
     }
 
     protected getTeamsArray(matchInfo : any) {
@@ -74,11 +78,24 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
         return null;
       }
 
+      protected findTeamStandingById(teamId : number, standings? : any) {
+        var standings = standings ? standings : this.state.standings;
+        if (standings) {
+          for (var i in standings.standings.results) {
+            var result = standings.standings.results[i];
+            if (result.entry == teamId) {
+              return result;
+            }
+          }
+        }
+      }
+
     protected teamNameChanged(event : any) {
         var oldSelection = this.selection;
         if (oldSelection.teamName !== event.target.value) {
             this.selection.teamName = event.target.value;
             this.selection.teamId = this.findTeamStandingByName(event.target.value).entry;
+            this.setUrl();
             this.readMatchInfo();
         }
     }
@@ -86,6 +103,7 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
     protected gameweekChanged(event : any) {
         if (this.selection.gameweek !== event.target.value) {
             this.selection.gameweek = event.target.value;
+            this.setUrl();
             this.readMatchInfo();
         }
     }
@@ -93,6 +111,7 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
     protected differentialsChanged(event : any) {
         if (this.selection.differentialsOnly !== event.target.checked) {
             this.selection.differentialsOnly = event.target.checked;
+            this.setUrl();
             this.setState({
                 standings: this.state.standings,
                 selection: this.selection,
@@ -106,7 +125,7 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
         var lastRead = this.lastMatchInfoRead.get(this.selection.teamId, this.selection.gameweek);
         if (!lastRead || (now.getTime() - lastRead.getTime()) > 60000) {
             this.lastMatchInfoRead.update(this.selection.teamId, this.selection.gameweek, now);
-            this.eplClient.readTeamData(this.leagueId, this.selection.teamId, this.selection.gameweek, this.processMatchInfo.bind(this));
+            this.eplClient.readTeamData(this.leagueId, this.selection.teamId, this.selection.gameweek, this.selection.cup, this.processMatchInfo.bind(this));
         }
         else {
             this.processMatchInfo(this.matchInfoCache.get(this.selection.teamId, this.selection.gameweek));
@@ -122,11 +141,18 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
     protected processStandings(data : any) {
         var standings = data;
         if (this.componentMounted) {
+            var standing = this.findTeamStandingById(this.selection.teamId, standings);
+            this.selection.teamName = standing.entry_name;
             this.setState({
                 matchInfo: this.state.matchInfo,
-                standings: standings
+                standings: standings,
+                selection: this.selection
             });
         }
+      }
+
+      protected setUrl() {
+        Url.setUrl(this.selection.teamId, this.selection.gameweek, this.selection.differentialsOnly, this.selection.cup);
       }
 
     protected processMatchInfo(data : any) {
@@ -155,7 +181,7 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
       }
       
         protected onFocus() {
-            //this.readMatchInfo();
+            this.readMatchInfo();
         }
 
       public componentDidMount() {

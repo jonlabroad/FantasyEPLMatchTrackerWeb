@@ -39,7 +39,7 @@ export var TeamName = function TeamName(props : TeamNameProps) {
 export function TeamRank(props : TeamNameProps) {
     return (
         <span className="team-rank">
-            {TeamNameUtils.getRank(props.team)}
+            #{TeamNameUtils.getRank(props.team)}
         </span>
     )
 }

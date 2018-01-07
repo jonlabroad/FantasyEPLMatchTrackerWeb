@@ -15,7 +15,10 @@ export default class EventTableElement extends React.Component<EventTableElement
         var eventClassName = "";
         var event = this.props.event;
         return <tr className={`${eventClassName}`}>
-                <td>{event.number} {event.typeString.replace("_", " ")} {event.footballerName} {event.pointDifference}</td>
+                <td className="event-footballer-name">{event.footballerName}</td>
+                <td className="event-number">{event.number}</td>
+                <td className="event-type">{event.typeString.replace("_", " ")}</td>
+                <td className="event-points">{event.pointDifference}</td>
             </tr>
     }
 }

@@ -19,6 +19,21 @@
 	background-color: #F2B8AE
 }
 
+.events-table .event-footballer-name {
+	width: 16%;
+}
+.events-table .event-number {
+	width: 5%;
+}
+
+.events-table .event-type {
+	width: 30%
+}
+				
+.events-table .event-points {
+	width: 5%
+}
+
 .events-table {
 	margin: auto;
 	float: none;

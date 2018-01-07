@@ -13,11 +13,11 @@ export default class TeamRecord extends React.Component<TeamRecordProps, {}> {
     }
 
     render() {
-        var standing = this.props.standing;    
-        return (
-            <span className="team-record">
-                {`${standing.matches_won}W-${standing.matches_drawn}D-${standing.matches_lost}L`}
-            </span>
-        );
-    }
+            var standing = this.props.standing;    
+            return (
+                <span className="team-record">
+                    {standing ? `${standing.matches_won}W-${standing.matches_drawn}D-${standing.matches_lost}L` : ""}
+                </span>
+            );
+        }
 }

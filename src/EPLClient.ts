@@ -17,8 +17,8 @@ export default class EPLClient {
         });
     }
 
-    public readTeamData(leagueId : number, teamId : number, gameweek : number, successFunc : Function) {
-        var link = this.getMatchInfoUrl(leagueId, teamId, gameweek, false);
+    public readTeamData(leagueId : number, teamId : number, gameweek : number, isCup : boolean, successFunc : Function) {
+        var link = this.getMatchInfoUrl(leagueId, teamId, gameweek, isCup);
         return $.ajax({
           url: link,
           type: "GET",

@@ -17,6 +17,10 @@ export default class PickList extends React.Component<PickListProps, {}> {
         }
     }
 
+    componentDidMount() {
+        //($('[data-toggle="tooltip"]') as any).tooltip(); 
+    }
+
     protected isDifferential(elementId : number) {
         return this.props.differentials.indexOf(elementId) >= 0;
     }

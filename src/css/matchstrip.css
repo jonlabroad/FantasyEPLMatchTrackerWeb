@@ -55,6 +55,16 @@
     width: 30%;
 }
 
+.match-strip .team-rank {
+    font-size: 18px;
+    color: #1d1e1f;
+    display: inline-block;
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
+}
+
 .match-strip .team-name {
     font-size: 18px;
     color: #1d1e1f;

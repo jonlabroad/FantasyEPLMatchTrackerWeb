@@ -52,7 +52,7 @@ export default class Highlight extends React.Component<HighlightProps, {}> {
         if (event) {
             var highlightPhoto = this.renderPhoto(event);
             var highlightText = this.renderHighlightText(event);
-            var highlightBackground = this.renderHighlightBackground();
+            var highlightBackground = this.renderHighlightBackground(event);
             var style = {
                 backgroundImage: `url(${BadgeProvider.getBadgeUrl(this.findTeamCode(event))})`                
             }
@@ -70,8 +70,12 @@ export default class Highlight extends React.Component<HighlightProps, {}> {
         return (<span></span>);
     }
 
+    protected getHighlightText(event : any) {
+        return `${event.footballerName} ${event.number} ${event.type.replace("_", " ")}`;
+    }
+
     protected renderHighlightText(event : any) {
-        var highlightText = `${event.footballerName}: ${event.type} (${event.pointDifference})`;
+        var highlightText = this.getHighlightText(event);
         return (
             <div className="highlight-text">
                 {highlightText}
@@ -79,7 +83,8 @@ export default class Highlight extends React.Component<HighlightProps, {}> {
         );
     }
 
-    protected renderHighlightBackground() {
+    protected renderHighlightBackground(event : any) {
+        var highlightText = this.getHighlightText(event);
         return <div className="highlight-background"></div>
     }
 
