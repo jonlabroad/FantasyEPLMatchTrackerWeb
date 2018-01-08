@@ -1,90 +1,21 @@
-.starter-pick {
+.bg-mine {
+    background-color: #307a30;
+    color: #ebebeb;
 }
 
-.sub-pick {
-	font-style: italic;
-	background-color: #e6e6e6
+.bg-mine a {
+    color: #ebebeb;
 }
 
-.event-scrollable {
-	height: 300px;
-	overflow-y: auto;
+.bg-color-dark {
+	background-color: #307a30
 }
 
-.event-important {
-	font-weight: bold
+.trophy-img {
+	height: 200px;
+	width: 200px;
 }
 
-.event-common {
-	background-color: #F2F093
-}
-
-.event-mine {
-	background-color: #98e698
-}
-
-.event-theirs {
-	background-color: #F2B8AE
-}
-
-.table-picks tr td {
-	padding: 2px;
-	font-size: 14px
-}
-
-.table-picks {
-	margin: auto;
-	width: auto;
-	padding: 1px
-}
-
-.events-table {
-	margin: auto;
-	float: none;
-	width: 100%
-}
-
-.events-table tr td {
-	padding: 2px;
-	font-size: 12px;
-	width: 100%;
-}
-
-.text-captain {
-	font-weight: bold
-}
-
-.wenger-face {
-	max-height: 80%;
-	max-width: 80%;
-}
-
-.team-highlight {
-	max-height: 100%;
-	max-width: 100%;
-}
-
-.invisible {
-	visibility: hidden;
-}
-
-.highlight-text {
-	position: absolute;
-	margin: auto;
-	top: 80%;
-	left: 0;
-	width: 100%;
-	font-size: 16px;
-	font-weight: bold
-}
-
-.highlight-background {
-	position: absolute;
-	margin: auto;
-	left: 0;
-	top: 80%;
-	height: 24px;
-	width: 100%;
-	background-color: #b3b3b3;
-	opacity: 0.9
+.gameweek-selector {
+	width: 70px;
 }

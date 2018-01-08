@@ -1,0 +1,47 @@
+.event-scrollable {
+	height: 300px;
+	overflow-y: auto;
+}
+
+.event-important {
+	font-weight: bold
+}
+
+.event-common {
+	background-color: #F2F093
+}
+
+.event-mine {
+	background-color: #98e698
+}
+
+.event-theirs {
+	background-color: #F2B8AE
+}
+
+.events-table .event-footballer-name {
+	width: 16%;
+}
+.events-table .event-number {
+	width: 5%;
+}
+
+.events-table .event-type {
+	width: 30%
+}
+				
+.events-table .event-points {
+	width: 5%
+}
+
+.events-table {
+	margin: auto;
+	float: none;
+	width: 100%
+}
+
+.events-table tr td {
+	padding: 2px;
+	font-size: 12px;
+	width: 100%;
+}
