@@ -289,14 +289,14 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
                 matchInfo={this.state.matchInfo}
               />
               <div className="container-fluid">
-                <div className="row row-fluid no-gutters">
-                  <div className="col-4">
-                    <div className="main-element">
+                <div className="row justify-content-center no-gutters">
+                  <div className="col-4 d-flex flex-column align-items-end">
+                    <div className="d-flex main-element side-column-element">
                       <PickList picks={teams[0].picks}
                                 config={this.state.selection}
                                 differentials={this.state.matchInfo.differentials}/>
                     </div>
-                    <div className="main-element">
+                    <div className="main-element side-column-element">
                       <FixtureStatusGroup
                         team={teams[0]}
                         fixtures={this.state.eventInfo ? this.state.eventInfo.fixtures : null}
@@ -304,7 +304,7 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
                       />                    
                     </div>
                   </div>
-                  <div className="col-4 no-gutters">
+                  <div className="col-4 d-flex flex-column align-items-center no-gutters center-column">
                     <div className="d-flex main-element justify-content-center">
                       <Highlight team={teams[0]} events={matchInfo.allEvents}/>
                       <Highlight team={teams[1]} events={matchInfo.allEvents}/>
@@ -315,14 +315,14 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
                       />
                     </div>
                   </div>
-                  <div className="col-4">
-                    <div className="main-element">
+                  <div className="col-4 d-flex flex-column align-items-start">
+                    <div className="main-element side-column-element">
                         <PickList picks={teams[1].picks}
                                   config={this.state.selection}
                                   differentials={this.state.matchInfo.differentials}
                         />
                     </div>
-                    <div className="main-element">
+                    <div className="main-element side-column-element">
                       <FixtureStatusGroup
                         team={teams[1]}
                         fixtures={this.state.eventInfo ? this.state.eventInfo.fixtures : null}

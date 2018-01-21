@@ -26,13 +26,12 @@ export default class FixtureStatusGroup extends React.Component<FixtureStatusGro
 
     renderFixture(fixture : any) : JSX.Element {
         return (
-            <div key={fixture.id}>
                 <FixtureStatus
+                    key={fixture.id}
                     fixture={fixture}
                     team={this.props.team}
                     clubs={this.props.clubs}
                 />
-            </div>
         );
     }
 

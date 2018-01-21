@@ -47,13 +47,27 @@ export default class FixtureStatus extends React.Component<FixtureStatusProps, {
     renderScore() {
         var fixture = this.props.fixture;
         var awayBadgeLink = BadgeProvider.getBadgeUrl(this.getTeamCode(fixture.team_a));
-        var homeBadgeLink = BadgeProvider.getBadgeUrl(this.getTeamCode(fixture.team_h));        
+        var homeBadgeLink = BadgeProvider.getBadgeUrl(this.getTeamCode(fixture.team_h));
+        var homeClub = this.props.clubs[fixture.team_h-1];
+        var awayClub = this.props.clubs[fixture.team_a-1];
         return (
-            <tr className="fixture-status">
-                <td className="fixture-badge fixture-badge-left"><img className="fixture-badge" src={homeBadgeLink}/></td>
-                <td className="fixture-score">{fixture ? `${fixture.team_h_score} - ${fixture.team_a_score}` : ""}</td>
-                <td className="fixture-badge fixture-badge-right"><img className="fixture-badge" src={awayBadgeLink}/></td>
-            </tr>
+                <div className="d-flex d-flex-inline justify-content-center fixture-status">
+                    <div className="fixture-club-name text-right">
+                        {homeClub.name}
+                    </div>
+                    <div className="fixture-badge">
+                        <img className="fixture-badge" src={homeBadgeLink}/>
+                    </div>
+                    <div className="fixture-score">
+                        {fixture ? `${fixture.team_h_score} - ${fixture.team_a_score}` : ""}
+                    </div>
+                    <div className="fixture-badge">
+                        <img className="fixture-badge" src={awayBadgeLink}/>
+                    </div>
+                    <div className="fixture-club-name text-left">
+                        {awayClub.name}
+                    </div>
+                </div>
         );
     }
 
@@ -87,20 +101,18 @@ export default class FixtureStatus extends React.Component<FixtureStatusProps, {
     render() {
         var fixture = this.props.fixture;
         if (!fixture) {
-            return (
-                <span></span>
-            );
+            return null;
         }
 
         return (
-            <span>
+            <div className="fixture-element">
+                {this.renderScore()}
                 <table className="table table-sm table-fluid table-fixtures">
                     <tbody>
-                        {this.renderScore()}
                         {this.renderBpsTable()}
                     </tbody>
                 </table>
-            </span>
+            </div>
         );
     }
 }

@@ -39,12 +39,6 @@
 	vertical-align: middle;
 }
 
-.fixture-status {
-	width: 2px;
-	padding: 0px;
-	margin: 0px;
-}
-
 .pick-not-in-fixture > td:nth-child(2) {
 
 }
