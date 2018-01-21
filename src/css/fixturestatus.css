@@ -84,6 +84,7 @@
     background-color: #c2c2c2;
     padding-top: 2px;
     padding-bottom: 2px;
+    width: 100%;
 }
 
 .fixture-not-in-fixture > td:nth-child(2) {
