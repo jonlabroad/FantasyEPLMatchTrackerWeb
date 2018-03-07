@@ -15,7 +15,6 @@ import DifferentialsSelector from "./DifferentialsSelector";
 import Highlight from "./Highlight";
 import Selection from "../models/Selection";
 import FixtureStatusGroup from "./FixtureStatusGroup";
-import MatchInfoCache from "../MatchInfoCache";
 import EventInfoCache from "../EventInfoCache";
 import VideoHighlightGroup from "./VideoHighlightGroup"
 import Url from "../Url";
@@ -39,9 +38,6 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
     
     protected eventInfoCache : EventInfoCache = new EventInfoCache();
     protected lastEventInfoRead : EventInfoCache = new EventInfoCache();   
-    
-    protected matchInfoCache : MatchInfoCache = new MatchInfoCache();
-    protected lastMatchInfoRead : MatchInfoCache = new MatchInfoCache();
     
     protected videoHighlightCache : EventInfoCache = new EventInfoCache();
     protected lastVideoHighlightsRead : EventInfoCache = new EventInfoCache();
@@ -132,7 +128,8 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
             this.setState({
                 standings: this.state.standings,
                 selection: this.selection,
-                matchInfo: this.state.matchInfo
+                matchInfo: this.state.matchInfo,
+                eventInfo: this.state.eventInfo
             });
         }
     }
@@ -165,16 +162,8 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
   }
 
     protected readMatchInfo() {
-        var now = new Date();
-        var lastRead = this.lastMatchInfoRead.get(this.selection.teamId, this.selection.gameweek);
-        if (!lastRead || (now.getTime() - lastRead.getTime()) > 60000) {
-            this.lastMatchInfoRead.update(this.selection.teamId, this.selection.gameweek, now);
-            this.eplClient.readTeamData(this.leagueId, this.selection.teamId, this.selection.gameweek, this.selection.cup, this.processMatchInfo.bind(this));
-        }
-        else {
-            this.processMatchInfo(this.matchInfoCache.get(this.selection.teamId, this.selection.gameweek));
-        }
-      }
+        this.eplClient.readTeamData(this.leagueId, this.selection.teamId, this.selection.gameweek, this.selection.cup, this.processMatchInfo.bind(this));
+    }
     
     protected readStandings() {
         if (!this.state.standings) {
@@ -200,16 +189,10 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
       }
 
     protected processMatchInfo(data : any) {
-        if (data) {
-            for (var key in data.teams) {
-                this.matchInfoCache.update(parseInt(key), this.selection.gameweek, data);
-            }
-            
+        if (data) {          
             if (this.componentMounted) {
                 this.setState({
-                    eventInfo: this.state.eventInfo,
                     matchInfo: data,
-                    standings: this.state.standings,
                     selection: this.selection
                 });
             }
@@ -217,10 +200,7 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
         else {
             if (this.componentMounted) {
                 this.setState({
-                    eventInfo: this.state.eventInfo,
                     matchInfo: this.state.matchInfo,
-                    standings: this.state.standings,
-                    selection: this.state.selection
                 });
             }
         }
@@ -233,8 +213,6 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
             if (this.componentMounted) {
                 this.setState({
                     eventInfo: data,
-                    matchInfo: this.state.matchInfo,
-                    standings: this.state.standings,
                     selection: this.selection
                 });
             }
@@ -242,10 +220,7 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
         else {
             if (this.componentMounted) {
                 this.setState({
-                    eventInfo: this.state.eventInfo,
-                    matchInfo: this.state.matchInfo,
-                    standings: this.state.standings,
-                    selection: this.state.selection
+                    eventInfo: this.state.eventInfo
                 });
             }
         }
@@ -258,9 +233,6 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
             if (this.componentMounted) {
                 this.setState({
                     videoHighlights: data,
-                    eventInfo: this.state.eventInfo,
-                    matchInfo: this.state.matchInfo,
-                    standings: this.state.standings,
                     selection: this.selection
                 });
             }
@@ -269,10 +241,6 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
             if (this.componentMounted) {
                 this.setState({
                     videoHighlights: this.state.videoHighlights,
-                    eventInfo: this.state.eventInfo,
-                    matchInfo: this.state.matchInfo,
-                    standings: this.state.standings,
-                    selection: this.state.selection
                 });
             }
         }
