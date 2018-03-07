@@ -14,7 +14,10 @@ import GameweekSelector from "./GameweekSelector";
 import DifferentialsSelector from "./DifferentialsSelector";
 import Highlight from "./Highlight";
 import Selection from "../models/Selection";
+import FixtureStatusGroup from "./FixtureStatusGroup";
 import MatchInfoCache from "../MatchInfoCache";
+import EventInfoCache from "../EventInfoCache";
+import VideoHighlightGroup from "./VideoHighlightGroup"
 import Url from "../Url";
 import { TeamStarterScore, TeamSubScore } from "./TeamScore";
 
@@ -25,14 +28,24 @@ export interface MatchTrackerState {
     matchInfo : any;
     standings : any;
     selection : any;
+    eventInfo : any;
+    videoHighlights : any;
 }
 
 export default class MatchTracker extends React.Component<MatchTrackerProps, MatchTrackerState> {
     protected leagueId : number = 31187;
     protected eplClient : EPLClient = new EPLClient();
     protected componentMounted : boolean = false;
+    
+    protected eventInfoCache : EventInfoCache = new EventInfoCache();
+    protected lastEventInfoRead : EventInfoCache = new EventInfoCache();   
+    
     protected matchInfoCache : MatchInfoCache = new MatchInfoCache();
     protected lastMatchInfoRead : MatchInfoCache = new MatchInfoCache();
+    
+    protected videoHighlightCache : EventInfoCache = new EventInfoCache();
+    protected lastVideoHighlightsRead : EventInfoCache = new EventInfoCache();
+    
     protected selection : Selection = {
         gameweek: parseInt(Url.getParameterByName("gameweek", "22")),
         differentialsOnly: Url.getParameterByName("differentials", "false") == 'true',
@@ -44,8 +57,10 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
     constructor(props : any) {
         super(props);
         this.state = {
+            eventInfo : null,
             matchInfo : null,
             standings : null,
+            videoHighlights : null,
             selection : {
                 gameweek: parseInt(Url.getParameterByName("gameweek", "22")),
                 differentialsOnly: Url.getParameterByName("differentials", "false") == 'true',
@@ -105,6 +120,8 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
             this.selection.gameweek = event.target.value;
             this.setUrl();
             this.readMatchInfo();
+            this.readEventInfo();
+            this.readVideoHighlights();
         }
     }
 
@@ -119,6 +136,33 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
             });
         }
     }
+
+  protected readEventInfo() {
+    var selectedGameweek = this.selection.gameweek;
+    var now = new Date();
+    var lastRead = this.lastEventInfoRead.get(selectedGameweek);
+    if (!lastRead || (now.getTime() - lastRead.getTime()) > 60000) {
+        this.lastEventInfoRead.update(selectedGameweek, now);
+        this.eplClient.readEventInfo(selectedGameweek, this.processEventInfo.bind(this));
+    }
+    else {
+        this.processEventInfo(this.eventInfoCache.get(selectedGameweek));
+    }
+  }
+
+  protected readVideoHighlights() {
+    var selectedGameweek = this.selection.gameweek;
+    var now = new Date();
+    var lastRead = this.lastVideoHighlightsRead.get(selectedGameweek);
+    if (!lastRead || (now.getTime() - lastRead.getTime()) > 60000) {
+        this.lastVideoHighlightsRead.update(selectedGameweek, now);
+        this.eplClient.readVideoHighlights(selectedGameweek, this.processVideoHighlights.bind(this));
+    }
+    else {
+        this.processVideoHighlights(this.videoHighlightCache.get(selectedGameweek));
+    }
+
+  }
 
     protected readMatchInfo() {
         var now = new Date();
@@ -163,6 +207,7 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
             
             if (this.componentMounted) {
                 this.setState({
+                    eventInfo: this.state.eventInfo,
                     matchInfo: data,
                     standings: this.state.standings,
                     selection: this.selection
@@ -172,6 +217,7 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
         else {
             if (this.componentMounted) {
                 this.setState({
+                    eventInfo: this.state.eventInfo,
                     matchInfo: this.state.matchInfo,
                     standings: this.state.standings,
                     selection: this.state.selection
@@ -179,9 +225,63 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
             }
         }
       }
+
+      protected processEventInfo(data : any) {
+        if (data) {
+            this.eventInfoCache.update(this.selection.gameweek, data);
+            
+            if (this.componentMounted) {
+                this.setState({
+                    eventInfo: data,
+                    matchInfo: this.state.matchInfo,
+                    standings: this.state.standings,
+                    selection: this.selection
+                });
+            }
+        }
+        else {
+            if (this.componentMounted) {
+                this.setState({
+                    eventInfo: this.state.eventInfo,
+                    matchInfo: this.state.matchInfo,
+                    standings: this.state.standings,
+                    selection: this.state.selection
+                });
+            }
+        }
+      }  
+      
+      protected processVideoHighlights(data : any) {
+        if (data) {
+            this.videoHighlightCache.update(this.selection.gameweek, data);
+            
+            if (this.componentMounted) {
+                this.setState({
+                    videoHighlights: data,
+                    eventInfo: this.state.eventInfo,
+                    matchInfo: this.state.matchInfo,
+                    standings: this.state.standings,
+                    selection: this.selection
+                });
+            }
+        }
+        else {
+            if (this.componentMounted) {
+                this.setState({
+                    videoHighlights: this.state.videoHighlights,
+                    eventInfo: this.state.eventInfo,
+                    matchInfo: this.state.matchInfo,
+                    standings: this.state.standings,
+                    selection: this.state.selection
+                });
+            }
+        }
+      }        
       
         protected onFocus() {
             this.readMatchInfo();
+            this.readEventInfo();
+            this.readVideoHighlights();
         }
 
       public componentDidMount() {
@@ -191,6 +291,8 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
         }
         this.readMatchInfo();
         this.readStandings();
+        this.readEventInfo();
+        this.readVideoHighlights();
       }
 
       public componentWillUnmount() {
@@ -239,17 +341,24 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
               <MatchHeader  
                 matchInfo={this.state.matchInfo}
               />
-              <div className="container">
-                <div className="row no-gutters">
-                  <div className="col-4">
-                    <div className="main-element">
+              <div className="container-fluid">
+                <div className="row justify-content-center no-gutters">
+                  <div className="col-4 d-flex flex-column align-items-end">
+                    <div className="d-flex main-element side-column-element">
                       <PickList picks={teams[0].picks}
                                 config={this.state.selection}
                                 differentials={this.state.matchInfo.differentials}/>
                     </div>
+                    <div className="main-element side-column-element">
+                      <FixtureStatusGroup
+                        team={teams[0]}
+                        fixtures={this.state.eventInfo ? this.state.eventInfo.fixtures : null}
+                        clubs={this.state.eventInfo ? this.state.eventInfo.clubs : null}
+                      />                    
+                    </div>
                   </div>
-                  <div className="col-4 no-gutters">
-                    <div className="d-flex main-element">
+                  <div className="col-4 d-flex flex-column align-items-center no-gutters center-column">
+                    <div className="d-flex main-element justify-content-center">
                       <Highlight team={teams[0]} events={matchInfo.allEvents}/>
                       <Highlight team={teams[1]} events={matchInfo.allEvents}/>
                     </div>
@@ -258,13 +367,25 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
                         eventList={matchInfo.allEvents}
                       />
                     </div>
-                  </div>
-                  <div className="col-4">
                     <div className="main-element">
+                      <VideoHighlightGroup
+                        playlistItems={this.state.videoHighlights}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-4 d-flex flex-column align-items-start">
+                    <div className="main-element side-column-element">
                         <PickList picks={teams[1].picks}
                                   config={this.state.selection}
                                   differentials={this.state.matchInfo.differentials}
                         />
+                    </div>
+                    <div className="main-element side-column-element">
+                      <FixtureStatusGroup
+                        team={teams[1]}
+                        fixtures={this.state.eventInfo ? this.state.eventInfo.fixtures : null}
+                        clubs={this.state.eventInfo ? this.state.eventInfo.clubs : null}
+                      />
                     </div>
                   </div>
                 </div>

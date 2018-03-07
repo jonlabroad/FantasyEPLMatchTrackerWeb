@@ -17,11 +17,11 @@ export default class Highlight extends React.Component<HighlightProps, {}> {
         this.state = props;
     }
 
-    protected getLatestHighPriorityEvent() {
+    protected getLatestEvent(highPriorityOnly : boolean) {
         var reversedEvents = this.props.events.slice(0).reverse();
         for (var i in reversedEvents) {
             if (reversedEvents[i].teamId == this.props.team.id || reversedEvents[i].teamId < 0) {
-                if (this.isHighPriorityEvent(reversedEvents[i])) {
+                if (!highPriorityOnly || this.isHighPriorityEvent(reversedEvents[i])) {
                     return reversedEvents[i];
                 }
             }
@@ -48,7 +48,10 @@ export default class Highlight extends React.Component<HighlightProps, {}> {
     }
 
     protected renderHighlight() : any {
-        var event = this.getLatestHighPriorityEvent();
+        var event = this.getLatestEvent(true);
+        if (!event) {
+            event = this.getLatestEvent(false);
+        }
         if (event) {
             var highlightPhoto = this.renderPhoto(event);
             var highlightText = this.renderHighlightText(event);

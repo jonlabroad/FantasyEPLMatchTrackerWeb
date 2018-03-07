@@ -2,7 +2,8 @@
     position: relative;
     background-color: #ffffffd0;
     background-size: 33%;
-    background-repeat: repeat;
+	background-repeat: repeat;
+	max-width: 100%;
 }
 
 .team-highlight img {
