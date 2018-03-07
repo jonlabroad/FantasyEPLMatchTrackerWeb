@@ -1,0 +1,15 @@
+.video-highlight-thumbnail {
+}
+
+.video-highlight-title div {
+    font-weight: bold;
+    font-size: 12px
+}
+
+.video-highlight-title {
+    color: inherit
+}
+
+.video-highlight-description {
+    font-size: 10px
+}

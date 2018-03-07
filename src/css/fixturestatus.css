@@ -81,7 +81,7 @@
 }
 
 .fixture-status {
-    background-color: #c2c2c2;
+    background-color: rgba(0, 0, 0, 0.1);
     padding-top: 2px;
     padding-bottom: 2px;
     width: 100%;
