@@ -17,6 +17,8 @@ import Selection from "../models/Selection";
 import FixtureStatusGroup from "./FixtureStatusGroup";
 import EventInfoCache from "../EventInfoCache";
 import VideoHighlightGroup from "./VideoHighlightGroup"
+import SimulatedH2h from "./SimulatedH2h";
+import LiveStandings from "./LiveStandings";
 import Url from "../Url";
 import { TeamStarterScore, TeamSubScore } from "./TeamScore";
 
@@ -313,7 +315,7 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
                 <div className="row justify-content-center no-gutters">
                   <div className="col-4 d-flex flex-column align-items-end">
                     <div className="d-flex main-element side-column-element">
-                      <PickList picks={teams[0].picks}
+                      <PickList picks={teams[0] != null ? teams[0].picks : null}
                                 config={this.state.selection}
                                 differentials={this.state.matchInfo.differentials}/>
                     </div>
@@ -330,6 +332,17 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
                       <Highlight team={teams[0]} events={matchInfo.allEvents}/>
                       <Highlight team={teams[1]} events={matchInfo.allEvents}/>
                     </div>
+                    <SimulatedH2h
+                          teams={teams}
+                          simulatedH2h={matchInfo.simulatedH2h}
+                    />
+                    <div className="main-element">
+                        <LiveStandings
+                            liveStandings={matchInfo.liveStandings != null ? matchInfo.liveStandings.liveStandings : null}
+                            team1Id={teams[0] != null ? teams[0].id : 0}
+                            team2Id={teams[1] != null ? teams[1].id : 0}
+                        />
+                    </div>
                     <div className="main-element">
                       <EventTable
                         eventList={matchInfo.allEvents}
@@ -343,7 +356,7 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
                   </div>
                   <div className="col-4 d-flex flex-column align-items-start">
                     <div className="main-element side-column-element">
-                        <PickList picks={teams[1].picks}
+                        <PickList picks={teams[1] != null ? teams[1].picks : null}
                                   config={this.state.selection}
                                   differentials={this.state.matchInfo.differentials}
                         />

@@ -87,6 +87,11 @@
     font-weight: normal;
 }
 
+.match-strip .team-chip {
+    background-color: #FFD700;
+    font-weight: bold;
+}
+
 .match-time {
     color: #48494a;
     display: block;

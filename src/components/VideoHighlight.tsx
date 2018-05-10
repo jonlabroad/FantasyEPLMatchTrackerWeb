@@ -18,8 +18,8 @@ export default class VideoHighlight extends React.Component<VideoHighlightProps,
             return null;
         }
 
-        var description = snippet.description.substring(0, Math.min(150, snippet.description.length));
-        if (description.length >= 150) {
+        var description = snippet.description.substring(0, Math.min(120, snippet.description.length));
+        if (description.length >= 120) {
             description += " ...";
         }
 
