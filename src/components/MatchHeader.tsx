@@ -6,7 +6,7 @@ import TeamRecord from "./TeamRecord";
 import {TeamStarterScore, TeamSubScore} from "./TeamScore";
 import TeamStripe from "./TeamStripe";
 import {TeamChip} from "./TeamChip";
-import Selection from "../models/Selection";
+import Selection from "../models/TrackerSelection";
 import SimulatedH2h from "./SimulatedH2h";
 
 export interface MatchHeaderState {

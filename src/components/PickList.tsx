@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import PickListElement from "./PickListElement"
-import Selection from "../models/Selection";
+import Selection from "../models/TrackerSelection";
 
 export interface PickListProps {
     picks : any;

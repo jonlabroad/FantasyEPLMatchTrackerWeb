@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import Selection from "../models/Selection";
+import Selection from "../models/TrackerSelection";
 
 export interface GameweekSelectorProps {
     onChange : any

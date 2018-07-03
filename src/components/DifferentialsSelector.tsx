@@ -1,11 +1,11 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 
-import Selection from "../models/Selection";
+import Selection from "../models/TrackerSelection";
+import TrackerSelection from "../models/TrackerSelection";
 
 export interface DifferentialsSelectorProps {
     onChange : any
-    config : Selection
+    config : TrackerSelection
 }
 
 export default class DifferentialsSelector extends React.Component<DifferentialsSelectorProps, {}> {   

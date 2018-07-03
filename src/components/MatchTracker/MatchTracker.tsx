@@ -1,26 +1,22 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 
-import * as JQuery from "jquery";
-
-import EPLClient from "../EPLClient";
-import MatchHeader from "./MatchHeader";
-import TeamName from "./TeamName";
-import PickList from "./PickList";
-import EventTable from "./EventTable";
-import TeamRecord from "./TeamRecord";
-import TeamSelector from "./TeamSelector";
-import GameweekSelector from "./GameweekSelector";
-import DifferentialsSelector from "./DifferentialsSelector";
-import Highlight from "./Highlight";
-import Selection from "../models/Selection";
-import FixtureStatusGroup from "./FixtureStatusGroup";
-import EventInfoCache from "../EventInfoCache";
-import VideoHighlightGroup from "./VideoHighlightGroup"
-import SimulatedH2h from "./SimulatedH2h";
-import LiveStandings from "./LiveStandings";
-import Url from "../Url";
-import { TeamStarterScore, TeamSubScore } from "./TeamScore";
+import EPLClient from "../../EPLClient";
+import EventInfoCache from "../../EventInfoCache";
+import MatchTrackerStateManager from "./MatchTrackerStateManager";
+import MatchTrackerSelectionManager from "./MatchTrackerSelectionManager";
+import Url from "../../Url";
+import TeamSelector from "../TeamSelector";
+import GameweekSelector from "../GameweekSelector";
+import DifferentialsSelector from "../DifferentialsSelector";
+import MatchHeader from "../MatchHeader";
+import PickList from "../PickList";
+import FixtureStatusGroup from "../FixtureStatusGroup";
+import Highlight from "../Highlight";
+import SimulatedH2h from "../SimulatedH2h";
+import TrackerSelection from "../../models/TrackerSelection";
+import LiveStandings from "../LiveStandings";
+import EventTable from "../EventTable";
+import VideoHighlightGroup from "../VideoHighlightGroup";
 
 export interface MatchTrackerProps {
 }
@@ -36,15 +32,18 @@ export interface MatchTrackerState {
 export default class MatchTracker extends React.Component<MatchTrackerProps, MatchTrackerState> {
     protected leagueId : number = 31187;
     protected eplClient : EPLClient = new EPLClient();
-    protected componentMounted : boolean = false;
+    public componentMounted : boolean = false;
     
-    protected eventInfoCache : EventInfoCache = new EventInfoCache();
+    public eventInfoCache : EventInfoCache = new EventInfoCache();
     protected lastEventInfoRead : EventInfoCache = new EventInfoCache();   
     
-    protected videoHighlightCache : EventInfoCache = new EventInfoCache();
+    public videoHighlightCache : EventInfoCache = new EventInfoCache();
     protected lastVideoHighlightsRead : EventInfoCache = new EventInfoCache();
     
-    protected selection : Selection = {
+    protected stateManager : MatchTrackerStateManager = null;
+    protected selManager : MatchTrackerSelectionManager = null;
+
+    public selection : TrackerSelection = {
         gameweek: parseInt(Url.getParameterByName("gameweek", "22")),
         differentialsOnly: Url.getParameterByName("differentials", "false") == 'true',
         teamName: "",
@@ -67,6 +66,8 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
                 cup: Url.getParameterByName("cup", "false") == 'true'
             }
         }
+        this.stateManager = new MatchTrackerStateManager(this);
+        this.selManager = new MatchTrackerSelectionManager(this);
         this.setUrl();
     }
 
@@ -78,177 +79,48 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
         return teams;
     }
 
-    protected findTeamStandingByName(teamName : string) {
-        var standings = this.state.standings;
-        if (standings) {
-          for (var i in standings.standings.results) {
-            var result = standings.standings.results[i];
-            if (result.entry_name === teamName) {
-              return result;
-            }
-          }
-        }
-        return null;
-      }
-
-      protected findTeamStandingById(teamId : number, standings? : any) {
-        var standings = standings ? standings : this.state.standings;
-        if (standings) {
-          for (var i in standings.standings.results) {
-            var result = standings.standings.results[i];
-            if (result.entry == teamId) {
-              return result;
-            }
-          }
-        }
-      }
-
-    protected teamNameChanged(event : any) {
-        var oldSelection = this.selection;
-        if (oldSelection.teamName !== event.target.value) {
-            this.selection.teamName = event.target.value;
-            this.selection.teamId = this.findTeamStandingByName(event.target.value).entry;
-            this.setUrl();
-            this.readMatchInfo();
-        }
-    }
-
-    protected gameweekChanged(event : any) {
-        if (this.selection.gameweek !== event.target.value) {
-            this.selection.gameweek = event.target.value;
-            this.setUrl();
-            this.readMatchInfo();
-            this.readEventInfo();
-            this.readVideoHighlights();
-        }
-    }
-
-    protected differentialsChanged(event : any) {
-        if (this.selection.differentialsOnly !== event.target.checked) {
-            this.selection.differentialsOnly = event.target.checked;
-            this.setUrl();
-            this.setState({
-                standings: this.state.standings,
-                selection: this.selection,
-                matchInfo: this.state.matchInfo,
-                eventInfo: this.state.eventInfo
-            });
-        }
-    }
-
-  protected readEventInfo() {
+  public readEventInfo() {
     var selectedGameweek = this.selection.gameweek;
     var now = new Date();
     var lastRead = this.lastEventInfoRead.get(selectedGameweek);
     if (!lastRead || (now.getTime() - lastRead.getTime()) > 60000) {
         this.lastEventInfoRead.update(selectedGameweek, now);
-        this.eplClient.readEventInfo(selectedGameweek, this.processEventInfo.bind(this));
+        this.eplClient.readEventInfo(selectedGameweek, this.stateManager.processEventInfo.bind(this.stateManager));
     }
     else {
-        this.processEventInfo(this.eventInfoCache.get(selectedGameweek));
+        this.stateManager.processEventInfo(this.eventInfoCache.get(selectedGameweek));
     }
   }
 
-  protected readVideoHighlights() {
+  public readVideoHighlights() {
     var selectedGameweek = this.selection.gameweek;
     var now = new Date();
     var lastRead = this.lastVideoHighlightsRead.get(selectedGameweek);
     if (!lastRead || (now.getTime() - lastRead.getTime()) > 60000) {
         this.lastVideoHighlightsRead.update(selectedGameweek, now);
-        this.eplClient.readVideoHighlights(selectedGameweek, this.processVideoHighlights.bind(this));
+        this.eplClient.readVideoHighlights(selectedGameweek, this.stateManager.processVideoHighlights.bind(this.stateManager));
     }
     else {
-        this.processVideoHighlights(this.videoHighlightCache.get(selectedGameweek));
+        this.stateManager.processVideoHighlights(this.videoHighlightCache.get(selectedGameweek));
     }
 
   }
 
-    protected readMatchInfo() {
-        this.eplClient.readTeamData(this.leagueId, this.selection.teamId, this.selection.gameweek, this.selection.cup, this.processMatchInfo.bind(this));
+    public readMatchInfo() {
+        this.eplClient.readTeamData(this.leagueId, this.selection.teamId, this.selection.gameweek, this.selection.cup, this.stateManager.processMatchInfo.bind(this.stateManager));
     }
     
-    protected readStandings() {
+    public readStandings() {
         if (!this.state.standings) {
-            this.eplClient.readLeagueStandings(this.leagueId, this.processStandings.bind(this));
+            this.eplClient.readLeagueStandings(this.leagueId, this.stateManager.processStandings.bind(this.stateManager));
         }
     }
     
-    protected processStandings(data : any) {
-        var standings = data;
-        if (this.componentMounted) {
-            var standing = this.findTeamStandingById(this.selection.teamId, standings);
-            this.selection.teamName = standing.entry_name;
-            this.setState({
-                matchInfo: this.state.matchInfo,
-                standings: standings,
-                selection: this.selection
-            });
-        }
-      }
-
-      protected setUrl() {
+    public setUrl() {
         Url.setUrl(this.selection.teamId, this.selection.gameweek, this.selection.differentialsOnly, this.selection.cup);
       }
 
-    protected processMatchInfo(data : any) {
-        if (data) {          
-            if (this.componentMounted) {
-                this.setState({
-                    matchInfo: data,
-                    selection: this.selection
-                });
-            }
-        }
-        else {
-            if (this.componentMounted) {
-                this.setState({
-                    matchInfo: this.state.matchInfo,
-                });
-            }
-        }
-      }
-
-      protected processEventInfo(data : any) {
-        if (data) {
-            this.eventInfoCache.update(this.selection.gameweek, data);
-            
-            if (this.componentMounted) {
-                this.setState({
-                    eventInfo: data,
-                    selection: this.selection
-                });
-            }
-        }
-        else {
-            if (this.componentMounted) {
-                this.setState({
-                    eventInfo: this.state.eventInfo
-                });
-            }
-        }
-      }  
-      
-      protected processVideoHighlights(data : any) {
-        if (data) {
-            this.videoHighlightCache.update(this.selection.gameweek, data);
-            
-            if (this.componentMounted) {
-                this.setState({
-                    videoHighlights: data,
-                    selection: this.selection
-                });
-            }
-        }
-        else {
-            if (this.componentMounted) {
-                this.setState({
-                    videoHighlights: this.state.videoHighlights,
-                });
-            }
-        }
-      }        
-      
-        protected onFocus() {
+      protected onFocus() {
             this.readMatchInfo();
             this.readEventInfo();
             this.readVideoHighlights();
@@ -288,15 +160,15 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
                     <TeamSelector
                       config = {this.selection}
                       standings = {this.state.standings}
-                      onChange = {this.teamNameChanged.bind(this)}
+                      onChange = {this.selManager.teamNameChanged.bind(this.selManager)}
                     />
                   <GameweekSelector
                     config = {this.selection}
-                    onChange = {this.gameweekChanged.bind(this)}
+                    onChange = {this.selManager.gameweekChanged.bind(this.selManager)}
                   />
                   <DifferentialsSelector
                     config = {this.selection}
-                    onChange = {this.differentialsChanged.bind(this)}
+                    onChange = {this.selManager.differentialsChanged.bind(this.selManager)}
                   />
                 </div>
         }
