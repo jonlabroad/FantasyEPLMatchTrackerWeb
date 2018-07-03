@@ -1,15 +1,22 @@
 .video-highlight-thumbnail {
+    padding: 10px;
 }
 
 .video-highlight-title div {
-    font-weight: bold;
-    font-size: 12px
+}
+
+.video-highlight-text {
+    padding: 10px;
+    font-family: -apple-system, BlinkMacSystemFont, Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 12px;
 }
 
 .video-highlight-title {
-    color: inherit
+    font-weight: bold;
+    color: #000000;
 }
 
 .video-highlight-description {
-    font-size: 10px
+    color: #6c6d6f;
+    font-weight: 400;
 }

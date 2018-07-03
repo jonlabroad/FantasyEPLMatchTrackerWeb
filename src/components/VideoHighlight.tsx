@@ -29,7 +29,7 @@ export default class VideoHighlight extends React.Component<VideoHighlightProps,
                 <a href={linkUrl} className="video-highlight-thumbnail" target="_blank">
                     <img src={snippet.thumbnails.default.url}/>
                 </a>
-                <div>
+                <div className="video-highlight-text">
                     <a href={linkUrl} className="video-highlight-title" target="_blank">
                         <div>
                             {snippet.title}
