@@ -17,6 +17,7 @@ import TrackerSelection from "../../models/TrackerSelection";
 import LiveStandings from "../LiveStandings";
 import EventTable from "../EventTable";
 import VideoHighlightGroup from "../VideoHighlightGroup";
+import { V4MAPPED } from "dns";
 
 export interface MatchTrackerProps {
 }
@@ -209,16 +210,20 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
                           simulatedH2h={matchInfo.simulatedH2h}
                     />
                     <div className="main-element">
+                      <EventTable
+                        eventList={matchInfo.allEvents}
+                        teams={teams.reduce(function(map, team) {
+                          map[team.id] = team;
+                          return map;
+                        }, {})}
+                      />
+                    </div>
+                    <div className="main-element">
                         <LiveStandings
                             liveStandings={matchInfo.liveStandings != null ? matchInfo.liveStandings.liveStandings : null}
                             team1Id={teams[0] != null ? teams[0].id : 0}
                             team2Id={teams[1] != null ? teams[1].id : 0}
                         />
-                    </div>
-                    <div className="main-element">
-                      <EventTable
-                        eventList={matchInfo.allEvents}
-                      />
                     </div>
                     <div className="main-element">
                       <VideoHighlightGroup

@@ -1,3 +1,38 @@
 .live-standing-highlighted {
     background-color: #ccccccbd;
 }
+
+.live-standings-header {
+    text-align: center;
+    font-weight: bold;
+    padding: 15px;
+}
+
+.live-standings-table table tbody tr:nth-child(even) {
+	background: rgba(0,0,0,0.017);
+}
+
+.live-standings-table tr td {
+	padding: 2px;
+	font-size: 12px;
+}
+
+.live-standings-num {
+    width: 6%;
+}
+
+.live-standings-name {
+    width: 40%;
+}
+
+.live-standings-record {
+    width: 15%;
+}
+
+.live-standings-points-for {
+    width: 8%;
+}
+
+.live-standings-points-total {
+    width: 8%;
+}

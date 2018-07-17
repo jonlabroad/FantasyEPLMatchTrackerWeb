@@ -15,8 +15,11 @@ body {
     border: 1px;
     border-color: rgb(212, 212, 212);
     border-style: solid;
-    border-radius: 3px;
+    border-radius: 10px;
     width: 100%;
+
+    font-family: -apple-system, BlinkMacSystemFont, Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 12px;
 }
 
 .side-column-element {

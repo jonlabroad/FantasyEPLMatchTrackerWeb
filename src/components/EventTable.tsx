@@ -5,6 +5,7 @@ import EventTableElement from "./EventTableElement"
 
 export interface EventTableProps {
     eventList : any[];
+    teams : any;
 }
 
 export default class EventTable extends React.Component<EventTableProps, {}> {
@@ -22,10 +23,11 @@ export default class EventTable extends React.Component<EventTableProps, {}> {
         }
     }
 
-    renderElement(key : string, event : any) {
+    renderElement(key : string, event : any, teamName : string) {
         return <EventTableElement
                 key={key}
                 event={event}
+                teamName={teamName}
             />
     }
 
@@ -33,7 +35,20 @@ export default class EventTable extends React.Component<EventTableProps, {}> {
         var elements = new Array<any>();
         for (var i in this.props.eventList) {
             var event = this.props.eventList[i];
-            elements.push(this.renderElement(i, event));
+            console.log(this.props.teams);
+            var teamName = "ERROR";
+            if (event.teamId < 0) {
+                var self = this;
+                teamName = Object.keys(this.props.teams).reduce(function(names : string, teamId : string) : string {
+                    var split = names ? "" : "/";
+                    names += self.props.teams[teamId].entry.entry.name + split;
+                    return names;
+                }, "");
+            }
+            else {
+                teamName = this.props.teams[event.teamId].entry.entry.name;
+            }
+            elements.push(this.renderElement(i, event, teamName));
         }
         return elements;
     }
@@ -47,15 +62,18 @@ export default class EventTable extends React.Component<EventTableProps, {}> {
     }
 
     render() {
-        var eventClassName = "";
-        return <div className="scrollable event-scrollable">
-                <table className={`table table-sm table-striped events-table ${eventClassName}`}>
+        return (
+            <div>
+                <div className="events-table-header">Match Commentary</div>
+                <div className="scrollable events-table event-scrollable">
+                <table className={`table table-sm`}>
                     <tbody>
                     {this.renderElements()}
                     </tbody>
                 </table>
-                <div ref={(el) => {this.bottomScrollElement = el}}>
+                <div ref={(el) => {this.bottomScrollElement = el}}></div>
                 </div>
             </div>
+        );
     }
 }

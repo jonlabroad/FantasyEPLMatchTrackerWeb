@@ -29,21 +29,21 @@ export default class LiveStandingElement extends React.Component<LiveStandingEle
         }
         return (
             <tr className={"live-standing-element " + addClasses}>
-                <td>
+                <td className="live-standings-num">
                     {this.props.num}
                 </td>
-                <td>
+                <td className="live-standings-name">
                     {this.props.liveStanding.teamName}
                 </td>
-                <td>
+                <td className="live-standings-record">
                     <TeamRecord
                         standing={standing}
                     />
                 </td>
-                <td>
+                <td className="live-standings-points-for">
                     {standing.points_for}
                 </td>
-                <td>
+                <td className="live-standings-points-total">
                     {standing.points_total}
                 </td>
             </tr>

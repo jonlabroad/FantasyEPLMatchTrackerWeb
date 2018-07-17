@@ -31,12 +31,15 @@ export default class LiveStandings extends React.Component<LiveStandingsProps, {
         }       
 
         return (
-            <div className="scrollable event-scrollable">
-                <table className="table table-sm table-picks">
+            <div>
+            <div className="live-standings-header">Live Standings</div>
+            <div className="scrollable event-scrollable live-standings-table">
+                <table className="table table-sm">
                     <tbody>
                         {standingElements}
                     </tbody>
                 </table>
+            </div>
             </div>
         );
     }

@@ -4,7 +4,7 @@
 }
 
 .event-important {
-	font-weight: bold
+	font-weight: bold;
 }
 
 .event-common {
@@ -19,29 +19,43 @@
 	background-color: #F2B8AE
 }
 
-.events-table .event-footballer-name {
-	width: 16%;
-}
-.events-table .event-number {
-	width: 5%;
+.event-icon img {
+	height: 16px;
+	width: 16px;
 }
 
-.events-table .event-type {
-	width: 30%
+.events-table .event-time {
+	font-weight: bold;
+	width: 15%;
 }
-				
-.events-table .event-points {
-	width: 5%
+
+.events-table .event-icon {
+	width: 10%;
+}
+
+.events-table .event-description {
+	width: 80%;
 }
 
 .events-table {
 	margin: auto;
 	float: none;
-	width: 100%
+	width: 100%;
+}
+
+.events-table table tbody tr:nth-child(even) {
+	background: rgba(0,0,0,0.017);
 }
 
 .events-table tr td {
 	padding: 2px;
 	font-size: 12px;
 	width: 100%;
+}
+
+.events-table-header {
+	text-align: center;
+	font-weight: bold;
+
+	padding: 15px;
 }
