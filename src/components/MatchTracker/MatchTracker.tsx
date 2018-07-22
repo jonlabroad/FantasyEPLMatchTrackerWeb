@@ -17,7 +17,6 @@ import TrackerSelection from "../../models/TrackerSelection";
 import LiveStandings from "../LiveStandings";
 import EventTable from "../EventTable";
 import VideoHighlightGroup from "../VideoHighlightGroup";
-import { V4MAPPED } from "dns";
 
 export interface MatchTrackerProps {
 }
@@ -31,8 +30,7 @@ export interface MatchTrackerState {
 }
 
 export default class MatchTracker extends React.Component<MatchTrackerProps, MatchTrackerState> {
-    protected leagueId : number = 31187;
-    protected eplClient : EPLClient = new EPLClient();
+    public eplClient : EPLClient;
     public componentMounted : boolean = false;
     
     public eventInfoCache : EventInfoCache = new EventInfoCache();
@@ -44,32 +42,42 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
     protected stateManager : MatchTrackerStateManager = null;
     protected selManager : MatchTrackerSelectionManager = null;
 
-    public selection : TrackerSelection = {
-        gameweek: parseInt(Url.getParameterByName("gameweek", "22")),
+    protected defaultGameweek : number = 1;
+    public selection : TrackerSelection = null;
+
+    constructor(props : any) {
+        super(props);
+        var appConfig = this.readAppConfig();
+        if (appConfig) {
+          this.defaultGameweek = appConfig.CurrentGameWeek;
+        }
+        
+        this.stateManager = new MatchTrackerStateManager(this);
+        this.selManager = new MatchTrackerSelectionManager(this);
+
+        this.selection = this.getTrackerSelection();
+        this.state = {
+          eventInfo : null,
+          matchInfo : null,
+          standings : null,
+          videoHighlights : null,
+          selection : this.selection
+      }
+      this.eplClient = new EPLClient(this.selection.leagueId, this.selection.seasonStartYear);
+      this.setUrl();
+    }
+
+    protected getTrackerSelection()
+    {
+      return {
+        seasonStartYear: parseInt(Url.getParameterByName("season", "2017")), // TODO change to 2018
+        leagueId: parseInt(Url.getParameterByName("league", "31187")), // TODO change to 5815
+        gameweek: parseInt(Url.getParameterByName("gameweek", this.defaultGameweek.toString())),
         differentialsOnly: Url.getParameterByName("differentials", "false") == 'true',
         teamName: "",
         teamId: parseInt(Url.getParameterByName("team", "2365803")),
         cup: Url.getParameterByName("cup", "false") == 'true'
-    }
-
-    constructor(props : any) {
-        super(props);
-        this.state = {
-            eventInfo : null,
-            matchInfo : null,
-            standings : null,
-            videoHighlights : null,
-            selection : {
-                gameweek: parseInt(Url.getParameterByName("gameweek", "22")),
-                differentialsOnly: Url.getParameterByName("differentials", "false") == 'true',
-                teamName: "",
-                teamId: parseInt(Url.getParameterByName("team", "2365803")),
-                cup: Url.getParameterByName("cup", "false") == 'true'
-            }
-        }
-        this.stateManager = new MatchTrackerStateManager(this);
-        this.selManager = new MatchTrackerSelectionManager(this);
-        this.setUrl();
+      };
     }
 
     protected getTeamsArray(matchInfo : any) {
@@ -108,17 +116,21 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
   }
 
     public readMatchInfo() {
-        this.eplClient.readTeamData(this.leagueId, this.selection.teamId, this.selection.gameweek, this.selection.cup, this.stateManager.processMatchInfo.bind(this.stateManager));
+        this.eplClient.readTeamData(this.selection.leagueId, this.selection.teamId, this.selection.gameweek, this.selection.cup, this.stateManager.processMatchInfo.bind(this.stateManager));
     }
     
     public readStandings() {
         if (!this.state.standings) {
-            this.eplClient.readLeagueStandings(this.leagueId, this.stateManager.processStandings.bind(this.stateManager));
+            this.eplClient.readLeagueStandings(this.selection.leagueId, this.stateManager.processStandings.bind(this.stateManager));
         }
+    }
+
+    public readAppConfig() {
+      return EPLClient.readAppConfigSync();
     }
     
     public setUrl() {
-        Url.setUrl(this.selection.teamId, this.selection.gameweek, this.selection.differentialsOnly, this.selection.cup);
+        Url.setUrl(this.selection.seasonStartYear, this.selection.leagueId, this.selection.teamId, this.selection.gameweek, this.selection.differentialsOnly, this.selection.cup);
       }
 
       protected onFocus() {

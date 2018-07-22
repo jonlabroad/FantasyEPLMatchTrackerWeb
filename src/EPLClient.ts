@@ -2,14 +2,36 @@ import CachedS3JsonReader from "./CachedS3JsonReader"
 import MatchInfoKey from "./MatchInfoKey"
 
 export default class EPLClient {
-    private static URL_BASE = "https://s3.amazonaws.com/fantasyeplmatchtracker/data"
-    private static LEAGUE_INFO_BASE = EPLClient.URL_BASE + "/31187/api";
+    private static URL_ROOT : string = "https://s3.amazonaws.com/fantasyeplmatchtracker";
+    private URL_BASE : string = EPLClient.URL_ROOT + "/data";
+    private SEASON_URL_BASE : string;
+    private LEAGUE_INFO_BASE : string;
     private static STANDINGS_BASE = "leagues-h2h-standings";
 
+    private seasonStartYear : number;
     private static matchInfoReader : CachedS3JsonReader<MatchInfoKey>;
 
-    constructor() {
+    constructor(leagueId : number, seasonStartYear : number) {
       EPLClient.matchInfoReader = new CachedS3JsonReader<MatchInfoKey>(60000);
+      this.SEASON_URL_BASE = this.URL_BASE + `/Season${seasonStartYear}`;
+      this.LEAGUE_INFO_BASE = `${this.SEASON_URL_BASE}/${leagueId}/api`;
+      this.seasonStartYear = seasonStartYear;
+    }
+
+    public static readAppConfigSync() : any{
+      var link = this.getAppConfigUrl();
+      var result = null;
+      $.ajax({
+        url: link,
+        async: false,
+        type: "GET",
+        cache: false,
+        dataType: "json",
+        success: function (data) {
+          result = data;
+        }
+      });
+      return result;
     }
 
     public readLeagueStandings(leagueId : number, successFunc : Function) {
@@ -26,7 +48,7 @@ export default class EPLClient {
     }
 
     public readTeamData(leagueId : number, teamId : number, gameweek : number, isCup : boolean, successFunc : Function) {
-      var key = new MatchInfoKey(leagueId, gameweek, teamId, isCup);
+      var key = new MatchInfoKey(this.seasonStartYear, leagueId, gameweek, teamId, isCup);
       return EPLClient.matchInfoReader.read(key, successFunc);    	
     }
 
@@ -57,19 +79,23 @@ export default class EPLClient {
       }      
 
     protected getLeagueStandingsUrl(leagueId : number) : any {
-        return `${EPLClient.LEAGUE_INFO_BASE}/${EPLClient.STANDINGS_BASE}`;
+        return `${this.LEAGUE_INFO_BASE}/${EPLClient.STANDINGS_BASE}`;
     }
 
     protected getEventInfoUrl(gameweek : number) : any {
-      return `${EPLClient.URL_BASE}/events/${gameweek}/EventInfo`;
+      return `${this.SEASON_URL_BASE}/events/${gameweek}/EventInfo`;
     }
 
     protected getVideoHighlightsUrl(gameweek : number) : any {
-      return `${EPLClient.URL_BASE}/highlights/${gameweek}/youtube.json`;
-    }    
+      return `${this.SEASON_URL_BASE}/highlights/${gameweek}/youtube.json`;
+    }
+
+    protected static getAppConfigUrl() : any {
+      return `${this.URL_ROOT}/appconfig.json`;
+    }
 
     protected getMatchInfoUrl(leagueId : number, teamId : number, gameweek : number, isCup : boolean) : string {
-        var root = 'https://s3.amazonaws.com/fantasyeplmatchtracker/data';
+        var root = this.SEASON_URL_BASE
         if (!isCup) {
           return `${root}/${leagueId}/${teamId}/${gameweek}/MatchInfo`
         }

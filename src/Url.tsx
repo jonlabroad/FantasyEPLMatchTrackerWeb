@@ -1,6 +1,6 @@
 export default class Url {
-    public static setUrl(teamId : number, gameweek : number, differentialsOnly : boolean, isCup : boolean) {
-        window.history.pushState("", "", `?team=${teamId}&gameweek=${gameweek}&differentials=${differentialsOnly}&cup=${isCup}`);
+    public static setUrl(startYear : number, leagueId: number, teamId : number, gameweek : number, differentialsOnly : boolean, isCup : boolean) {
+        window.history.pushState("", "", `?season=${startYear}&league=${leagueId}&team=${teamId}&gameweek=${gameweek}&differentials=${differentialsOnly}&cup=${isCup}`);
     }
 
     public static getParameterByName(name : string, defaultValue? : string, url? : string) {

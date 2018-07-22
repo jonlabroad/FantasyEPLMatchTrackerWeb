@@ -5,13 +5,15 @@ export default class MatchInfoKey extends CacheKey {
     public team : Number;
     public isCup : Boolean;
     public leagueId : Number;
+    public seasonStartYear : Number;
 
-    constructor(leagueId : Number, gameweek : Number, team : Number, isCup : Boolean) {
+    constructor(seasonStartYear : number, leagueId : Number, gameweek : Number, team : Number, isCup : Boolean) {
         super();
         this.leagueId = leagueId;
         this.gameweek = gameweek;
         this.team = team;
         this.isCup = isCup;
+        this.seasonStartYear = seasonStartYear;
     }
 
     public hash(): string {
@@ -19,8 +21,8 @@ export default class MatchInfoKey extends CacheKey {
     }
     public path(): string {
         if (!this.isCup) {
-            return `${this.leagueId}/${this.team}/${this.gameweek}/MatchInfo`
+            return `Season${this.seasonStartYear}/${this.leagueId}/${this.team}/${this.gameweek}/MatchInfo`
         }
-        return `cup/${this.team}/${this.gameweek}/MatchInfo`
+        return `Season${this.seasonStartYear}/cup/${this.team}/${this.gameweek}/MatchInfo`
     }  
 }

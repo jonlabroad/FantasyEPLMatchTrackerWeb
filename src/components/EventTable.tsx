@@ -35,7 +35,6 @@ export default class EventTable extends React.Component<EventTableProps, {}> {
         var elements = new Array<any>();
         for (var i in this.props.eventList) {
             var event = this.props.eventList[i];
-            console.log(this.props.teams);
             var teamName = "ERROR";
             if (event.teamId < 0) {
                 var self = this;
