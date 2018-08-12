@@ -17,7 +17,7 @@ export interface MatchHeaderProps {
 }
 
 export default class MatchHeader extends React.Component<MatchHeaderProps, {}> {   
-    protected leagueName : string = "Let the Pun begin!";
+    protected leagueName : string = "Alexi Lalas is the worst!!!!!!";
     
     constructor(props : any) {
         super(props);
@@ -30,6 +30,10 @@ export default class MatchHeader extends React.Component<MatchHeaderProps, {}> {
         for (var id in teams) {
             teamsArray.push(teams[id]);
         }
+        if (teamsArray.length == 1)
+        {
+            teamsArray.push(teamsArray[0]);
+        }
         return teamsArray;
     }
 
@@ -41,7 +45,7 @@ export default class MatchHeader extends React.Component<MatchHeaderProps, {}> {
                 <div className="row">
                     <div className="col league-header">
                         {this.leagueName}
-s                    </div>
+                    </div>
                 </div>
             </div>
             <div className="container-fluid match-strip-container mx-auto no-gutters align-items-center">

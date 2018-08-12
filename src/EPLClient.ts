@@ -47,9 +47,9 @@ export default class EPLClient {
         });
     }
 
-    public readTeamData(leagueId : number, teamId : number, gameweek : number, isCup : boolean, successFunc : Function) {
-      var key = new MatchInfoKey(this.seasonStartYear, leagueId, gameweek, teamId, isCup);
-      return EPLClient.matchInfoReader.read(key, successFunc);    	
+    public readTeamData(leagueId : number, teamId : number, gameweek : number, isCup : boolean, isScouting : boolean, successFunc : Function) {
+      var key = new MatchInfoKey(this.seasonStartYear, leagueId, gameweek, teamId, isCup, isScouting);
+      return EPLClient.matchInfoReader.read(key, successFunc);
     }
 
       public readEventInfo(gameweek : number, successFunc : Function) {
@@ -94,11 +94,12 @@ export default class EPLClient {
       return `${this.URL_ROOT}/appconfig.json`;
     }
 
-    protected getMatchInfoUrl(leagueId : number, teamId : number, gameweek : number, isCup : boolean) : string {
-        var root = this.SEASON_URL_BASE
+    protected getMatchInfoUrl(leagueId : number, teamId : number, gameweek : number, isCup : boolean, isScouting : boolean = false) : string {
+        var root = this.SEASON_URL_BASE;
+        var filename = isScouting ? "ScoutReport" : "MatchInfo";
         if (!isCup) {
-          return `${root}/${leagueId}/${teamId}/${gameweek}/MatchInfo`
+          return `${root}/${leagueId}/${teamId}/${gameweek}/${filename}`
         }
-        return `${root}/cup/${teamId}/${gameweek}/MatchInfo`
+        return `${root}/cup/${teamId}/${gameweek}/${filename}`
       }    
 }

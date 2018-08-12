@@ -46,13 +46,20 @@ export default class PickList extends React.Component<PickListProps, {}> {
         }       
 
         return (
-            <table className="table table-sm table-striped table-picks">
-                <tbody>
-                    {starterPicks}
-                    <tr><th>Subs</th></tr>
-                    {subPicks}
-                </tbody>
-            </table>            
+            <div>
+                <div className="events-table-header">Starting Lineup</div>
+                <table className="table table-sm table-striped table-picks">
+                    <tbody>
+                        {starterPicks}
+                    </tbody>
+                </table>
+                <div className="events-table-header">Bench</div>
+                <table className="table table-sm table-striped table-picks">
+                    <tbody>
+                        {subPicks}
+                    </tbody>
+                </table>
+            </div>
         );
     }
 }

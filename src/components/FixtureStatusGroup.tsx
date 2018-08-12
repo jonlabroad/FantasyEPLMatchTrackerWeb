@@ -38,6 +38,7 @@ export default class FixtureStatusGroup extends React.Component<FixtureStatusGro
     render() {
         return (
             <div className="fixture-group">
+                <div className="events-table-header">Fixtures and Bonus Points</div>
                 {this.renderFixtures()}
             </div>
         );

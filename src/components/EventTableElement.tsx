@@ -1,10 +1,13 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import IconProvider from "../IconProvider";
+import ColorCommentator from "../ColorCommentator";
 
 export interface EventTableElementProps {
     event : any;
     teamName : any;
+    isLatest : boolean;
+    gameweek : number;
 }
 
 export default class EventTableElement extends React.Component<EventTableElementProps, {}> {
@@ -20,56 +23,50 @@ export default class EventTableElement extends React.Component<EventTableElement
         return `${date.getMonth()}/${date.getDate()} ${(hours < 10 ? "0" : "") + date.getHours()}:${(min < 10 ? "0" : "") + min}`;
     }
 
-    private getEventText(teamName : string, eventType : string, footballer : string, eventNumber : string, eventPts : string) : string {
+    private getEventText(teamName : string, eventType : string, footballer : string, eventNumber : string, eventPts : string, gameweek : number) : string {
         if (eventType.match("GOAL")) {
-            return this.getGoalText(teamName, footballer, eventNumber, eventPts);
+            return this.getGoalText(teamName, footballer, eventNumber, eventPts, gameweek);
         }
         else if (eventType.match("MINUTES")) {
-            return this.getMinutesPlayedText(teamName, footballer, eventNumber, eventPts);
+            return this.getMinutesPlayedText(teamName, footballer, eventNumber, eventPts, gameweek);
         }
         else if (eventType.match("ASSIST")) {
-            return this.getAssistText(teamName, footballer, eventNumber, eventPts);
+            return this.getAssistText(teamName, footballer, eventNumber, eventPts, gameweek);
         }
         else if (eventType.match("CLEAN_SHEET")) {
-            return this.getCleanSheetText(teamName, footballer, eventNumber, eventPts);
+            return this.getCleanSheetText(teamName, footballer, eventNumber, eventPts, gameweek);
         }
         else if (eventType.match("BONUS")) {
-            return this.getBonusText(teamName, footballer, eventPts);
+            return this.getBonusText(teamName, footballer, eventPts, gameweek);
         }
         else {
             return this.getDefaultText(teamName, footballer, eventType, eventNumber, eventPts);
         }
     }
 
-    private getGoalText(teamName : string, footballer : string, eventNumber : string, eventPts : string) : string {
+    private getGoalText(teamName : string, footballer : string, eventNumber : string, eventPts : string, gameweek : number) : string {
         var num = parseInt(eventNumber);
-        var goalStr = num > 1 ? `${num} Goals` : "Goal";
-        
-        return `${goalStr}! Scored by ${footballer} (${teamName}) (${this.getPtsString(eventPts)})`;
+        return ColorCommentator.GetGoalCommentary(`${footballer} (${teamName})`, num, gameweek) + ` (${this.getPtsString(eventPts)})`;
     }
 
-    private getAssistText(teamName : string, footballer : string, eventNumber : string, eventPts : string) : string {
+    private getAssistText(teamName : string, footballer : string, eventNumber : string, eventPts : string, gameweek : number) : string {
         var num = parseInt(eventNumber);
-        var assistStr = num > 1 ? `${num} Assists` : "Assist";
-        
-        return `${assistStr} by ${footballer} (${teamName}) (${this.getPtsString(eventPts)})`;
+        return ColorCommentator.GetAssistCommentary(`${footballer} (${teamName})`, num, gameweek) + ` (${this.getPtsString(eventPts)})`;
     }
 
-    private getMinutesPlayedText(teamName : string, footballer : string, eventNumber : string, eventPts : string) {
+    private getMinutesPlayedText(teamName : string, footballer : string, eventNumber : string, eventPts : string, gameweek : number) {
         var num = parseInt(eventNumber);
-        var mins = num > 0 ? "minutes" : "minute";
-
-        return `${footballer} (${teamName}) played ${num} ${mins} (${this.getPtsString(eventPts)})`;
+        return ColorCommentator.GetMinutesCommentary(`${footballer} (${teamName})`, num, gameweek) + ` (${this.getPtsString(eventPts)})`;
     }
 
-    private getCleanSheetText(teamName : string, footballer : string, eventNumber : string, eventPts : string) {
+    private getCleanSheetText(teamName : string, footballer : string, eventNumber : string, eventPts : string, gameweek : number) {
         var num = parseInt(eventNumber);
-        var text = num <= 0 ? "no longer has a clean sheet" : "currently has a clean sheet";
-        return `${footballer} (${teamName}) ${text} (${this.getPtsString(eventPts)})`;
+        return ColorCommentator.GetCleanSheetCommentary(`${footballer} (${teamName})`, num, gameweek) + ` (${this.getPtsString(eventPts)})`;
     }
 
-    private getBonusText(teamName : string, footballer : string, eventPts : string) {
-        return `${footballer} (${teamName}) with a superb performance today! (${this.getPtsString(eventPts)})`;
+    private getBonusText(teamName : string, footballer : string, eventPts : string, gameweek : number) {
+        var num = parseInt(eventPts);
+        return ColorCommentator.GetBonusCommentary(`${footballer} (${teamName})`, num, gameweek) + ` (${this.getPtsString(eventPts)})`;
     }
 
     private getDefaultText(teamName : string, footballer : string, eventType : string, eventNumber : string, eventPts : string) {
@@ -85,7 +82,11 @@ export default class EventTableElement extends React.Component<EventTableElement
         return pts > 0 ? `+${eventPts}` : eventPts.toString();
     }
 
-    renderIcon(typeString : string) {
+    renderIcon(typeString : string, eventNum : string) {
+        if (typeString.match("MINUTES") && parseInt(eventNum) >= 60)
+        {
+            typeString = "minutes_60";
+        }
         var icon = IconProvider.getIcon(typeString);
         return (
             <img src={`img/icon/${icon}`}/>
@@ -95,10 +96,10 @@ export default class EventTableElement extends React.Component<EventTableElement
     render() {
         var eventClassName = "";
         var event = this.props.event;
-        return <tr className={`${eventClassName}`}>
+        return <tr id={this.props.isLatest ? "latest-event" : ""} className={`${eventClassName}`}>
                 <td className="event-time">{this.formatTime(event.dateTime)}</td>
-                <td className="event-icon">{this.renderIcon(event.typeString)}</td>
-                <td className="event-description">{this.getEventText(this.props.teamName, event.typeString, event.footballerName, event.number, event.pointDifference)}</td>
+                <td className="event-icon">{this.renderIcon(event.typeString, event.number)}</td>
+                <td className="event-description">{this.getEventText(this.props.teamName, event.typeString, event.footballerName, event.number, event.pointDifference, this.props.gameweek)}</td>
             </tr>
     }
 }

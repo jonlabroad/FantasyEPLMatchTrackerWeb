@@ -6,8 +6,9 @@ export default class MatchInfoKey extends CacheKey {
     public isCup : Boolean;
     public leagueId : Number;
     public seasonStartYear : Number;
+    public isScouting : boolean = false;
 
-    constructor(seasonStartYear : number, leagueId : Number, gameweek : Number, team : Number, isCup : Boolean) {
+    constructor(seasonStartYear : number, leagueId : Number, gameweek : Number, team : Number, isCup : Boolean, isScouting : boolean) {
         super();
         this.leagueId = leagueId;
         this.gameweek = gameweek;
@@ -20,9 +21,10 @@ export default class MatchInfoKey extends CacheKey {
         return this.gameweek.toString() + "_" + this.team.toString();
     }
     public path(): string {
+        var filename = this.isScouting ? "ScoutReport" : "MatchInfo";
         if (!this.isCup) {
-            return `Season${this.seasonStartYear}/${this.leagueId}/${this.team}/${this.gameweek}/MatchInfo`
+            return `Season${this.seasonStartYear}/${this.leagueId}/${this.team}/${this.gameweek}/${filename}`
         }
-        return `Season${this.seasonStartYear}/cup/${this.team}/${this.gameweek}/MatchInfo`
+        return `Season${this.seasonStartYear}/cup/${this.team}/${this.gameweek}/${filename}`
     }  
 }

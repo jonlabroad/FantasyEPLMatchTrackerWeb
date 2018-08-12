@@ -28,7 +28,6 @@ export default class IconProvider {
         var explain = explainType.toLowerCase();
         var icon = this.icons[explain];
         if (!icon) {
-            console.log(explain.slice(0, explain.length - 1));
             icon = this.icons[explain.slice(0, explain.length - 1)];
         }
         return icon;

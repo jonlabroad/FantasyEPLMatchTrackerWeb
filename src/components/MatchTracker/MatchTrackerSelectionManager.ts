@@ -1,5 +1,6 @@
 import TeamStandingHelper from "../../TeamStandingHelper";
 import MatchTracker from "./MatchTracker";
+import TabType from "../../models/TabType";
 
 // Kinda gross in that it is basically an extension of MatchTracker, but it's just to get it out of the way of the component code
 
@@ -40,7 +41,20 @@ export default class MatchTrackerSelectionManager
                 standings: this.tracker.state.standings,
                 selection: this.tracker.selection,
                 matchInfo: this.tracker.state.matchInfo,
-                eventInfo: this.tracker.state.eventInfo
+                eventInfo: this.tracker.state.eventInfo,
+            });
+        }
+    }
+
+    public tabChanged(tab : TabType) {
+        if (this.tracker.selection.tab !== tab) {
+            this.tracker.selection.tab = tab;
+            this.tracker.setUrl();
+            this.tracker.setState({
+                standings: this.tracker.state.standings,
+                selection: this.tracker.selection,
+                matchInfo: this.tracker.state.matchInfo,
+                eventInfo: this.tracker.state.eventInfo,
             });
         }
     }

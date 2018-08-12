@@ -1,3 +1,5 @@
+import TabType from "./TabType";
+
 export default class TrackerSelection {
     public seasonStartYear : number;
     public leagueId : number;
@@ -6,4 +8,5 @@ export default class TrackerSelection {
     public gameweek : number = 1;
     public differentialsOnly : boolean = false;
     public cup : boolean = false;
+    public tab : TabType;
 }

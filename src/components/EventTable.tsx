@@ -6,28 +6,33 @@ import EventTableElement from "./EventTableElement"
 export interface EventTableProps {
     eventList : any[];
     teams : any;
+    gameweek : number
 }
 
 export default class EventTable extends React.Component<EventTableProps, {}> {
-    protected bottomScrollElement : Element;
+    protected bottomScrollElement : Element = null;
 
     constructor(props : EventTableProps) {
         super(props);
         this.state = {};
     }
 
-    public scrollToBottom() {
+    public scrollToBottom(smooth : boolean) {
         if (this.bottomScrollElement) {
-            // TODO do this right. This currently scrolls the entire page
-            //this.bottomScrollElement.scrollIntoView({ behavior: "smooth" });
+            var target = $('#latest-event');
+            $('.event-scrollable').stop().animate({
+                scrollTop: 5000
+            }, (smooth ? 1000 : 0));
         }
     }
 
-    renderElement(key : string, event : any, teamName : string) {
+    renderElement(key : string, event : any, teamName : string, isLast : boolean, gameweek : number) {
         return <EventTableElement
                 key={key}
                 event={event}
                 teamName={teamName}
+                isLatest={isLast}
+                gameweek={gameweek}
             />
     }
 
@@ -47,17 +52,18 @@ export default class EventTable extends React.Component<EventTableProps, {}> {
             else {
                 teamName = this.props.teams[event.teamId].entry.entry.name;
             }
-            elements.push(this.renderElement(i, event, teamName));
+            elements.push(this.renderElement(i, event, teamName, parseInt(i) == (this.props.eventList.length - 1), this.props.gameweek));
         }
+        this.bottomScrollElement = elements[elements.length - 1];
         return elements;
     }
 
     componentDidUpdate() {
-        this.scrollToBottom();
+        this.scrollToBottom(true);
     }
 
     componentDidMount() {
-        this.scrollToBottom();
+        this.scrollToBottom(false);
     }
 
     render() {
@@ -70,7 +76,6 @@ export default class EventTable extends React.Component<EventTableProps, {}> {
                     {this.renderElements()}
                     </tbody>
                 </table>
-                <div ref={(el) => {this.bottomScrollElement = el}}></div>
                 </div>
             </div>
         );
