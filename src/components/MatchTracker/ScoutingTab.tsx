@@ -3,7 +3,6 @@ import * as React from "react";
 import PickList from "../PickList";
 import FixtureStatusGroup from "../FixtureStatusGroup";
 import SimulatedH2h from "../SimulatedH2h";
-import LiveStandings from "../LiveStandings";
 import ScoutTeamInfo from "../ScoutTeamInfo";
 
 export interface ScoutingTabProps {
@@ -36,9 +35,9 @@ export default class ScoutingTab extends React.Component<ScoutingTabProps, Scout
       var teams = this.getTeamsArray(matchInfo);
       return (
         <div className="container-fluid">
-          <div className="row justify-content-center no-gutters">
-            <div className="col-3 order-1 d-flex flex-column align-items-end">
-              <div className="d-flex main-element side-column-element">
+          <div className="row no-gutters justify-content-center">
+            <div className="col order-1 d-flex flex-column align-items-end side-column">
+              <div className="main-element side-column-element">
                 <PickList picks={teams[0] != null ? teams[0].picks : null}
                   config={this.props.selection}
                   differentials={this.props.matchInfo.differentials}
@@ -46,7 +45,7 @@ export default class ScoutingTab extends React.Component<ScoutingTabProps, Scout
                 />
               </div>
             </div>
-            <div className="col-3 order-3 d-flex flex-column align-items-start">
+            <div className="col order-3 d-flex flex-column align-items-start side-column">
               <div className="main-element side-column-element">
                 <PickList picks={teams[1] != null ? teams[1].picks : null}
                   config={this.props.selection}
@@ -55,7 +54,7 @@ export default class ScoutingTab extends React.Component<ScoutingTabProps, Scout
                 />
               </div>
             </div>
-            <div className="col-4 order-2 d-flex flex-column align-items-center no-gutters center-column">
+            <div className="col order-2 d-flex flex-column align-items-center no-gutters center-column">
               <div className="row justify-content-center no-gutters">
                 <div className="col-6 d-flex flex-column align-items-center no-gutters center-column">
                   <div className="main-element">
@@ -66,7 +65,7 @@ export default class ScoutingTab extends React.Component<ScoutingTabProps, Scout
                     />
                   </div>
                 </div>
-                <div className="col-6 d-flex flex-column align-items-center no-gutters center-column">
+                <div className="col d-flex flex-column align-items-center no-gutters center-column">
                   <div className="main-element">
                     <ScoutTeamInfo
                       team={teams[1]}

@@ -227,10 +227,10 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
       var teams = this.getTeamsArray(matchInfo);
       if (this.selection.tab == TabType.MATCH) {
         var tab = 
-        <div>
-          <div className="row justify-content-center">
-            <div className="col-3 order-1 d-flex flex-column align-items-end">
-              <div className="d-flex main-element side-column-element">
+          <div className="container-fluid">
+          <div className="row no-gutters justify-content-center">
+            <div className="col order-1 d-flex flex-column align-items-end side-column">
+              <div className="main-element side-column-element">
                 <PickList picks={teams[0] != null ? teams[0].picks : null}
                   config={this.state.selection}
                   differentials={this.state.matchInfo.differentials}
@@ -245,7 +245,7 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
                 />
               </div>
             </div>
-            <div className="col-3 order-3 d-flex flex-column align-items-start">
+            <div className="col order-3 d-flex flex-column align-items-start side-column">
               <div className="main-element side-column-element">
                 <PickList picks={teams[1] != null ? teams[1].picks : null}
                   config={this.state.selection}
@@ -262,15 +262,11 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
               </div>
             </div>
 
-            <div className="col-4 order-2 d-flex flex-column align-items-center no-gutters center-column">
-              <div className="d-flex main-element justify-content-center">
+            <div className="col order-2 center-column">
+              <div className="main-element d-flex justify-content-center">
                 <Highlight team={teams[0]} events={matchInfo.allEvents} />
                 <Highlight team={teams[1]} events={matchInfo.allEvents} />
               </div>
-              <SimulatedH2h
-                teams={teams}
-                simulatedH2h={matchInfo.simulatedH2h}
-              />
               <div className="main-element">
                 <EventTable
                   eventList={matchInfo.allEvents}

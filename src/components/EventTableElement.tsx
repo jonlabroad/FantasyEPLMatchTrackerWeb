@@ -24,7 +24,7 @@ export default class EventTableElement extends React.Component<EventTableElement
     }
 
     private getEventText(teamName : string, eventType : string, footballer : string, eventNumber : string, eventPts : string, gameweek : number) : string {
-        if (eventType.match("GOAL")) {
+        if (eventType.match("GOAL") && !eventType.match("GOALS_CONCEDED")) {
             return this.getGoalText(teamName, footballer, eventNumber, eventPts, gameweek);
         }
         else if (eventType.match("MINUTES")) {

@@ -22,6 +22,11 @@ body {
     font-size: 12px;
 }
 
+.side-column {
+    min-width: 250px;
+    overflow: hidden;
+}
+
 .side-column-element {
     max-width: 500px;
 }
