@@ -6,8 +6,8 @@ import TeamRecord from "./TeamRecord";
 export interface LiveStandingElementProps {
     num : any,
     liveStanding : any,
-    team1Id : any,
-    team2Id : any
+    team1 : any,
+    team2 : any
 }
 
 export default class LiveStandingElement extends React.Component<LiveStandingElementProps, {}> {
@@ -23,12 +23,12 @@ export default class LiveStandingElement extends React.Component<LiveStandingEle
         
         var standing = this.props.liveStanding.standing;     
         var addClasses = "";
-        if (this.props.liveStanding.teamId == this.props.team1Id || this.props.liveStanding.teamId == this.props.team2Id)
+        if (this.props.liveStanding.teamId == this.props.team1.id || this.props.liveStanding.teamId == this.props.team2.id)
         {
-            addClasses = "live-standing-highlighted";
+            addClasses = "live-standings-highlighted";
         }
         return (
-            <tr className={"live-standing-element " + addClasses}>
+            <tr className={"live-standings-element " + addClasses}>
                 <td className="live-standings-num">
                     {this.props.num}
                 </td>
@@ -39,6 +39,9 @@ export default class LiveStandingElement extends React.Component<LiveStandingEle
                     <TeamRecord
                         standing={standing}
                     />
+                </td>
+                <td className="live-standings-points-for">
+                    {this.props.liveStanding.currentWeekScore ? this.props.liveStanding.currentWeekScore.startingScore : '-'}
                 </td>
                 <td className="live-standings-points-for">
                     {standing.points_for}

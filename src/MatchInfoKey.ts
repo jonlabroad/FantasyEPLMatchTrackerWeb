@@ -15,13 +15,14 @@ export default class MatchInfoKey extends CacheKey {
         this.team = team;
         this.isCup = isCup;
         this.seasonStartYear = seasonStartYear;
+        this.isScouting = isScouting;
     }
 
     public hash(): string {
-        return this.gameweek.toString() + "_" + this.team.toString();
+        return this.gameweek.toString() + "_" + this.team.toString() + "_" + (this.isScouting ? "ScoutingReport" : "MatchInfo");
     }
     public path(): string {
-        var filename = this.isScouting ? "ScoutReport" : "MatchInfo";
+        var filename = this.isScouting ? "ScoutingReport" : "MatchInfo";
         if (!this.isCup) {
             return `Season${this.seasonStartYear}/${this.leagueId}/${this.team}/${this.gameweek}/${filename}`
         }

@@ -104,6 +104,7 @@ export default class ColorCommentator {
         "{footballerName} was one of the stars on display during this match",
         "Another day, another amazing performance by {footballerName}",
         "It felt like {footballerName} barely put a foot wrong tonight!",
+        "Alexi Lalas: \"{footballerName} was good today, but not as good as I was in the '94 World Cup when we beat Columbia and I ran around the pitch draped in the USA flag\"",
         "Alexi Lalas: '{footballerName} had no business being on the pitch tonight'",
     );
 
@@ -117,6 +118,33 @@ export default class ColorCommentator {
         "With more performances like this, {footballerName} may go down as one of the all-time greats!",
         "{footballerName}... the new GOAT??? It's becoming harder and harder to argue against!",
         "Alexi Lalas: 'What can I say? {footballerName} was simply terrible out there today'",
+    );
+
+    private static autosubOutTemplates : Array<string> = new Array<string>(
+        "{footballerName} will make way for someone a bit more... effective",
+        "{footballerName} was not in the manager's plans today",
+        "{footballerName} never entered the game",
+        "It's a good thing there is a backup available for {footballerName}",
+        "The manager will not be happy with the disappearance of {footballerName}, but luckily there is help on the bench",
+        "{footballerName} was a no show!",
+        "Where was {footballerName} today? Is there a pending transfer?",
+        "{footballerName} was left out of the team today after a training ground bust-up",
+        "{footballerName} was not in the team. Is he ill?",
+        "{footballerName} was not in the team due to personal matters",
+        "{footballerName} is ill, perhaps due to the lasagna he ate last night at the team dinner",
+        "Alexi Lalas: \"{footballerName} was a joy to watch today! Wait, what? He didn't even play? Okay-silly-dilly-dokey-o, I'm an idiot\""
+    );
+
+    private static autosubInTemplates : Array<string> = new Array<string>(
+        "{footballerName} did not expect to get off the bench today, but here he is!",
+        "I hope that {footballerName} is ready, cause he's coming on!",
+        "{footballerName} is being subbed on",
+        "Fans will be delighted to see {footballerName} coming on!",
+        "{footballerName} gets off the bench!",
+        "{footballerName} is IN",
+        "{footballerName} will cherish this opportunity to come into the game",
+        "{footballerName} doesn't see too much first-team football, so he will take any minutes he can get",
+        "Alexi Lalas: \"Thank you for watching and have a good ni.... wait... what's this? Someone is coming onto the pitch? Who is that? That looks like {footballerName}!"
     );
 
     public static GetGoalCommentary(footballerName : any, num : number, gameweek : number) : string {
@@ -183,6 +211,22 @@ export default class ColorCommentator {
         return vals[index]
             .replace("{footballerName}", footballerName)
             .replace("{eventNum}", num.toString());
+    }
+
+    public static GetAutosubOutCommentary(footballerName : any, gameweek : number) : string {
+        var vals = ColorCommentator.autosubOutTemplates;
+        var hashString = `${footballerName}${gameweek}`;
+        var index = ColorCommentator.getIndex(hashString, vals.length);
+        return vals[index]
+            .replace("{footballerName}", footballerName);
+    }
+
+    public static GetAutosubInCommentary(footballerName : any, gameweek : number) : string {
+        var vals = ColorCommentator.autosubInTemplates;
+        var hashString = `${footballerName}${gameweek}`;
+        var index = ColorCommentator.getIndex(hashString, vals.length);
+        return vals[index]
+            .replace("{footballerName}", footballerName);
     }
 
     private static getIndex(s : string, len : number) {

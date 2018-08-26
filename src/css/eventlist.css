@@ -24,6 +24,11 @@
 	width: 16px;
 }
 
+.events-table-header {
+	font-weight: bold;
+	font-size: 10px;
+}
+
 .events-table .event-time {
 	font-weight: bold;
 	width: 15%;

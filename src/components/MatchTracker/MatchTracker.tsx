@@ -48,7 +48,7 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
   protected defaultGameweek: number = 1;
   public selection: TrackerSelection = null;
 
-  protected appConfig: any = null;
+  public appConfig: any = null;
 
   constructor(props: any) {
     super(props);
@@ -76,7 +76,7 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
   protected getTrackerSelection(): TrackerSelection {
     var selectedGameweek = parseInt(Url.getParameterByName("gameweek", this.defaultGameweek.toString()));
     var defaultTab = (this.appConfig == null || selectedGameweek <= this.appConfig.CurrentGameWeek) ? TabType.MATCH : TabType.SCOUTING;
-    var tabVal = Url.getParameterByName("tab", defaultTab.toString());
+    var tabVal = selectedGameweek <= this.appConfig.CurrentGameWeek ? Url.getParameterByName("tab", defaultTab.toString()) : TabType.SCOUTING;
     return {
       seasonStartYear: parseInt(Url.getParameterByName("season", "2018")),
       leagueId: parseInt(Url.getParameterByName("league", "5815")),
@@ -204,13 +204,14 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
       <div>
         <MatchHeader
           matchInfo={this.state.matchInfo}
+          isScouting={this.selection.tab == TabType.SCOUTING}
         />
         <div className="container-fluid">
           <div className="row justify-content-center no-gutters">
             <div className="col-10">
               <NavTab
                 onClick={this.selManager.tabChanged.bind(this.selManager)}
-                matchAvailable={true}
+                matchAvailable={this.selection.gameweek <= this.appConfig.CurrentGameWeek}
                 selection={this.selection.tab}
               />
             </div>
@@ -228,11 +229,13 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
         var tab = 
         <div>
           <div className="row justify-content-center">
-            <div className="col-4 order-1 d-flex flex-column align-items-end">
+            <div className="col-3 order-1 d-flex flex-column align-items-end">
               <div className="d-flex main-element side-column-element">
                 <PickList picks={teams[0] != null ? teams[0].picks : null}
                   config={this.state.selection}
-                  differentials={this.state.matchInfo.differentials} />
+                  differentials={this.state.matchInfo.differentials}
+                  isScouting={false}
+                  />
               </div>
               <div className="main-element side-column-element">
                 <FixtureStatusGroup
@@ -242,11 +245,12 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
                 />
               </div>
             </div>
-            <div className="col-4 order-3 d-flex flex-column align-items-start">
+            <div className="col-3 order-3 d-flex flex-column align-items-start">
               <div className="main-element side-column-element">
                 <PickList picks={teams[1] != null ? teams[1].picks : null}
                   config={this.state.selection}
                   differentials={this.state.matchInfo.differentials}
+                  isScouting={false}
                 />
               </div>
               <div className="main-element side-column-element">
@@ -280,8 +284,8 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
               <div className="main-element">
                 <LiveStandings
                   liveStandings={matchInfo.liveStandings != null ? matchInfo.liveStandings.liveStandings : null}
-                  team1Id={teams[0] != null ? teams[0].id : 0}
-                  team2Id={teams[1] != null ? teams[1].id : 0}
+                  team1={teams[0]}
+                  team2={teams[1]}
                 />
               </div>
               <div className="main-element">

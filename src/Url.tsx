@@ -2,7 +2,7 @@ import TabType from "./models/TabType";
 
 export default class Url {
     public static setUrl(startYear : number, leagueId: number, teamId : number, gameweek : number, differentialsOnly : boolean, isCup : boolean, tab : TabType) {
-        window.history.pushState("", "", `?season=${startYear}&league=${leagueId}&team=${teamId}&gameweek=${gameweek}&differentials=${differentialsOnly}&cup=${isCup}&tab=${tab}`);
+        window.history.pushState("", "", `?team=${teamId}&gameweek=${gameweek}&differentials=${differentialsOnly}&cup=${isCup}`);
     }
 
     public static getParameterByName(name : string, defaultValue? : any, url? : string) {

@@ -8,6 +8,7 @@ export interface PickListProps {
     picks : any;
     differentials : any;
     config : Selection;
+    isScouting : boolean
 }
 
 export default class PickList extends React.Component<PickListProps, {}> {
@@ -36,6 +37,7 @@ export default class PickList extends React.Component<PickListProps, {}> {
             var element = <PickListElement
                 key={i}
                 pick = {this.props.picks[i]}
+                isScouting = {this.props.isScouting}
             />
             if (this.props.picks[i].pick.position <= 11) {
                 starterPicks.push(element);

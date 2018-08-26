@@ -13,13 +13,31 @@ export default class NavTab extends React.Component<NavTabProps, {}> {
         this.state = {};
     }
 
+    public componentDidUpdate()
+    {
+        this.manageClickHandlers();
+    }
+
     public componentDidMount()
     {
+        this.manageClickHandlers();
+    }
+
+    private manageClickHandlers()
+    {
         var self = this;
-        $("#match-tab").click(function() {
-            self.props.onClick(TabType.MATCH);
-        });
+        if (this.props.matchAvailable)
+        {
+            $("#match-tab").click(function() {
+                self.props.onClick(TabType.MATCH);
+            });
+        }
+        else
+        {
+            $("#match-tab").off("click");
+        }
         $("#scouting-tab").click(function() {
+            console.log("Scouting click handler added");
             self.props.onClick(TabType.SCOUTING);
         });
     }

@@ -39,6 +39,12 @@ export default class EventTableElement extends React.Component<EventTableElement
         else if (eventType.match("BONUS")) {
             return this.getBonusText(teamName, footballer, eventPts, gameweek);
         }
+        else if (eventType.match("AUTOSUB_IN")) {
+            return this.getAutosubInText(teamName, footballer, eventPts, gameweek);
+        }
+        else if (eventType.match("AUTOSUB_OUT")) {
+            return this.getAutosubOutText(teamName, footballer, eventPts, gameweek);
+        }
         else {
             return this.getDefaultText(teamName, footballer, eventType, eventNumber, eventPts);
         }
@@ -67,6 +73,14 @@ export default class EventTableElement extends React.Component<EventTableElement
     private getBonusText(teamName : string, footballer : string, eventPts : string, gameweek : number) {
         var num = parseInt(eventPts);
         return ColorCommentator.GetBonusCommentary(`${footballer} (${teamName})`, num, gameweek) + ` (${this.getPtsString(eventPts)})`;
+    }
+
+    private getAutosubOutText(teamName : string, footballer : string, eventPts : string, gameweek : number) {
+        return ColorCommentator.GetAutosubOutCommentary(`${footballer} (${teamName})`, gameweek);
+    }
+
+    private getAutosubInText(teamName : string, footballer : string, eventPts : string, gameweek : number) {
+        return ColorCommentator.GetAutosubInCommentary(`${footballer} (${teamName})`, gameweek);
     }
 
     private getDefaultText(teamName : string, footballer : string, eventType : string, eventNumber : string, eventPts : string) {

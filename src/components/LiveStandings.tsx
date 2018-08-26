@@ -5,8 +5,8 @@ import LiveStandingElement from "./LiveStandingElement";
 
 export interface LiveStandingsProps {
     liveStandings : any;
-    team1Id : any,
-    team2Id : any
+    team1 : any,
+    team2 : any,
 }
 
 export default class LiveStandings extends React.Component<LiveStandingsProps, {}> {
@@ -23,8 +23,8 @@ export default class LiveStandings extends React.Component<LiveStandingsProps, {
                 key={i}
                 num={parseInt(i) + 1}
                 liveStanding = {this.props.liveStandings[i]}
-                team1Id = {this.props.team1Id}
-                team2Id = {this.props.team2Id}
+                team1 = {this.props.team1}
+                team2 = {this.props.team2}
             />
             standingElements.push(element);
         }       
@@ -32,8 +32,18 @@ export default class LiveStandings extends React.Component<LiveStandingsProps, {
         return (
             <div>
             <div className="live-standings-header">Live Standings</div>
-            <div className="scrollable event-scrollable live-standings-table">
+            <div className="scrollable live-standings-scrollable live-standings-table">
                 <table className="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Team</th>
+                            <th>Record</th>
+                            <th>GW Score</th>
+                            <th>Total Score</th>
+                            <th>League Pts</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         {standingElements}
                     </tbody>

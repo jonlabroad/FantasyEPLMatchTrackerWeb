@@ -14,6 +14,7 @@ export interface MatchHeaderState {
 
 export interface MatchHeaderProps {
     matchInfo : any;
+    isScouting : boolean;
 }
 
 export default class MatchHeader extends React.Component<MatchHeaderProps, {}> {   
@@ -85,22 +86,26 @@ export default class MatchHeader extends React.Component<MatchHeaderProps, {}> {
                         <div className="sub-score text-center">
                             <TeamSubScore
                                 team={teamsArray[0]}
+                                isScouting={this.props.isScouting}
                             />
                         </div>                    
                         <div className="score text-center">
                             <TeamStarterScore
                                 team={teamsArray[0]}
+                                isScouting={this.props.isScouting}
                             />
                         </div>
                         <div className="match-time text-center"></div>
                         <div className="score">
                             <TeamStarterScore
                                 team={teamsArray[1]}
+                                isScouting={this.props.isScouting}
                             />
                         </div>
                         <div className="sub-score text-center">
                             <TeamSubScore
                                 team={teamsArray[1]}
+                                isScouting={this.props.isScouting}
                             />
                         </div>
                         <div className="team-name-box text-center">

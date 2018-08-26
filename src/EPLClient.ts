@@ -49,6 +49,7 @@ export default class EPLClient {
 
     public readTeamData(leagueId : number, teamId : number, gameweek : number, isCup : boolean, isScouting : boolean, successFunc : Function) {
       var key = new MatchInfoKey(this.seasonStartYear, leagueId, gameweek, teamId, isCup, isScouting);
+      console.log("Going to read " + key.hash());
       return EPLClient.matchInfoReader.read(key, successFunc);
     }
 
@@ -96,7 +97,7 @@ export default class EPLClient {
 
     protected getMatchInfoUrl(leagueId : number, teamId : number, gameweek : number, isCup : boolean, isScouting : boolean = false) : string {
         var root = this.SEASON_URL_BASE;
-        var filename = isScouting ? "ScoutReport" : "MatchInfo";
+        var filename = isScouting ? "ScoutingReport" : "MatchInfo";
         if (!isCup) {
           return `${root}/${leagueId}/${teamId}/${gameweek}/${filename}`
         }

@@ -21,6 +21,7 @@ export default class CachedS3JsonReader<T extends CacheKey>
         var now = new Date();
         if (!lastRead || (now.getTime() - lastRead.getTime()) > this.invalidateTimeMillis) {
             var self = this;
+            console.log(key);
             this.reader.read(key.path(), function(data : any) {
                 self.lastUpdated.update(key, now);
                 self.dataCache.update(key, data);

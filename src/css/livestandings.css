@@ -1,5 +1,14 @@
-.live-standing-highlighted {
-    background-color: #ccccccbd;
+.live-standings-scrollable {
+	height: 300px;
+	overflow-y: auto;
+}
+
+.live-standings-table table tbody tr:nth-child(even) {
+	background: rgba(0,0,0,0.017);
+}
+
+.live-standings-highlighted {
+    background-color: #ccccccbd !important;
 }
 
 .live-standings-header {
@@ -8,8 +17,9 @@
     padding: 15px;
 }
 
-.live-standings-table table tbody tr:nth-child(even) {
-	background: rgba(0,0,0,0.017);
+.live-standings-table th {
+	padding: 2px;
+	font-size: 10px;
 }
 
 .live-standings-table tr td {

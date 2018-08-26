@@ -19,9 +19,10 @@ export default class DifferentialsSelector extends React.Component<Differentials
     }
 
     render() {
+        var checked = this.props.config.differentialsOnly;
         return (
             <div className="form-check-inline navbar-control">
-    			<input className="form-check-input" type="checkbox" onChange={this.props.onChange} value="" id="diff-only"/>
+    			<input className="form-check-input" type="checkbox" onChange={this.props.onChange} value="" id="diff-only" defaultChecked={checked}/>
                 <label className="form-check-label">differentials only</label>
 			</div>	
         );

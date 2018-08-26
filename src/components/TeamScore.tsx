@@ -2,21 +2,36 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 export interface TeamScoreProps {
-    team : any
+    team : any,
+    isScouting : boolean
 }
 
 export function TeamStarterScore(props : TeamScoreProps) {
     return (
         <span className="team-score">
-            {props.team.score.startingScore}
+            {props.isScouting && props.team.standing ? 
+               calculateEstimatedScore(props)
+             : props.team.score.startingScore}
         </span>
     );
 }
 
+function calculateEstimatedScore(props : TeamScoreProps) : number {
+    var score = 0;
+    for (var i in props.team.picks) {
+        var pick = props.team.picks[i];
+        if (pick.pick.position <= 11) {
+            score += Number(pick.footballer.rawData.footballer.ep_next) * pick.pick.multiplier;
+        }
+    }
+    return score;
+}
+
 export function TeamSubScore(props : TeamScoreProps) {
+    var isAverage = props.team.id == 0;
     return (
         <span className="team-sub-score">
-            ({props.team.score.subScore})
+            {props.isScouting || isAverage ? "" : `(${props.team.score.subScore})`}
         </span>
     );
 }
