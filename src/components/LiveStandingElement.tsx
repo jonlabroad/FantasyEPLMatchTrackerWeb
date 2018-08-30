@@ -29,8 +29,10 @@ export default class LiveStandingElement extends React.Component<LiveStandingEle
         }
         return (
             <tr className={"live-standings-element " + addClasses}>
-                <td className="live-standings-num">
-                    {this.props.num}
+                <td className={"live-standings-num text-center"}>
+                    <div className={(this.props.num <= 5 ? "live-standings-money badge badge-success" : "")}>
+                        {this.props.num}
+                    </div>
                 </td>
                 <td className="live-standings-name">
                     {this.props.liveStanding.teamName}

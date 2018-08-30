@@ -20,6 +20,7 @@ import VideoHighlightGroup from "../VideoHighlightGroup";
 import NavTab from "../NavTab";
 import TabType from "../../models/TabType";
 import ScoutingTab from "./ScoutingTab";
+import ChipStripTeam from "../ChipStripTeam";
 
 export interface MatchTrackerProps {
 }
@@ -229,15 +230,20 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
         var tab = 
           <div className="container-fluid">
           <div className="row no-gutters justify-content-center">
-            <div className="col order-1 d-flex flex-column align-items-end side-column">
-              <div className="main-element side-column-element">
+            <div className="col order-1 side-column">
+            <div className = "main-element">
+                <ChipStripTeam
+                    team={teams[0]}
+                    gameweek={this.state.selection.gameweek}
+                  />
+              </div>
+              <div className="main-element">
                 <PickList picks={teams[0] != null ? teams[0].picks : null}
                   config={this.state.selection}
                   differentials={this.state.matchInfo.differentials}
-                  isScouting={false}
                   />
               </div>
-              <div className="main-element side-column-element">
+              <div className="main-element">
                 <FixtureStatusGroup
                   team={teams[0]}
                   fixtures={this.state.eventInfo ? this.state.eventInfo.fixtures : null}
@@ -245,15 +251,20 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
                 />
               </div>
             </div>
-            <div className="col order-3 d-flex flex-column align-items-start side-column">
-              <div className="main-element side-column-element">
+            <div className="col order-3 side-column">
+              <div className = "main-element">
+                <ChipStripTeam
+                    team={teams[1]}
+                    gameweek={this.state.selection.gameweek}
+                  />
+              </div>
+              <div className="main-element">
                 <PickList picks={teams[1] != null ? teams[1].picks : null}
                   config={this.state.selection}
                   differentials={this.state.matchInfo.differentials}
-                  isScouting={false}
                 />
               </div>
-              <div className="main-element side-column-element">
+              <div className="main-element">
                 <FixtureStatusGroup
                   team={teams[1]}
                   fixtures={this.state.eventInfo ? this.state.eventInfo.fixtures : null}
@@ -319,7 +330,7 @@ export default class MatchTracker extends React.Component<MatchTrackerProps, Mat
 
   render() {
     return (
-      <div>
+      <div id="bootstrap-overrides">
         {this.renderNavBar()}
         {this.renderMatchInfo()}
       </div>

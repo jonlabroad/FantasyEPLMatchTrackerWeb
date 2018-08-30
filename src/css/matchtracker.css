@@ -23,7 +23,7 @@ body {
 }
 
 .side-column {
-    min-width: 250px;
+    /*min-width: 250px;*/
     overflow: hidden;
 }
 

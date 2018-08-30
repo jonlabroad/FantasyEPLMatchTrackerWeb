@@ -14,20 +14,33 @@
 	width: 1%;
 }
 
-.pick-points {
+#bootstrap-overrides .pick-points .badge{
+	font-size: 18px;
 	text-align: center;
-	width: 10%
+	width: 30px;
+	font-weight: normal;
+	/*background-color: #6abb4a;*/
+}
+
+.pick-points {
+	width: 35px;
 }
 
 .pick-position {
 	text-align: center;
-	width: 1%
+	width: 25px;
 }
 
 .pick-name {
 	padding-left: 5px;
-	width: 35%;
+	width: 110px
 }
+
+.pick-icon {
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
 
 .pick-icon img {
 	height: 18px;
@@ -51,7 +64,7 @@
 }
 
 .pick-fixture-complete > td:nth-child(2) {
-	background-color: #8fcc5d;
+	/*background-color: #8fcc5d;*/
 }
 
 .table-picks {

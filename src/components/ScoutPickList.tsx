@@ -3,14 +3,16 @@ import * as ReactDOM from "react-dom";
 
 import PickListElement from "./PickListElement"
 import Selection from "../models/TrackerSelection";
+import ScoutPickListElement from "./ScoutPickListElement";
 
-export interface PickListProps {
+export interface ScoutPickListProps {
     picks : any;
     differentials : any;
     config : Selection;
+    isScouting : boolean
 }
 
-export default class PickList extends React.Component<PickListProps, {}> {
+export default class ScoutPickList extends React.Component<ScoutPickListProps, {}> {
     constructor(props : any) {
         super(props);
         this.state = {
@@ -18,7 +20,7 @@ export default class PickList extends React.Component<PickListProps, {}> {
     }
 
     componentDidMount() {
-        ($('[data-toggle="tooltip"]') as any).tooltip();
+        //($('[data-toggle="tooltip"]') as any).tooltip(); 
     }
 
     protected isDifferential(elementId : number) {
@@ -33,7 +35,7 @@ export default class PickList extends React.Component<PickListProps, {}> {
             if (this.props.config.differentialsOnly && !this.isDifferential(pick.footballer.rawData.footballer.id)) {
                 continue;
             }
-            var element = <PickListElement
+            var element = <ScoutPickListElement
                 key={i}
                 pick = {this.props.picks[i]}
             />
@@ -49,6 +51,19 @@ export default class PickList extends React.Component<PickListProps, {}> {
             <div>
                 <div className="events-table-header">Starting Lineup</div>
                 <table className="table table-sm table-striped table-picks">
+                    <thead className="events-table-header">
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Form</th>
+                            <th>Pts Per Game</th>
+                            <th>Selected %</th>
+                            <th>Cost</th>
+                            <th>£/Ppg</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         {starterPicks}
                     </tbody>

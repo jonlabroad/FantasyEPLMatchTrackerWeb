@@ -23,7 +23,7 @@ export default class DifferentialsSelector extends React.Component<ScoutStatsPro
     renderStats(team : any, stats : any) {
         var elements : Array<JSX.Element> = new Array<JSX.Element>();
         var key = 0;
-        elements.push(this.createStat(key++, "Points Per Week", team.entry.entry.summary_overall_points/(team.standing.matches_played)));
+        elements.push(this.createStat(key++, "Points Per Week", Math.round(team.entry.entry.summary_overall_points/(team.standing.matches_played)*10)/10));
         elements.push(this.createStat(key++, "Overall Points", team.entry.entry.summary_overall_points));
         elements.push(this.createStat(key++, "Overall Rank", team.entry.entry.summary_overall_rank));
         elements.push(this.createStat(key++, "Team Value", this.renderValue(team.entry.entry.value)));

@@ -6,7 +6,6 @@ import IconProvider from "../IconProvider";
 
 export interface PickListElementProps {
     pick: any;
-    isScouting: any;
 }
 
 export default class PickListElement extends React.Component<PickListElementProps, {}> {
@@ -16,7 +15,7 @@ export default class PickListElement extends React.Component<PickListElementProp
     }
 
     protected getIcons(explains: any): JSX.Element {
-        var icons = <span>
+        var icons = <span className="d-flex flex-wrap">
             {this.getIcon(explains, "minutes")}
             {this.getIcon(explains, "goals_scored")}
             {this.getIcon(explains, "assists")}
@@ -33,7 +32,7 @@ export default class PickListElement extends React.Component<PickListElementProp
         return icons;
     }
 
-    protected getIcon(explains: any, fieldName: string): JSX.Element {
+    protected getIcon(explains: any, fieldName: string): Array<JSX.Element> {
         var combinedExplain: any = null;
         for (var i in explains) {
             var explain = this.getExplainElement(explains[i], fieldName);
@@ -68,7 +67,7 @@ export default class PickListElement extends React.Component<PickListElementProp
         return null;
     }
 
-    private getExplainIcons(explain: any, explainName: string): JSX.Element {
+    private getExplainIcons(explain: any, explainName: string): Array<JSX.Element> {
         var iconFiles: Array<string> = new Array<string>();
         if (explainName === 'minutes') {
             iconFiles.push(explain.value < 60 ? IconProvider.getIcon(explainName) : IconProvider.getIcon("minutes_60"));
@@ -89,22 +88,18 @@ export default class PickListElement extends React.Component<PickListElementProp
             icons.push(this.renderIconElement(iconFiles[i], explain, explainName, `${explainName}${i}`));
         }
 
-        return (
-            <span className="pick-icon">
-                {icons}
-            </span>
-        );
+        return icons;
     }
 
     private renderIconElement(iconFile: string, explain: any, explainName: string, key: string): JSX.Element {
-        return (<span key={key}>
+        return (<div key={key} className="pick-icon">
             <img
                 data-toggle="tooltip"
                 title={explain.value + " " + explainName.replace("_", " ") + ": " + explain.points + "pts"}
                 src={`img/icon/${iconFile}`}
                 alt={explainName} />
-            <span> </span>
-        </span>
+        </div>
+
         );
     }
 
@@ -163,7 +158,7 @@ export default class PickListElement extends React.Component<PickListElementProp
         return rank;
     }
 
-    private getPosition() : string {
+    private getPosition(): string {
         switch (this.props.pick.footballer.rawData.footballer.element_type) {
             case 1:
                 return "GK";
@@ -179,7 +174,7 @@ export default class PickListElement extends React.Component<PickListElementProp
     }
 
     private getPoints(): number {
-        return this.props.isScouting ? this.props.pick.footballer.rawData.footballer.ep_next : this.props.pick.score;
+        return this.props.pick.score;
     }
 
     private getTeamCode(): number {
@@ -199,15 +194,14 @@ export default class PickListElement extends React.Component<PickListElementProp
     }
 
     private getFixtureStatusClass(): string {
-        if (!this.props.isScouting) {
-            var pick = this.props.pick;
-            if (pick.footballer.isCurrentlyPlaying) {
-                return "pick-in-fixture";
-            }
-            if (pick.footballer.isDonePlaying) {
-                return "pick-fixture-complete";
-            }
+        var pick = this.props.pick;
+        if (pick.footballer.isCurrentlyPlaying) {
+            return "pick-in-fixture";
         }
+        if (pick.footballer.isDonePlaying) {
+            return "pick-fixture-complete";
+        }
+        return "";
     }
 
     render() {
@@ -215,13 +209,16 @@ export default class PickListElement extends React.Component<PickListElementProp
         var captainClassName = this.getRoleClass();
         var fixtureStatusClassName = this.getFixtureStatusClass();
         var badgeLink = this.getBadgeLink();
+        var ptsClasses : string = (this.props.pick.footballer.isDonePlaying ? "badge badge-success" : this.getFixtureStatusClass());
         return (
             <tr className={`${starterClassName} ${captainClassName} ${fixtureStatusClassName}`}>
                 <td className="pick-badge">
                     <img className="pick-badge" src={badgeLink} />
                 </td>
-                <td className="pick-points">
-                    {this.getPoints()}
+                <td className={"pick-points text-center"}>
+                    <div className={ptsClasses}>
+                        {this.getPoints()}
+                    </div>
                 </td>
                 <td className="pick-position">
                     {this.getPosition()}
@@ -234,7 +231,7 @@ export default class PickListElement extends React.Component<PickListElementProp
                     </span>
                 </td>
                 <td className="pick-explains">
-                    {this.props.isScouting ? "" : this.getIcons(this.getExplains())}
+                    {this.getIcons(this.getExplains())}
                 </td>
             </tr>
         );

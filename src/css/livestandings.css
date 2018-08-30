@@ -46,3 +46,8 @@
 .live-standings-points-total {
     width: 8%;
 }
+
+.live-standings-money {
+    width: 20px;
+    font-size: 12px;
+}

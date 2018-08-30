@@ -24,7 +24,7 @@ function calculateEstimatedScore(props : TeamScoreProps) : number {
             score += Number(pick.footballer.rawData.footballer.ep_next) * pick.pick.multiplier;
         }
     }
-    return score;
+    return Math.round(score*10)/10;
 }
 
 export function TeamSubScore(props : TeamScoreProps) {
