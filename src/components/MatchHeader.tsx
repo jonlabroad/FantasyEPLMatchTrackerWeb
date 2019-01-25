@@ -5,6 +5,7 @@ import {TeamName, TeamRank, TeamPlayerName} from "./TeamName";
 import TeamRecord from "./TeamRecord";
 import {TeamStarterScore, TeamSubScore} from "./TeamScore";
 import TeamStripe from "./TeamStripe";
+import TeamForm from "./TeamForm";
 
 export interface MatchHeaderState {
 }
@@ -73,7 +74,12 @@ export default class MatchHeader extends React.Component<MatchHeaderProps, {}> {
                                 <TeamRecord
                                     standing={teamsArray[0] != null ? teamsArray[0].standing : null}
                                 />
-                            </div>  
+                            </div>
+                            <div>
+                                <TeamForm
+                                    form={teamsArray[0] != null ? teamsArray[0].form : null}
+                                />
+                            </div>
                         </div>
                         <div className="sub-score text-center">
                             <TeamSubScore
@@ -117,7 +123,12 @@ export default class MatchHeader extends React.Component<MatchHeaderProps, {}> {
                                 <TeamRecord
                                     standing={teamsArray[1] != null ? teamsArray[1].standing : null}
                                 />
-                            </div>  
+                            </div>
+                            <div>
+                                <TeamForm
+                                    form={teamsArray[1] != null ? teamsArray[1].form : null}
+                                />
+                            </div>
                         </div>
                     </div>
                     <div className="col-2 kit match-strip-height">
