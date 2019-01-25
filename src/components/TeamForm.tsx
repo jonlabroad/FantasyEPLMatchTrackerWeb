@@ -14,7 +14,7 @@ export default class TeamForm extends React.Component<TeamFormProps, {}> {
     }
 
     render() {
-        var form = Enumerable.from(this.props.form).reverse().take(8).reverse().toArray();
+        var form = Enumerable.from(this.props.form).reverse().take(10).reverse().toArray();
         return (
             <span className="team-record">
                 {form ? form.join('-') : null}
