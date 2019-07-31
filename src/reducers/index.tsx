@@ -1,5 +1,5 @@
 import { TrackerState } from "../types";
-import { TEST, RECEIVE_ENTRY, TAB_SELECT, RECEIVE_PICKS, RECEIVE_BOOTSTRAP, RECEIVE_LIVE } from "../constants";
+import { TEST, RECEIVE_ENTRY, TAB_SELECT, RECEIVE_PICKS, RECEIVE_BOOTSTRAP, RECEIVE_LIVE, RECEIVE_EVENT, RECEIVE_BOOTSTRAPSTATIC, RECEIVE_FIXTURES } from "../constants";
 import { Reducer } from "redux";
 
 export const initialState: TrackerState = {
@@ -7,7 +7,9 @@ export const initialState: TrackerState = {
         entries: {},
         picks: {},
         live: {},
-        bootstrap: undefined
+        events: {},
+        bootstrap: undefined,
+        fixtures: {}
     },
     nav: {
         selectedTab: 0
@@ -19,9 +21,12 @@ export const trackerReducer: Reducer<TrackerState> = (state = initialState, acti
     if (!state) {
         state = initialState;
     }
+    console.log(action.type);
     switch (action.type) {
         case RECEIVE_BOOTSTRAP:
             return { ...state, data: { ...state.data, bootstrap: action.bootstrap }};
+        case RECEIVE_BOOTSTRAPSTATIC:
+                return { ...state, data: { ...state.data, bootstrapStatic: action.bootstrapStatic }};
         case RECEIVE_ENTRY:
             {
                 let newState = { ...state, data: { ...state.data, entries: { ...state.data.entries } } };
@@ -38,6 +43,17 @@ export const trackerReducer: Reducer<TrackerState> = (state = initialState, acti
             {
                 let newState = { ...state, data: { ...state.data, live: { ...state.data.live } } };
                 newState.data.live[action.gameweek] = action.live;
+                return newState;
+            }
+        case RECEIVE_EVENT:
+            {
+                let newState = { ...state, data: { ...state.data, events: { ...state.data.events } } };
+                newState.data.events[action.gameweek] = action.event;
+                return newState;
+            }
+        case RECEIVE_FIXTURES:
+            {
+                let newState = { ...state, data: { ...state.data, fixtures: { ...state.data.fixtures, ...action.mappedFixtures } } };
                 return newState;
             }
         case TAB_SELECT:

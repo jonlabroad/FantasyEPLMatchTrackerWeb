@@ -1,6 +1,6 @@
 import IFplClient from "./IFplClient";
 import FplClient from "./FplClient";
-import Picks from "../../data/fpl/Picks";
+import { MappedFixtures } from "../../data/MappedFixtures";
 
 export default class MockFplClient implements IFplClient {
     async entryEvent(entryId: number, eventId: number) {
@@ -4818,6 +4818,10 @@ export default class MockFplClient implements IFplClient {
                 }
             ]
         });
+    }
+
+    async fixtures(eventId?: number): Promise<MappedFixtures> {
+        return await new FplClient().fixtures(eventId);
     }
 
     async picks(entryId: number, gameweek: number): Promise<any> {

@@ -9,6 +9,7 @@ import LiveHelper from "../util/LiveHelper";
 import { PointsIcon } from "./PointsIcon";
 import PointsIcons from "./PointsIcons";
 import ScoreCalculator from "../util/ScoreCalculator";
+import ClubIcon from "./ClubIcon";
 
 export interface PicksListProps {
     picks: Picks
@@ -23,6 +24,13 @@ const noIconPerEventTypes = [
 ];
 
 export default class PicksList extends React.Component<PicksListProps> {
+    getTeamCode(pick: Pick) {
+        const element = BootstrapHelper.getElement(pick.element, this.props.bootstrap);
+        if (element) {
+            return element.team_code;
+        }
+    }
+    
     renderLive(pick: Pick) {
         const liveElement = LiveHelper.getElement(pick.element, this.props.live);
         if (liveElement) {
@@ -36,6 +44,7 @@ export default class PicksList extends React.Component<PicksListProps> {
         return (
             <TableRow key={pick.element}>
                 <TableCell>{element ? ScoreCalculator.calculateElementScore(pick, this.props.live): 0}</TableCell>
+                <TableCell><ClubIcon teamCode={this.getTeamCode(pick)}/></TableCell>
                 <TableCell>{element ? element.web_name : pick.element}</TableCell>
                 <TableCell>{element ? BootstrapHelper.getPosition(element.element_type) : pick.position}</TableCell>
                 <TableCell>{this.renderLive(pick)}</TableCell>
@@ -62,6 +71,7 @@ export default class PicksList extends React.Component<PicksListProps> {
                 <TableHead>
                     <TableRow>
                         <TableCell>Points</TableCell>
+                        <TableCell>Club</TableCell>
                         <TableCell>Player</TableCell>
                         <TableCell>Position</TableCell>
                         <TableCell>Activity</TableCell>

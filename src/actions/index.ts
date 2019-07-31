@@ -2,6 +2,8 @@ import * as constants from '../constants';
 import Picks from '../data/fpl/Picks';
 import Bootstrap from '../data/fpl/Bootstrap';
 import Live from '../data/fpl/Live';
+import { BootstrapStatic } from '../data/fpl/BootstrapStatic';
+import { MappedFixtures } from '../data/MappedFixtures';
 
 export interface Test {
     type: constants.TEST;
@@ -25,6 +27,18 @@ export function receiveBootstrap(bootstrap: Bootstrap): ReceiveBootstrap {
     }
 };
 
+export interface ReceiveBootstrapStatic {
+    type: constants.RECEIVE_BOOTSTRAPSTATIC;
+    bootstrapStatic: BootstrapStatic;
+}
+export type ReceiveBootstrapStaticAction = ReceiveBootstrapStatic;
+export function receiveBootstrapStatic(bootstrapStatic: BootstrapStatic): ReceiveBootstrapStatic {
+    return {
+        type: constants.RECEIVE_BOOTSTRAPSTATIC,
+        bootstrapStatic: bootstrapStatic
+    }
+};
+
 export interface ReceiveEntry {
     type: constants.RECEIVE_ENTRY;
     entry: any;
@@ -34,6 +48,18 @@ export function receiveEntry(entry: any): ReceiveEntry {
     return {
         type: constants.RECEIVE_ENTRY,
         entry: entry
+    }
+};
+
+export interface ReceiveFixtures {
+    type: constants.RECEIVE_FIXTURES;
+    mappedFixtures: MappedFixtures;
+}
+export type ReceiveFixturesAction = ReceiveFixtures;
+export function receiveFixtures(fixtures: MappedFixtures): ReceiveFixtures {
+    return {
+        type: constants.RECEIVE_FIXTURES,
+        mappedFixtures: fixtures
     }
 };
 
@@ -67,6 +93,20 @@ export function receiveLive(gameweek: number, live: Live): ReceiveLive {
     }
 };
 
+export interface ReceiveEvent {
+    type: constants.RECEIVE_EVENT;
+    gameweek: number;
+    event: Event;
+}
+export type ReceiveEventAction = ReceiveEvent;
+export function receiveEvent(gameweek: number, event: Event): ReceiveEvent {
+    return {
+        type: constants.RECEIVE_EVENT,
+        gameweek: gameweek,
+        event: event
+    }
+};
+
 export interface TabSelect {
     type: constants.TAB_SELECT;
     index: number;
@@ -82,8 +122,11 @@ export function tabSelect(index: number): TabSelect {
 export type RootAction =
 TestAction |
 ReceiveBootstrap |
+ReceiveBootstrapStatic |
 ReceiveEntry |
+ReceiveFixtures |
 ReceivePicks |
 ReceiveLive |
+ReceiveEvent |
 TabSelect
 ;

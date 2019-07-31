@@ -1,5 +1,8 @@
 import Axios from 'axios';
 import IFplClient from './IFplClient';
+import { MappedFixtures } from '../../data/MappedFixtures';
+import Enumerable from 'linq';
+import { Fixtures } from '../../data/fpl/Fixtures';
 
 export default class FplClient implements IFplClient {
     static readonly baseUrl: string = 'https://fkcc5km0gj.execute-api.us-east-1.amazonaws.com/prod';
@@ -21,6 +24,19 @@ export default class FplClient implements IFplClient {
 
     async history(entryId: number) {
         return await this.get(this.historyUrl(entryId));
+    }
+
+    async fixtures(eventId?: number): Promise<MappedFixtures> {
+        const fixtures: Fixtures = await this.get(this.fixtureUrl(eventId));
+        if (eventId) {
+            return {[eventId]: fixtures};
+        }
+        let mapped: MappedFixtures = {};
+        const allEvents = Enumerable.from(fixtures).select(f => f.event).distinct().toArray();
+        for (let event of allEvents) {
+            mapped[event] = Enumerable.from(fixtures).where(f => f.event === event).toArray();
+        }
+        return mapped;
     }
 
     async leaguesH2hMatches(leagueId: number) {
@@ -76,4 +92,7 @@ export default class FplClient implements IFplClient {
         return `entry/${entryId}`;
     }
 
+    fixtureUrl(eventId?: number) {
+        return `fixtures${eventId ? `?event=${eventId}` : ''}`;
+    }
 }
