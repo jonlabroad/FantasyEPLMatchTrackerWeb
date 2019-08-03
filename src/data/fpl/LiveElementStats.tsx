@@ -1,5 +1,4 @@
-export type LiveElementStats = {[key: string]: number | boolean}
-/*
+export interface LiveElementStats {
     yellow_cards: number;
     own_goals: number;
     creativity: number;
@@ -19,5 +18,4 @@ export type LiveElementStats = {[key: string]: number | boolean}
     penalties_saved: number;
     in_dreamteam: boolean;
     minutes: number;
-
-*/
+}

@@ -10,11 +10,18 @@ import Live, { Lives } from "../data/fpl/Live";
 import moment from 'moment';
 
 import "../styles/fixture-list.css";
+import FixtureBpsList from "./FixtureBpsList";
+import Picks from "../data/fpl/Picks";
+import PicksHelper from "../util/PicksHelper";
 
 export interface EventFixtureListProps {
     bootstrap?: Bootstrap
     fixtures?: Fixtures
     live?: Live
+    picks: {[key: string]: Picks}
+    team1: number,
+    team2: number,
+    gameweek: number
 }
 
 export default class EventFixtureList extends React.Component<EventFixtureListProps> {
@@ -48,10 +55,15 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
         const elements: JSX.Element[] = [];
         for (let fixture of this.getFixtures()) {
             elements.push(
-            <Box display="flex" alignContent="center" alignItems="center" justifyContent="space-around" className="fixture-list-element">
-                {this.renderFixtureTeam(fixture.team_a, bs, "row", "away")}
-                {this.renderScoreOrTime(fixture, bs)}
-                {this.renderFixtureTeam(fixture.team_h, bs, "row-reverse", "home")}
+            <Box display="flex" flexDirection="column">
+                <Box display="flex" alignContent="center" alignItems="center" justifyContent="space-around" className="fixture-list-element">
+                    {this.renderFixtureTeam(fixture.team_a, bs, "row", "away")}
+                    {this.renderScoreOrTime(fixture, bs)}
+                    {this.renderFixtureTeam(fixture.team_h, bs, "row-reverse", "home")}
+                </Box>
+                <FixtureBpsList
+                    teamPicks={PicksHelper.getMatchPicks(this.props.team1, this.props.team2, this.props.gameweek, this.props.picks)}
+                    fixture={fixture} live={this.props.live} bootstrap={this.props.bootstrap}/>
             </Box>
             );
         }
