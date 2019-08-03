@@ -1,6 +1,6 @@
 import Picks from "../data/fpl/Picks";
 import Bootstrap from "../data/fpl/Bootstrap";
-import Live from "../data/fpl/Live";
+import Live, { Lives } from "../data/fpl/Live";
 import { Events } from "../data/state/Events";
 import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 import { MappedFixtures } from "../data/MappedFixtures";
@@ -10,7 +10,7 @@ export interface TrackerData {
     events: Events
     fixtures: MappedFixtures
     picks: {[key: string]: Picks}
-    live: {[key: number]: Live}
+    live: Lives
     bootstrap: Bootstrap | undefined
     bootstrapStatic?: BootstrapStatic
 }

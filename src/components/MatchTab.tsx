@@ -31,10 +31,10 @@ export default class MatchTab extends React.Component<MatchTabProps> {
                 <Grid item xs={2}></Grid>
 
                 <Grid item xs={2}></Grid>
-                <Grid item xs={4}>
+                <Grid item xs={2}>
                     <EventFixtureListContainer gameweek={1}/>
                 </Grid>
-                <Grid item xs={4}></Grid>
+                <Grid item xs={6}></Grid>
                 <Grid item xs={2}></Grid>
             </Grid>
         );

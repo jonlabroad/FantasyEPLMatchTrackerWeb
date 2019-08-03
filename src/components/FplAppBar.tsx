@@ -14,9 +14,8 @@ export default class FplAppBar extends React.Component<FplAppBarProps, {}> {
     
     render() {
         return (
-        <MuiThemeProvider theme={Themes.mainTheme}>
             <div className="fpl-app-bar">
-                <AppBar position="static">
+                <AppBar color="primary" position="static">
                     <Toolbar>
                         <Typography variant="h6" className='fpl-app-bar-title'>
                             FPL Matchtracker
@@ -24,7 +23,6 @@ export default class FplAppBar extends React.Component<FplAppBarProps, {}> {
                     </Toolbar>
                 </AppBar>
             </div>
-        </MuiThemeProvider>
         );
     }
 }

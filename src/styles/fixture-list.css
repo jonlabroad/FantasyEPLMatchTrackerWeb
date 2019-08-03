@@ -1,0 +1,68 @@
+.fixture-list-container {
+}
+
+.fixture-list-element {
+    /*background-color: white;*/
+    padding: 5px 5px 5px 5px;
+    width: 100%;
+    height: 60px;
+
+    border-style: dotted;
+    border-width: 0 0 1px 0;
+    border-color: #ababab;
+    /*border-style: solid; border-width: 1px; border-color: grey;*/
+}
+
+.fixture-time-box {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #efefef;
+    padding-left: 3px;
+    padding-right: 3px;
+    margin-left: 10px;
+    margin-right: 10px;
+    min-width: 60px;
+    max-height: 27px;
+}
+
+.fixture-list-element-score {
+    /*border-style: dotted; border-width: 1px; border-color: green;*/
+
+    min-width: 60px;
+}
+
+.fixture-score-element {
+
+}
+
+.club-name-logo {
+    width: 70px;
+    align-items: center;
+    /*border-style: dotted; border-width: 1px; border-color: green;*/
+}
+
+.club-name {
+    width: 30px;
+    /*border-style: dotted; border-width: 1px; border-color: red;*/
+}
+
+.fixture-minutes {
+    text-align: center;
+}
+
+.fixture-in-progress {
+    color: green;
+    font-weight: normal;
+}
+
+.away {
+    text-align: right;
+    justify-content: left;
+}
+
+.home {
+    text-align: left;
+    justify-content: right;
+}
+
+
