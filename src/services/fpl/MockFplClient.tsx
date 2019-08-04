@@ -5175,6 +5175,74 @@ export default class MockFplClient implements IFplClient {
                             "minutes": 61
                         }
                     },
+                    "25": {
+                        "explain":
+                        [
+                            [
+                                {
+                                    "minutes": {
+                                        "points": 2,
+                                        "name": "Minutes played",
+                                        "value": 45
+                                    },
+                                    "goals_scored": {
+                                        "points": 8,
+                                        "value": 2
+                                    },
+                                    "bonus": {
+                                        "points": 3,
+                                        "value": 3
+                                    },
+                                    "clean_sheets": {
+                                        "points": 4,
+                                        "name": "Clean sheets",
+                                        "value": 1
+                                    },
+                                    "assists": {
+                                        "points": 0,
+                                        "value": 0
+                                    },
+                                    "yellow_cards": {
+                                        "points": 0,
+                                        "value": 0
+                                    },
+                                    "red_cards": {
+                                        "points": -2,
+                                        "value": 1
+                                    },
+                                    "penalties_missed": {
+                                        "points": 0,
+                                        "value": 0
+                                    },
+                                    "goals_conceded": {
+                                        "points": -3,
+                                        "value": 2
+                                    },
+                                    "saves": {
+                                        "points": 0,
+                                        "value": 0
+                                    },
+                                    "penalties_saved": {
+                                        "points": 0,
+                                        "value": 0
+                                    },
+                                    "own_goals": {
+                                        "points": -2,
+                                        "value": 1
+                                    }
+                                }
+                            ]
+                        ],
+                        "stats": {
+                            "yellow_cards": 0,
+                            "saves": 0,
+                            "bps": 44,
+                            "assists": 0,
+                            "goals_scored": 0,
+                            "clean_sheets": 1,
+                            "minutes": 61
+                        }
+                    },
                     "24": {
                         "explain": [
 

@@ -55,7 +55,7 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
         const elements: JSX.Element[] = [];
         for (let fixture of this.getFixtures()) {
             elements.push(
-            <Box display="flex" flexDirection="column">
+            <Box display="flex" flexDirection="column" className="fixture-list-element-container">
                 <Box display="flex" alignContent="center" alignItems="center" justifyContent="space-around" className="fixture-list-element">
                     {this.renderFixtureTeam(fixture.team_a, bs, "row", "away")}
                     {this.renderScoreOrTime(fixture, bs)}

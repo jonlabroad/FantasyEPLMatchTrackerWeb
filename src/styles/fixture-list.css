@@ -3,25 +3,36 @@
 
 .fixture-list-element {
     /*background-color: white;*/
-    padding: 5px 5px 5px 5px;
+    padding: 3px 0px 3px 0px;
     width: 100%;
-    height: 60px;
+    min-height: 60px;
 
+    /*border-style: solid; border-width: 1px; border-color: grey;*/
+}
+
+.fixture-list-element-container {
     border-style: dotted;
     border-width: 0 0 1px 0;
     border-color: #ababab;
-    /*border-style: solid; border-width: 1px; border-color: grey;*/
+}
+
+.fixture-list-element-container * {
+    /*
+    border-style: dotted;
+    border-width: 1px 1px 1px 1px;
+    border-color: #ababab;
+    */
 }
 
 .fixture-time-box {
     border-style: solid;
     border-width: 1px;
     border-color: #efefef;
-    padding-left: 3px;
-    padding-right: 3px;
-    margin-left: 10px;
-    margin-right: 10px;
-    min-width: 60px;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin-left: 5px;
+    margin-right: 5px;
+    min-width: 65px;
     max-height: 27px;
 }
 
@@ -33,6 +44,39 @@
 
 .fixture-score-element {
 
+}
+
+.bps-table-element {
+    width: 100%;
+}
+
+.bps-table-element * {
+    width: 100%;
+}
+
+.bps-element-name {
+    width: 50%;
+    text-align: left;
+}
+
+.bps-element-bps {
+    width: 10%;
+}
+
+.bonus-stars {
+    width: 30%;
+}
+
+.bonus-star-container {
+    width: 20%;
+}
+
+.bonus-star {
+    padding: 0 1px 0 0px;
+}
+
+.bonus-star-filled {
+    color: goldenrod
 }
 
 .club-name-logo {
