@@ -1,17 +1,17 @@
 import React from "react";
 import { Typography } from "@material-ui/core";
-import EntryData from "../data/fpl/EntryData";
+import Entry from "../data/fpl/Entry";
 
 export interface TeamHeaderElementProps {
-    entry: EntryData
+    entry: Entry
 }
 
-const getPlayerName = (entry: EntryData) => {
-    return entry ? `${entry.entry.player_first_name} ${entry.entry.player_last_name}` : '';
+const getPlayerName = (entry: Entry) => {
+    return entry ? `${entry.player_first_name} ${entry.player_last_name}` : '';
 }
 
-const getEntryName = (entry: EntryData) => {
-    return entry ? entry.entry.name : '';
+const getEntryName = (entry: Entry) => {
+    return entry ? entry.name : '';
 }
 
 export const TeamHeaderElement: React.SFC<TeamHeaderElementProps> = (props) => {

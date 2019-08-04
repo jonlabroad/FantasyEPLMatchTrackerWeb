@@ -3,6 +3,7 @@ import IFplClient from './IFplClient';
 import { MappedFixtures } from '../../data/MappedFixtures';
 import Enumerable from 'linq';
 import { Fixtures } from '../../data/fpl/Fixtures';
+import Entry from '../../data/fpl/Entry';
 
 export default class FplClient implements IFplClient {
     static readonly baseUrl: string = 'https://fkcc5km0gj.execute-api.us-east-1.amazonaws.com/prod';
@@ -52,8 +53,10 @@ export default class FplClient implements IFplClient {
         return await this.get(this.eventUrl(eventId));
     }
 
-    async entry(entryId: number) {
-        return await this.get(this.entryUrl(entryId));
+    async entry(entryId: number): Promise<Entry> {
+        const response = await this.get(this.entryUrl(entryId));
+        console.log({[entryId]: response});
+        return response
     }
 
     async get(path: string) {

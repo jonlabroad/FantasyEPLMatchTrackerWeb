@@ -90,7 +90,7 @@ export default class FixtureBpsList extends React.Component<FixtureBpsListProps,
             const rank = i + 1;
             if (!fixtureStats.live) continue;
             const elementBps = fixtureStats.live.stats.bps;
-            const elementOnTeam1 = !!(teamPicks[0].picks.find(p => p.element === fixtureStats.element.id));
+            const elementOnTeam1 = !!(teamPicks[0] && teamPicks[0].picks.find(p => p.element === fixtureStats.element.id));
             const elementOnTeam2 = !!(teamPicks[1] && teamPicks[1].picks.find(p => p.element == fixtureStats.element.id));
             if (this.state.displayAll || (elementOnTeam1 || elementOnTeam2)) {
                 renderElements.push((

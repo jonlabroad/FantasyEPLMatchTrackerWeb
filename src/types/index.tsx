@@ -4,9 +4,10 @@ import Live, { Lives } from "../data/fpl/Live";
 import { Events } from "../data/state/Events";
 import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 import { MappedFixtures } from "../data/MappedFixtures";
+import Entry from "../data/fpl/Entry";
 
 export interface TrackerData {
-    entries: {[key: number]: any}
+    entries: {[key: number]: Entry}
     events: Events
     fixtures: MappedFixtures
     picks: {[key: string]: Picks}
@@ -16,7 +17,9 @@ export interface TrackerData {
 }
 
 export interface NavigationState {
-    selectedTab: number
+    selectedTab: number,
+    gameweek: number,
+    teams: number[]
 }
 
 export interface TrackerState {

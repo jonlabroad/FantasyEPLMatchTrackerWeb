@@ -15,6 +15,30 @@ export function test(): Test {
     }
 };
 
+export interface SetGameweek {
+    type: constants.SET_GAMEWEEK;
+    gameweek: number;
+}
+export type SetGameweekAction = SetGameweek;
+export function setGameweek(gameweek: number): SetGameweek {
+    return {
+        type: constants.SET_GAMEWEEK,
+        gameweek: gameweek
+    }
+};
+
+export interface SetTeams {
+    type: constants.SET_TEAMS;
+    teams: number[];
+}
+export type SetTeamsAction = SetTeams;
+export function setTeams(teams: number[]): SetTeams {
+    return {
+        type: constants.SET_TEAMS,
+        teams: teams
+    }
+};
+
 export interface ReceiveBootstrap {
     type: constants.RECEIVE_BOOTSTRAP;
     bootstrap: Bootstrap;
@@ -121,6 +145,8 @@ export function tabSelect(index: number): TabSelect {
 
 export type RootAction =
 TestAction |
+SetGameweek |
+SetTeams |
 ReceiveBootstrap |
 ReceiveBootstrapStatic |
 ReceiveEntry |

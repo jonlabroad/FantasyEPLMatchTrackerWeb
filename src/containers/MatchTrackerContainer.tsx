@@ -1,7 +1,7 @@
 import React from "react";
 import { TrackerState } from "../types";
 import { Dispatch } from "redux";
-import { RootAction, receiveEntry, receiveBootstrap, receivePicks, receiveLive, receiveEvent, receiveBootstrapStatic, receiveFixtures } from "../actions";
+import { RootAction, receiveEntry, receiveBootstrap, receivePicks, receiveLive, receiveEvent, receiveBootstrapStatic, receiveFixtures, setTeams, setGameweek } from "../actions";
 import MockFplClient from "../services/fpl/MockFplClient";
 import { connect } from "react-redux";
 import MatchHeaderContainer from "./MatchHeaderContainer";
@@ -12,8 +12,14 @@ import Picks from "../data/fpl/Picks";
 import Live from "../data/fpl/Live";
 import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 import { MappedFixtures } from "../data/MappedFixtures";
+import Url from "../util/Url";
 
 export interface MatchTrackerContainerProps {
+    gameweek: number
+    teams: number[]
+
+    setTeams: any
+    setGameweek: any
     receiveBootstrap: any
     receiveBootstrapStatic: any
     receiveEntry: any
@@ -25,27 +31,46 @@ export interface MatchTrackerContainerProps {
 
 export class MatchTrackerContainer extends React.Component<MatchTrackerContainerProps, any> {
     async componentDidMount() {
+        const gameweek = parseInt(Url.getGameweek() || "1");
+        let teams = Url.getTeams();
+        if (teams.length <= 0) {
+            teams = [55385, 55385];
+        }
+
+        Url.set(gameweek, teams);
+
+        this.props.setTeams(teams);
+        this.props.setGameweek(gameweek);
+
         new MockFplClient().bootstrapStatic().then((bootstrapStatic) => {
             this.props.receiveBootstrapStatic(bootstrapStatic);
         });
         new MockFplClient().fixtures().then((fixtures) => {
-            console.log({fixies: fixtures});
             this.props.receiveFixtures(fixtures);
         });
         this.props.receiveBootstrap(await new MockFplClient().bootstrap());
-        this.props.receiveEntry(await new MockFplClient().entry(0));
-        this.props.receiveLive(1, await new MockFplClient().live(1));
-        this.props.receiveEvent(1, await new MockFplClient().event(1));
+        console.log({teams: teams});
+        if (teams[0]) {
+            this.props.receiveEntry(await new MockFplClient().entry(teams[0]));
+        }
+        if (teams[1]) {
+            this.props.receiveEntry(await new MockFplClient().entry(teams[1]));
+        }
+        this.props.receiveLive(gameweek, await new MockFplClient().live(gameweek));
+        this.props.receiveEvent(gameweek, await new MockFplClient().event(gameweek));
 
         // TODO get picks for all entries in league!
-        this.props.receivePicks(2365803, 1, await new MockFplClient().picks(2365803, 1));
+        this.props.receivePicks(teams[0], gameweek, await new MockFplClient().picks(teams[0], gameweek));
+        if (teams[1]) {
+            this.props.receivePicks(teams[1], gameweek, await new MockFplClient().picks(teams[1], gameweek));
+        }
     }
     
     render() {
         return (
         <div>
             <FplAppBar/>
-            <MatchHeaderContainer entry1Id={2365803} entry2Id={2365803}/>
+            <MatchHeaderContainer/>
             <TrackerTabsContainer/>
         </div>
         )
@@ -54,11 +79,14 @@ export class MatchTrackerContainer extends React.Component<MatchTrackerContainer
 
 export function mapStateToProps(state: TrackerState) {
     return {
-
+        gameweek: state.nav.gameweek,
+        teams: state.nav.teams
     };
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
+    setTeams: (teams: number[]) => dispatch(setTeams(teams)),
+    setGameweek: (gameweek: number) => dispatch(setGameweek(gameweek)),
     receiveBootstrap: (bootstrap: Bootstrap) => dispatch(receiveBootstrap(bootstrap)),
     receiveBootstrapStatic: (bootstrapStatic: BootstrapStatic) => dispatch(receiveBootstrapStatic(bootstrapStatic)),
     receiveEntry: (entry: any) => dispatch(receiveEntry(entry)),

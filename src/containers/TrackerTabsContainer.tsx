@@ -7,6 +7,8 @@ import TrackerTabs from "../components/TrackerTabs";
 
 export interface TrackerTabsContainerProps {
     currentTab: number
+    gameweek: number
+    teams: number[]
 
     tabChanged: Function
 }
@@ -23,6 +25,8 @@ export class TrackerTabsContainer extends React.Component<TrackerTabsContainerPr
             <TrackerTabs
                 currentTab={this.props.currentTab}
                 tabChanged={this.tabChanged.bind(this)}
+                gameweek={this.props.gameweek}
+                teams={this.props.teams}
             />
         );
     }
@@ -30,7 +34,9 @@ export class TrackerTabsContainer extends React.Component<TrackerTabsContainerPr
 
 export function mapStateToProps(state: TrackerState) {
     return {
-        currentTab: state.nav.selectedTab
+        currentTab: state.nav.selectedTab,
+        teams: state.nav.teams,
+        gameweek: state.nav.gameweek
     }
 }
 

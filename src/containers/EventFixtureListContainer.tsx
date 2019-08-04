@@ -9,6 +9,7 @@ import Bootstrap from "../data/fpl/Bootstrap";
 import LiveHelper from "../util/LiveHelper";
 import Live, { Lives } from "../data/fpl/Live";
 import Picks from "../data/fpl/Picks";
+import { StepButton } from "@material-ui/core";
 
 export interface EventFixtureListContainerProps {
     gameweek: number
@@ -16,21 +17,19 @@ export interface EventFixtureListContainerProps {
     fixtures?: MappedFixtures
     live: Lives
     picks: {[key: string]: Picks}
-    team1: number,
-    team2: number
+    teams: number[]
 }
 
 export class EventFixtureListContainer extends React.Component<EventFixtureListContainerProps> {
     render() {
-        console.log('hi');
         return (
         <EventFixtureList
             bootstrap={this.props.bootstrap}
             fixtures={FixturesHelper.getFixtures(this.props.gameweek, this.props.fixtures)}
             live={LiveHelper.getLive(this.props.gameweek, this.props.live)}
             picks={this.props.picks}
-            team1={this.props.team1}
-            team2={this.props.team2}
+            team1={this.props.teams[0]}
+            team2={this.props.teams[1]}
             gameweek={this.props.gameweek}
         />
         );
@@ -43,8 +42,7 @@ export function mapStateToProps(state: TrackerState) {
       fixtures: state.data.fixtures,
       live: state.data.live,
       picks: state.data.picks,
-      team1: 2365803,
-      team2: 2365803
+      teams: state.nav.teams
     };
 }
 

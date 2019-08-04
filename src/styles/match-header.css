@@ -1,0 +1,14 @@
+.match-header-container {
+    padding: 15px 0 15px 0;
+}
+
+.header-score {
+    color: white;
+    background-color: #e90052;
+    min-height: 70px;
+    width: 80%;
+}
+
+.header-score > * {
+    padding: 0 5px 0 2px;
+}

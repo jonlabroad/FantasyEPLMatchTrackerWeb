@@ -1,6 +1,12 @@
 export const TEST = 'TEST';
 export type TEST = typeof TEST;
 
+export const SET_GAMEWEEK = 'SET_GAMEWEEK';
+export type SET_GAMEWEEK = typeof SET_GAMEWEEK;
+
+export const SET_TEAMS = 'SET_TEAMS';
+export type SET_TEAMS = typeof SET_TEAMS;
+
 export const RECEIVE_BOOTSTRAP = 'RECEIVE_BOOTSTRAP';
 export type RECEIVE_BOOTSTRAP = typeof RECEIVE_BOOTSTRAP;
 

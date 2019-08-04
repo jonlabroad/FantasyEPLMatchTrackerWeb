@@ -1,5 +1,5 @@
 import { TrackerState } from "../types";
-import { TEST, RECEIVE_ENTRY, TAB_SELECT, RECEIVE_PICKS, RECEIVE_BOOTSTRAP, RECEIVE_LIVE, RECEIVE_EVENT, RECEIVE_BOOTSTRAPSTATIC, RECEIVE_FIXTURES } from "../constants";
+import { TEST, RECEIVE_ENTRY, TAB_SELECT, RECEIVE_PICKS, RECEIVE_BOOTSTRAP, RECEIVE_LIVE, RECEIVE_EVENT, RECEIVE_BOOTSTRAPSTATIC, RECEIVE_FIXTURES, SET_GAMEWEEK, SET_TEAMS } from "../constants";
 import { Reducer } from "redux";
 
 export const initialState: TrackerState = {
@@ -12,7 +12,9 @@ export const initialState: TrackerState = {
         fixtures: {}
     },
     nav: {
-        selectedTab: 0
+        selectedTab: 0,
+        gameweek: 1,
+        teams: [55385, 55385]
     }
 };
 
@@ -21,8 +23,11 @@ export const trackerReducer: Reducer<TrackerState> = (state = initialState, acti
     if (!state) {
         state = initialState;
     }
-    console.log(action.type);
     switch (action.type) {
+        case SET_GAMEWEEK:
+            return { ...state, nav: { ...state.nav, gameweek: action.gameweek }};
+        case SET_TEAMS:
+            return { ...state, nav: { ...state.nav, teams: action.teams }};
         case RECEIVE_BOOTSTRAP:
             return { ...state, data: { ...state.data, bootstrap: action.bootstrap }};
         case RECEIVE_BOOTSTRAPSTATIC:
@@ -30,7 +35,7 @@ export const trackerReducer: Reducer<TrackerState> = (state = initialState, acti
         case RECEIVE_ENTRY:
             {
                 let newState = { ...state, data: { ...state.data, entries: { ...state.data.entries } } };
-                newState.data.entries[action.entry.entry.id] = action.entry;
+                newState.data.entries[action.entry.id] = action.entry;
                 return newState;
             }
         case RECEIVE_PICKS:

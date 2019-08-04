@@ -5,6 +5,8 @@ import TeamsTab from "./TeamsTab";
 
 export interface TrackerTabsProps {
     currentTab: number;
+    gameweek: number;
+    teams: number[];
 
     tabChanged: (event: ChangeEvent<{}>, value: any) => void;
 }
@@ -14,7 +16,7 @@ export default class TrackerTabs extends React.Component<TrackerTabsProps> {
         return (
             <Grid container className="tracker-tabs-container" justify="center">
                 <Grid item xs={8}>
-                <AppBar position="static" color="default">
+                <AppBar className="tracker-tabs-appbar" position="static" color="default">
                     <Tabs
                         value={this.props.currentTab}
                         onChange={this.props.tabChanged}
@@ -24,7 +26,7 @@ export default class TrackerTabs extends React.Component<TrackerTabsProps> {
                     </Tabs>
                 </AppBar>
                 </Grid>
-                <MatchTab currentTab={this.props.currentTab} index={0}>
+                <MatchTab currentTab={this.props.currentTab} teams={this.props.teams} gameweek={this.props.gameweek} index={0}>
                     
                 </MatchTab>
                 <TeamsTab currentTab={this.props.currentTab} index={1}></TeamsTab>

@@ -5,7 +5,6 @@ export default class PicksHelper {
         if (!picksData) {
             return undefined;
         }
-        console.log({lookup: `${entryId}_${gameweek}`})
         return picksData[`${entryId}_${gameweek}`];
     }
 

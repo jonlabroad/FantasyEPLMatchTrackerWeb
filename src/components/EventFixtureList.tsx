@@ -88,9 +88,9 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
     renderScore(fixture: Fixture) {
         return (
             <Box display="flex" flexDirection="row" className="fixture-list-element-score" justifyContent="space-evenly">
-                <Typography variant="body1" className="fixture-score-element">{1/*fixture.team_a_score*/}</Typography>
+                <Typography variant="body1" className="fixture-score-element">{fixture.team_a_score}</Typography>
                 <Typography className="fixture-score-element">-</Typography>
-                <Typography className="fixture-score-element">{3/*fixture.team_h_score*/}</Typography>
+                <Typography className="fixture-score-element">{fixture.team_h_score}</Typography>
             </Box>
         )
     }
@@ -108,6 +108,7 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
 
         return (
             <Box display="flex" flexDirection="column" className="fixture-list-container">
+                <Typography className="fixture-list-header" variant="subtitle1">Fixtures</Typography>
                 {this.renderFixtures(bootstrap)}
             </Box>
         )

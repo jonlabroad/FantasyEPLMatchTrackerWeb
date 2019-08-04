@@ -49,6 +49,6 @@ export default class PointsIcons extends React.Component<PointsIconsProps> {
             }
         }
         
-        return <Box display="flex" flexDirection="row" alignContent="center">{elements}</Box>;
+        return <Box maxWidth="100%" display="flex" flexDirection="row" alignContent="center" flexWrap="wrap">{elements}</Box>;
     }
 }

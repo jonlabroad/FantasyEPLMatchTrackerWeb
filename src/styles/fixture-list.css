@@ -46,6 +46,12 @@
 
 }
 
+.fixture-list-header {
+    color: white;
+    text-align: center;
+    background-color: #37003C;
+}
+
 .bps-table-element {
     width: 100%;
 }

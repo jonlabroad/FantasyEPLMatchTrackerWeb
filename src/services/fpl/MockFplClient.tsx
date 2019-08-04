@@ -1,6 +1,7 @@
 import IFplClient from "./IFplClient";
 import FplClient from "./FplClient";
 import { MappedFixtures } from "../../data/MappedFixtures";
+import Entry from "../../data/fpl/Entry";
 
 export default class MockFplClient implements IFplClient {
     async entryEvent(entryId: number, eventId: number) {
@@ -4940,9 +4941,9 @@ export default class MockFplClient implements IFplClient {
         `));
     }
 
-    async entry(entryId: number) {
+    async entry(entryId: number): Promise<Entry> {
+        return await new FplClient().entry(entryId);
         return Promise.resolve(JSON.parse(`{
-            "entry": {
                 "id": 2365803,
                 "player_first_name": "Jon",
                 "player_last_name": "LaBroad",
@@ -5032,7 +5033,6 @@ export default class MockFplClient implements IFplClient {
                     }
                 ]
             }
-        }
         `))
     }
     async live(eventId: number) {

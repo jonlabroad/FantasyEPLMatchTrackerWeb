@@ -5,6 +5,8 @@ import EventFixtureListContainer from "../containers/EventFixtureListContainer";
 
 export interface MatchTabProps {
     currentTab: number;
+    gameweek: number;
+    teams: number[]
     index: number;
 }
 
@@ -15,27 +17,27 @@ export default class MatchTab extends React.Component<MatchTabProps> {
         }
         return (
             <Grid container spacing={3} className="match-tab" justify="center">
-                <Grid item xs={2}></Grid>
-                <Grid item xs={4}>
+                <Grid item xs={1}></Grid>
+                <Grid item xs={5}>
                     <PicksListContainer
-                        entryId={2365803}
-                        gameweek={1}
+                        entryId={this.props.teams[0]}
+                        gameweek={this.props.gameweek}
                     />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={5}>
                     <PicksListContainer
-                        entryId={2365803}
-                        gameweek={1}
+                        entryId={this.props.teams[1]}
+                        gameweek={this.props.gameweek}
                     />
                 </Grid>
-                <Grid item xs={2}></Grid>
+                <Grid item xs={1}></Grid>
 
-                <Grid item xs={2}></Grid>
+                <Grid item xs={1}></Grid>
                 <Grid item xs={2}>
-                    <EventFixtureListContainer gameweek={1}/>
+                    <EventFixtureListContainer gameweek={this.props.gameweek}/>
                 </Grid>
-                <Grid item xs={6}></Grid>
-                <Grid item xs={2}></Grid>
+                <Grid item xs={8}></Grid>
+                <Grid item xs={1}></Grid>
             </Grid>
         );
     }
