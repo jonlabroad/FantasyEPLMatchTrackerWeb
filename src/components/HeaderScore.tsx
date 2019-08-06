@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Box } from "@material-ui/core";
+import { Typography, Box, IconButton } from "@material-ui/core";
 import { Score } from "../util/ScoreCalculator";
 
 export interface HeaderScoreProps {

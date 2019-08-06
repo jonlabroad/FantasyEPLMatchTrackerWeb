@@ -4,6 +4,8 @@ import { MappedFixtures } from '../../data/MappedFixtures';
 import Enumerable from 'linq';
 import { Fixtures } from '../../data/fpl/Fixtures';
 import Entry from '../../data/fpl/Entry';
+import LeaguesH2hStandings from '../../data/fpl/LeaguesH2hStandings';
+import { ProcessedPlayers } from '../../data/ProcessedPlayers';
 
 export default class FplClient implements IFplClient {
     static readonly baseUrl: string = 'https://fkcc5km0gj.execute-api.us-east-1.amazonaws.com/prod';
@@ -45,6 +47,10 @@ export default class FplClient implements IFplClient {
         return await this.get(this.historyUrl(leagueId));
     }
 
+    async leaguesH2hStandings(leagueId: number): Promise<LeaguesH2hStandings> {
+        return await this.get(this.leaguesH2hStandingsUrl(leagueId));
+    }
+
     async entryEvent(entryId: number, eventId: number) {
         return await this.get(this.entryEventUrl(entryId, eventId));
     }
@@ -67,6 +73,10 @@ export default class FplClient implements IFplClient {
         return await this.get(this.picksUrl(entryId, gameweek));
     }
 
+    async processedPlayers(eventId: number): Promise<ProcessedPlayers> {
+        return await this.get(this.processedPlayersUrl(eventId));
+    }
+
     historyUrl(entryId: number) {
         return `${this.entryUrl(entryId)}/history`;
     }
@@ -83,6 +93,10 @@ export default class FplClient implements IFplClient {
         return `leagues-entries-and-h2h-matches/league/${leagueId}?page=${page}`;
     }
 
+    leaguesH2hStandingsUrl(leagueId: number, page: number = 1) {
+        return `leagues-h2h/${leagueId}/standings/page_new_entries=${page}&page_standings=${page}`;
+    }
+
     eventUrl(eventId: number) {
         return `event/${eventId}`;
     }
@@ -97,5 +111,9 @@ export default class FplClient implements IFplClient {
 
     fixtureUrl(eventId?: number) {
         return `fixtures${eventId ? `?event=${eventId}` : ''}`;
+    }
+
+    processedPlayersUrl(eventId: number) {
+        return `processed/players/${eventId}`;
     }
 }

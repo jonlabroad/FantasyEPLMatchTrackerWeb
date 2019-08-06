@@ -4,6 +4,7 @@ import Bootstrap from '../data/fpl/Bootstrap';
 import Live from '../data/fpl/Live';
 import { BootstrapStatic } from '../data/fpl/BootstrapStatic';
 import { MappedFixtures } from '../data/MappedFixtures';
+import { ProcessedPlayers } from '../data/ProcessedPlayers';
 
 export interface Test {
     type: constants.TEST;
@@ -131,6 +132,20 @@ export function receiveEvent(gameweek: number, event: Event): ReceiveEvent {
     }
 };
 
+export interface ReceiveProcessedPlayers {
+    type: constants.RECEIVE_PROCESSED_PLAYERS;
+    gameweek: number;
+    processedPlayers: ProcessedPlayers;
+}
+export type ReceiveProcessedPlayersAction = ReceiveProcessedPlayers;
+export function receiveProcessedPlayers(gameweek: number, processedPlayers: ProcessedPlayers): ReceiveProcessedPlayers {
+    return {
+        type: constants.RECEIVE_PROCESSED_PLAYERS,
+        gameweek: gameweek,
+        processedPlayers: processedPlayers
+    }
+};
+
 export interface TabSelect {
     type: constants.TAB_SELECT;
     index: number;
@@ -154,5 +169,6 @@ ReceiveFixtures |
 ReceivePicks |
 ReceiveLive |
 ReceiveEvent |
+ReceiveProcessedPlayers |
 TabSelect
 ;

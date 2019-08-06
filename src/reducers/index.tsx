@@ -1,6 +1,7 @@
 import { TrackerState } from "../types";
-import { TEST, RECEIVE_ENTRY, TAB_SELECT, RECEIVE_PICKS, RECEIVE_BOOTSTRAP, RECEIVE_LIVE, RECEIVE_EVENT, RECEIVE_BOOTSTRAPSTATIC, RECEIVE_FIXTURES, SET_GAMEWEEK, SET_TEAMS } from "../constants";
+import { TEST, RECEIVE_ENTRY, TAB_SELECT, RECEIVE_PICKS, RECEIVE_BOOTSTRAP, RECEIVE_LIVE, RECEIVE_EVENT, RECEIVE_BOOTSTRAPSTATIC, RECEIVE_FIXTURES, SET_GAMEWEEK, SET_TEAMS, RECEIVE_PROCESSED_PLAYERS } from "../constants";
 import { Reducer } from "redux";
+import Url from "../util/Url";
 
 export const initialState: TrackerState = {
     data: {
@@ -9,7 +10,8 @@ export const initialState: TrackerState = {
         live: {},
         events: {},
         bootstrap: undefined,
-        fixtures: {}
+        fixtures: {},
+        processedPlayers: {}
     },
     nav: {
         selectedTab: 0,
@@ -25,8 +27,10 @@ export const trackerReducer: Reducer<TrackerState> = (state = initialState, acti
     }
     switch (action.type) {
         case SET_GAMEWEEK:
+            Url.set(action.gameweek, state.nav.teams);
             return { ...state, nav: { ...state.nav, gameweek: action.gameweek }};
         case SET_TEAMS:
+            Url.set(state.nav.gameweek, action.teams);
             return { ...state, nav: { ...state.nav, teams: action.teams }};
         case RECEIVE_BOOTSTRAP:
             return { ...state, data: { ...state.data, bootstrap: action.bootstrap }};
@@ -59,6 +63,11 @@ export const trackerReducer: Reducer<TrackerState> = (state = initialState, acti
         case RECEIVE_FIXTURES:
             {
                 let newState = { ...state, data: { ...state.data, fixtures: { ...state.data.fixtures, ...action.mappedFixtures } } };
+                return newState;
+            }
+        case RECEIVE_PROCESSED_PLAYERS:
+            {
+                let newState = { ...state, data: { ...state.data, processedPlayers: { ...state.data.processedPlayers, ...{[action.gameweek]: action.processedPlayers} }}};
                 return newState;
             }
         case TAB_SELECT:

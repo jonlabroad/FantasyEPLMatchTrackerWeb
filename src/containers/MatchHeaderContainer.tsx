@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { TrackerState } from "../types";
-import { RootAction } from "../actions";
+import { RootAction, setGameweek } from "../actions";
 import { Dispatch } from "redux";
 import MatchHeader from "../components/MatchHeader";
 import PicksHelper from "../util/PicksHelper";
@@ -15,11 +15,19 @@ export interface MatchHeaderContainerProps {
     entries: {[key: number]: any};
     picks?: any;
     live?: {[key: string]: Live};
+
+    setGameweek: any;
 }
 
 export class MatchHeaderContainer extends React.Component<MatchHeaderContainerProps, {}> {
+    incrementGameweek(event: any, increment: number){
+        this.props.setGameweek(this.props.gameweek + 1);    }
+
+    decrementGameweek(event: any) {
+        this.props.setGameweek(this.props.gameweek - 1);
+    }
+    
     render() {
-        console.log({matchHeaderContainer: this.props});
         return (
         <MatchHeader
             gameweek={this.props.gameweek}
@@ -28,6 +36,9 @@ export class MatchHeaderContainer extends React.Component<MatchHeaderContainerPr
             picks1={PicksHelper.getPicks(this.props.teams[0], this.props.gameweek, this.props.picks)}
             picks2={PicksHelper.getPicks(this.props.teams[1], this.props.gameweek, this.props.picks)}
             live={LiveHelper.getLive(this.props.gameweek, this.props.live)}
+
+            incrementGameweekClick={this.incrementGameweek.bind(this)}
+            decrementGameweekClick={this.decrementGameweek.bind(this)}
         />
         );
     }
@@ -44,6 +55,7 @@ export function mapStateToProps(state: TrackerState) {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
+    setGameweek: (gameweek: number) => dispatch(setGameweek(gameweek))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MatchHeaderContainer);

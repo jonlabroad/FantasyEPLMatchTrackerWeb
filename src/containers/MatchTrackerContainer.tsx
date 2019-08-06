@@ -1,7 +1,7 @@
 import React from "react";
 import { TrackerState } from "../types";
 import { Dispatch } from "redux";
-import { RootAction, receiveEntry, receiveBootstrap, receivePicks, receiveLive, receiveEvent, receiveBootstrapStatic, receiveFixtures, setTeams, setGameweek } from "../actions";
+import { RootAction, receiveEntry, receiveBootstrap, receivePicks, receiveLive, receiveEvent, receiveBootstrapStatic, receiveFixtures, setTeams, setGameweek, receiveProcessedPlayers } from "../actions";
 import MockFplClient from "../services/fpl/MockFplClient";
 import { connect } from "react-redux";
 import MatchHeaderContainer from "./MatchHeaderContainer";
@@ -13,6 +13,7 @@ import Live from "../data/fpl/Live";
 import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 import { MappedFixtures } from "../data/MappedFixtures";
 import Url from "../util/Url";
+import { ProcessedPlayers } from "../data/ProcessedPlayers";
 
 export interface MatchTrackerContainerProps {
     gameweek: number
@@ -27,6 +28,7 @@ export interface MatchTrackerContainerProps {
     receivePicks: any
     receiveLive: any
     receiveEvent: any
+    receiveProcessedPlayers: any
 }
 
 export class MatchTrackerContainer extends React.Component<MatchTrackerContainerProps, any> {
@@ -64,6 +66,8 @@ export class MatchTrackerContainer extends React.Component<MatchTrackerContainer
         if (teams[1]) {
             this.props.receivePicks(teams[1], gameweek, await new MockFplClient().picks(teams[1], gameweek));
         }
+
+        new MockFplClient().processedPlayers(gameweek).then(processedPlayers => this.props.receiveProcessedPlayers(gameweek, processedPlayers));
     }
     
     render() {
@@ -93,7 +97,8 @@ const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
     receiveFixtures: (fixtures: MappedFixtures) => dispatch(receiveFixtures(fixtures)),
     receivePicks: (entryId: number, gameweek: number, picks: Picks) => dispatch(receivePicks(entryId, gameweek, picks)),
     receiveLive: (gameweek: number, live: Live) => dispatch(receiveLive(gameweek, live)),
-    receiveEvent: (gameweek: number, event: Event) => dispatch(receiveEvent(gameweek, event))
+    receiveEvent: (gameweek: number, event: Event) => dispatch(receiveEvent(gameweek, event)),
+    receiveProcessedPlayers: (gameweek: number, processedPlayers: ProcessedPlayers) => dispatch(receiveProcessedPlayers(gameweek, processedPlayers))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MatchTrackerContainer);

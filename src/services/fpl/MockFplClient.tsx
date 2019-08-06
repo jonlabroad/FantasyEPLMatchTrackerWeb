@@ -2,6 +2,8 @@ import IFplClient from "./IFplClient";
 import FplClient from "./FplClient";
 import { MappedFixtures } from "../../data/MappedFixtures";
 import Entry from "../../data/fpl/Entry";
+import LeaguesH2hStandings from "../../data/fpl/LeaguesH2hStandings";
+import { ProcessedPlayers } from "../../data/ProcessedPlayers";
 
 export default class MockFplClient implements IFplClient {
     async entryEvent(entryId: number, eventId: number) {
@@ -5281,6 +5283,9 @@ export default class MockFplClient implements IFplClient {
     }
     async leaguesH2hMatches(leagueId: number) {
         throw new Error("Method not implemented.");
+    }
+    async leaguesH2hStandings(leagueId: number): Promise<LeaguesH2hStandings> {
+        return await new FplClient().leaguesH2hStandings(leagueId);
     }
     async bootstrap() {
         return Promise.resolve(JSON.parse(`{
@@ -41389,5 +41394,9 @@ export default class MockFplClient implements IFplClient {
     }
     async bootstrapStatic() {
         return await (new FplClient().bootstrapStatic());
+    }
+
+    async processedPlayers(eventId: number): Promise<ProcessedPlayers> {
+        return await (new FplClient().processedPlayers(0));
     }
 }

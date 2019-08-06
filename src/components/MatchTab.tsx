@@ -2,6 +2,7 @@ import React from "react";
 import PicksListContainer from "../containers/PicksListContainer";
 import { Grid } from "@material-ui/core";
 import EventFixtureListContainer from "../containers/EventFixtureListContainer";
+import MatchEventsContainer from "../containers/MatchEventsContainer";
 
 export interface MatchTabProps {
     currentTab: number;
@@ -36,7 +37,10 @@ export default class MatchTab extends React.Component<MatchTabProps> {
                 <Grid item xs={2}>
                     <EventFixtureListContainer gameweek={this.props.gameweek}/>
                 </Grid>
-                <Grid item xs={8}></Grid>
+                <Grid item xs={3}>
+                    <MatchEventsContainer/>
+                </Grid>
+                <Grid item xs={5}></Grid>
                 <Grid item xs={1}></Grid>
             </Grid>
         );

@@ -5,6 +5,7 @@ import { Events } from "../data/state/Events";
 import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 import { MappedFixtures } from "../data/MappedFixtures";
 import Entry from "../data/fpl/Entry";
+import { MappedProcessedPlayers } from "../data/ProcessedPlayers";
 
 export interface TrackerData {
     entries: {[key: number]: Entry}
@@ -13,7 +14,8 @@ export interface TrackerData {
     picks: {[key: string]: Picks}
     live: Lives
     bootstrap: Bootstrap | undefined
-    bootstrapStatic?: BootstrapStatic
+    bootstrapStatic?: BootstrapStatic,
+    processedPlayers?: MappedProcessedPlayers | undefined
 }
 
 export interface NavigationState {

@@ -1,0 +1,8 @@
+.match-event {
+    padding-bottom: 10px;
+}
+
+.match-event.important-event {
+    color: white;
+    background-color: #e90052
+}
