@@ -1,15 +1,24 @@
 import React from "react";
 import { MatchEvent, MatchEventType } from "../data/MatchEvent";
 import { Box, Typography } from "@material-ui/core";
+import { MatchEventDate } from "./MatchEventDate";
+import { MatchEventTypeIcon } from "./MatchEventTypeIcon";
+import MatchEventUtil from "../util/MatchEventUtil";
+import Bootstrap from "../data/fpl/Bootstrap";
+import BootstrapHelper from "../util/BootstrapHelper";
+import { ElementPhoto } from "./ElementPhoto";
+import { MatchEventPhoto } from "./MatchEventPhoto";
 
 export interface MatchEventElementProps {
     event: MatchEvent
+    bootstrap?: Bootstrap
 }
 
 export default class MatchEventElement extends React.Component<MatchEventElementProps> {
     isImportant(event: MatchEvent) {
         if (event.type === MatchEventType.GOAL ||
-            event.type === MatchEventType.ASSIST) {
+            event.type === MatchEventType.ASSIST ||
+            event.type === MatchEventType.BONUS) {
             return true;
         }
 
@@ -22,10 +31,14 @@ export default class MatchEventElement extends React.Component<MatchEventElement
         const isImportant = this.isImportant(event);
 
         return (
-            <Box display="flex" flexDirection="column" className={`match-event ${isImportant ? "important-event" : ""}`}>
-                <Typography variant="overline" className="match-event-time">{event.dateTime}</Typography>
-                <Typography variant="subtitle1" className="match-event-type">{`${event.typeString}${isImportant ? "!" : ""}`}</Typography>
-                <Typography variant="body1" className="match-event-name">{event.footballerName}</Typography>
+            <Box display="flex" flexDirection="row" className={`match-event ${isImportant ? "important-event" : ""}`}>
+                <MatchEventTypeIcon eventType={event.typeString} />
+                <MatchEventDate dateString={event.dateTime} isImportant={isImportant}/>
+                <Box display="flex" flexDirection="column">
+                    <Typography variant="subtitle1" className="match-event-type-text">{`${MatchEventUtil.matchEventToString(event.type)}${isImportant ? "!" : ""}`}</Typography>
+                    <Typography variant="body1" className="match-event-name-text">{event.footballerName}</Typography>
+                </Box>
+                <MatchEventPhoto element={BootstrapHelper.getElement(event.footballerId, this.props.bootstrap)}/>
             </Box>
         );
     }
