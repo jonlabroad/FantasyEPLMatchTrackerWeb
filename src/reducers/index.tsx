@@ -21,7 +21,6 @@ export const initialState: TrackerState = {
 };
 
 export const trackerReducer: Reducer<TrackerState> = (state = initialState, action) => {
-    console.log({action: action});
     if (!state) {
         state = initialState;
     }

@@ -48,7 +48,6 @@ export class MatchTrackerContainer extends React.Component<MatchTrackerContainer
         new FplClient().fixtures().then((fixtures) => {
             this.props.receiveFixtures(fixtures);
         });
-        console.log({teams: teams});
         if (teams[0]) {
             this.props.receiveEntry(await new FplClient().entry(teams[0]));
         }
@@ -64,7 +63,7 @@ export class MatchTrackerContainer extends React.Component<MatchTrackerContainer
             this.props.receivePicks(teams[1], gameweek, await new FplClient().picks(teams[1], gameweek));
         }
 
-        new FplClient().processedPlayers(gameweek).then(processedPlayers => this.props.receiveProcessedPlayers(gameweek, processedPlayers));
+        new FplClient().processedPlayers(gameweek).then(processedPlayers => {this.props.receiveProcessedPlayers(gameweek, processedPlayers)});
     }
     
     render() {

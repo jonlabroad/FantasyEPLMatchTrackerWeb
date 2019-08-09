@@ -35,7 +35,7 @@ export function mapStateToProps(state: TrackerState) {
         teams: state.nav.teams,
         processedPlayers: state.data.processedPlayers,
         picks: state.data.picks,
-        bootstrap: state.data.bootstrapStatic
+        bootstrapStatic: state.data.bootstrapStatic
     };
 }
 

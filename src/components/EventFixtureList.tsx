@@ -34,7 +34,6 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
 
     renderFixtureTeam(teamId: number, bs: BootstrapStatic, direction: string, homeAway: string) {
         const team = bs.teams.find(t => t.id === teamId);
-        console.log({team: team});
         if (team) {
             return (
             <Box className={`club-name-logo club-name-logo-${homeAway}`} display="flex" flexDirection={direction} justifyContent="space-around">
@@ -47,7 +46,6 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
     
     renderFixtures(fixtures: Fixtures, bs: BootstrapStatic): JSX.Element[] {
         const elements: JSX.Element[] = [];
-        console.log(fixtures);
         for (let fixture of fixtures) {
             elements.push(
             <Box display="flex" flexDirection="column" className="fixture-list-element-container">
@@ -92,12 +90,11 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
 
     renderMinutes(fixture: Fixture) {
         return <div className={`fixture-minutes ${!fixture.finished ? "fixture-in-progress" : "fixture-finished"}`}>
-            {!fixture.finished ? `${fixture.minutes}'` : 'FT'}</div>;
+            {!fixture.finished ? `live` : 'FT'}</div>;
     }
 
     render() {
         const { fixtures, bootstrapStatic } = this.props;
-        console.log({fixtures: fixtures}); console.log(bootstrapStatic);
         if (!fixtures || !bootstrapStatic) {
             return null;
         }

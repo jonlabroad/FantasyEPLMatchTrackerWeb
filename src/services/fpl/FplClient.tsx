@@ -66,7 +66,6 @@ export default class FplClient implements IFplClient {
 
     async entry(entryId: number): Promise<Entry> {
         const response = await this.get(this.entryUrl(entryId));
-        console.log({[entryId]: response});
         return response
     }
 

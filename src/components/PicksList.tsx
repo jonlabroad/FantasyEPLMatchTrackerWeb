@@ -73,7 +73,6 @@ export default class PicksList extends React.Component<PicksListProps> {
     }
     
     render() {
-        console.log({props: this.props.picks});
         if (!this.props.picks) {
             return null;
         }

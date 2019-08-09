@@ -38,12 +38,11 @@ export default class MatchTab extends React.Component<MatchTabProps> {
                     <EventFixtureListContainer gameweek={this.props.gameweek}/>
                 </Grid>
                 <Grid item xs={3}>
-                    <div className="match-events-placeholder"/>
+                    <MatchEventsContainer/>
                 </Grid>
                 <Grid item xs={5}></Grid>
                 <Grid item xs={1}></Grid>
             </Grid>
         );
-        // <MatchEventsContainer/>
     }
 }

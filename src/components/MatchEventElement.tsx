@@ -29,7 +29,7 @@ export default class MatchEventElement extends React.Component<MatchEventElement
         const { event } = this.props;
 
         const isImportant = this.isImportant(event);
-
+console.log({event: event});
         return (
             <Box display="flex" flexDirection="row" className={`match-event ${isImportant ? "important-event" : ""}`}>
                 <MatchEventTypeIcon eventType={event.typeString} />

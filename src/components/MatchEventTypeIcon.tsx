@@ -8,7 +8,6 @@ export interface MatchEventTypeIconProps {
 }
 
 export const MatchEventTypeIcon: React.SFC<MatchEventTypeIconProps> = (props) => {
-    console.log(props.eventType);
     return (
         <Box display="flex" alignContent="center" alignItems="center" justifyItems="center" justifyContent="center" className="match-event-icon-container">
             <PointsIcon explainType={props.eventType}/>
