@@ -1,5 +1,5 @@
 import { TrackerState } from "../types";
-import { TEST, RECEIVE_ENTRY, TAB_SELECT, RECEIVE_PICKS, RECEIVE_BOOTSTRAP, RECEIVE_LIVE, RECEIVE_EVENT, RECEIVE_BOOTSTRAPSTATIC, RECEIVE_FIXTURES, SET_GAMEWEEK, SET_TEAMS, RECEIVE_PROCESSED_PLAYERS } from "../constants";
+import { TEST, RECEIVE_ENTRY, TAB_SELECT, RECEIVE_PICKS, RECEIVE_LIVE, RECEIVE_EVENT, RECEIVE_BOOTSTRAPSTATIC, RECEIVE_FIXTURES, SET_GAMEWEEK, SET_TEAMS, RECEIVE_PROCESSED_PLAYERS } from "../constants";
 import { Reducer } from "redux";
 import Url from "../util/Url";
 
@@ -9,7 +9,7 @@ export const initialState: TrackerState = {
         picks: {},
         live: {},
         events: {},
-        bootstrap: undefined,
+        bootstrapStatic: undefined,
         fixtures: {},
         processedPlayers: {}
     },
@@ -32,8 +32,6 @@ export const trackerReducer: Reducer<TrackerState> = (state = initialState, acti
         case SET_TEAMS:
             Url.set(state.nav.gameweek, action.teams);
             return { ...state, nav: { ...state.nav, teams: action.teams }};
-        case RECEIVE_BOOTSTRAP:
-            return { ...state, data: { ...state.data, bootstrap: action.bootstrap }};
         case RECEIVE_BOOTSTRAPSTATIC:
                 return { ...state, data: { ...state.data, bootstrapStatic: action.bootstrapStatic }};
         case RECEIVE_ENTRY:

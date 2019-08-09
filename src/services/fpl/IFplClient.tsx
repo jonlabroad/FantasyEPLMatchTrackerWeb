@@ -1,4 +1,3 @@
-import Bootstrap from "../../data/fpl/Bootstrap";
 import Live from "../../data/fpl/Live";
 import Entry from "../../data/fpl/Entry";
 import Picks from "../../data/fpl/Picks";
@@ -7,7 +6,6 @@ import LeaguesH2hStandings from "../../data/fpl/LeaguesH2hStandings";
 import { ProcessedPlayers } from "../../data/ProcessedPlayers";
 
 export default interface IFplClient {
-    bootstrap(): Promise<Bootstrap>;
     bootstrapStatic(): Promise<any>;
     event(eventId: number): Promise<any>;
     entryEvent(entryId: number, eventId: number): Promise<any>;

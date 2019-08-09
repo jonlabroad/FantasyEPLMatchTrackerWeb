@@ -5,15 +5,14 @@ import { connect } from "react-redux";
 import EventFixtureList from "../components/EventFixtureList";
 import { MappedFixtures } from "../data/MappedFixtures";
 import FixturesHelper from "../util/FixturesHelper";
-import Bootstrap from "../data/fpl/Bootstrap";
 import LiveHelper from "../util/LiveHelper";
 import Live, { Lives } from "../data/fpl/Live";
 import Picks from "../data/fpl/Picks";
-import { StepButton } from "@material-ui/core";
+import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 
 export interface EventFixtureListContainerProps {
     gameweek: number
-    bootstrap?: Bootstrap
+    bootstrapStatic?: BootstrapStatic
     fixtures?: MappedFixtures
     live: Lives
     picks: {[key: string]: Picks}
@@ -22,9 +21,10 @@ export interface EventFixtureListContainerProps {
 
 export class EventFixtureListContainer extends React.Component<EventFixtureListContainerProps> {
     render() {
-        return (
+        return (null
+            /*
         <EventFixtureList
-            bootstrap={this.props.bootstrap}
+            bootstrapStatic={this.props.bootstrapStatic}
             fixtures={FixturesHelper.getFixtures(this.props.gameweek, this.props.fixtures)}
             live={LiveHelper.getLive(this.props.gameweek, this.props.live)}
             picks={this.props.picks}
@@ -32,13 +32,14 @@ export class EventFixtureListContainer extends React.Component<EventFixtureListC
             team2={this.props.teams[1]}
             gameweek={this.props.gameweek}
         />
+        */
         );
     }
 }
 
 export function mapStateToProps(state: TrackerState) {
     return {
-      bootstrap: state.data.bootstrap,
+      bootstrap: state.data.bootstrapStatic,
       fixtures: state.data.fixtures,
       live: state.data.live,
       picks: state.data.picks,

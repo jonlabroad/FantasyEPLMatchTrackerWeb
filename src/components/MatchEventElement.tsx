@@ -4,14 +4,14 @@ import { Box, Typography } from "@material-ui/core";
 import { MatchEventDate } from "./MatchEventDate";
 import { MatchEventTypeIcon } from "./MatchEventTypeIcon";
 import MatchEventUtil from "../util/MatchEventUtil";
-import Bootstrap from "../data/fpl/Bootstrap";
 import BootstrapHelper from "../util/BootstrapHelper";
 import { ElementPhoto } from "./ElementPhoto";
 import { MatchEventPhoto } from "./MatchEventPhoto";
+import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 
 export interface MatchEventElementProps {
     event: MatchEvent
-    bootstrap?: Bootstrap
+    bootstrapStatic?: BootstrapStatic
 }
 
 export default class MatchEventElement extends React.Component<MatchEventElementProps> {
@@ -38,7 +38,7 @@ export default class MatchEventElement extends React.Component<MatchEventElement
                     <Typography variant="subtitle1" className="match-event-type-text">{`${MatchEventUtil.matchEventToString(event.type)}${isImportant ? "!" : ""}`}</Typography>
                     <Typography variant="body1" className="match-event-name-text">{event.footballerName}</Typography>
                 </Box>
-                <MatchEventPhoto element={BootstrapHelper.getElement(event.footballerId, this.props.bootstrap)}/>
+                <MatchEventPhoto element={BootstrapHelper.getElement(event.footballerId, this.props.bootstrapStatic)}/>
             </Box>
         );
     }

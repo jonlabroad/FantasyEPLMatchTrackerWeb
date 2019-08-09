@@ -1,9 +1,9 @@
-import Bootstrap from "../data/fpl/Bootstrap";
+import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 
 export default class BootstrapHelper {
-    public static getElement(elementId: number, bootstrap?: Bootstrap) {
-        if (bootstrap) {
-            return bootstrap.elements.find((el) => el.id === elementId);
+    public static getElement(elementId: number, bootstrapStatic?: BootstrapStatic) {
+        if (bootstrapStatic) {
+            return bootstrapStatic.elements.find((el) => el.id === elementId);
         }
         return undefined;
     }

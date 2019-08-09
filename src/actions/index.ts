@@ -1,10 +1,10 @@
 import * as constants from '../constants';
 import Picks from '../data/fpl/Picks';
-import Bootstrap from '../data/fpl/Bootstrap';
 import Live from '../data/fpl/Live';
 import { BootstrapStatic } from '../data/fpl/BootstrapStatic';
 import { MappedFixtures } from '../data/MappedFixtures';
 import { ProcessedPlayers } from '../data/ProcessedPlayers';
+import EventStatus from '../data/fpl/EventStatus';
 
 export interface Test {
     type: constants.TEST;
@@ -40,15 +40,15 @@ export function setTeams(teams: number[]): SetTeams {
     }
 };
 
-export interface ReceiveBootstrap {
-    type: constants.RECEIVE_BOOTSTRAP;
-    bootstrap: Bootstrap;
+export interface ReceiveEventStatus {
+    type: constants.RECEIVE_EVENT_STATUS;
+    eventStatus: EventStatus;
 }
-export type ReceiveBootstrapAction = ReceiveBootstrap;
-export function receiveBootstrap(bootstrap: Bootstrap): ReceiveBootstrap {
+export type ReceiveEventStatusAction = ReceiveEventStatus;
+export function receiveEventStatus(status: EventStatus): ReceiveEventStatus {
     return {
-        type: constants.RECEIVE_BOOTSTRAP,
-        bootstrap: bootstrap
+        type: constants.RECEIVE_EVENT_STATUS,
+        eventStatus: status
     }
 };
 
@@ -162,7 +162,6 @@ export type RootAction =
 TestAction |
 SetGameweek |
 SetTeams |
-ReceiveBootstrap |
 ReceiveBootstrapStatic |
 ReceiveEntry |
 ReceiveFixtures |
@@ -170,5 +169,6 @@ ReceivePicks |
 ReceiveLive |
 ReceiveEvent |
 ReceiveProcessedPlayers |
-TabSelect
+TabSelect |
+ReceiveEventStatus
 ;

@@ -1,10 +1,11 @@
 import FootballerScoreDetailElement from "./ElementScoreDetailElement";
 import { LiveElementStats } from "./LiveElementStats";
-import { Explains } from "./Explains";
+import { Explain } from "./Explain";
 
 export default interface LiveElement
 {
-    explain: Explains[];
+    id: number;
+    explain: Explain[];
     stats: LiveElementStats;
 }
 

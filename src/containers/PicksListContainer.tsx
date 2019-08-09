@@ -6,16 +6,16 @@ import { connect } from "react-redux";
 import TrackerTabs from "../components/TrackerTabs";
 import PicksHelper from "../util/PicksHelper";
 import PicksList from "../components/PicksList";
-import Bootstrap from "../data/fpl/Bootstrap";
 import Live from "../data/fpl/Live";
 import LiveHelper from "../util/LiveHelper";
+import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 
 export interface PicksListContainerProps {
     entryId: number,
     gameweek: number,
 
     picks: any
-    bootstrap?: Bootstrap
+    bootstrapStatic?: BootstrapStatic
     live: {[key: number]: Live}
 }
 
@@ -29,7 +29,7 @@ export class PicksListContainer extends React.Component<PicksListContainerProps>
         return (
             <PicksList
                 picks={picks}
-                bootstrap={this.props.bootstrap}
+                bootstrapStatic={this.props.bootstrapStatic}
                 live={LiveHelper.getLive(this.props.gameweek, this.props.live)}
             />
         );
@@ -38,7 +38,7 @@ export class PicksListContainer extends React.Component<PicksListContainerProps>
 
 export function mapStateToProps(state: TrackerState) {
     return {
-        bootstrap: state.data.bootstrap,
+        bootstrapStatic: state.data.bootstrapStatic,
         picks: state.data.picks,
         live: state.data.live
     }

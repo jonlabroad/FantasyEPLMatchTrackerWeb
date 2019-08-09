@@ -2,21 +2,20 @@ import React from "react";
 import { Table, TableRow, TableHead, TableCell, TableBody, Box, Typography } from "@material-ui/core";
 import Picks from "../data/fpl/Picks";
 import Pick from "../data/fpl/Pick";
-import Bootstrap from "../data/fpl/Bootstrap";
 import BootstrapHelper from "../util/BootstrapHelper";
 import Live from "../data/fpl/Live";
 import LiveHelper from "../util/LiveHelper";
-import { PointsIcon } from "./PointsIcon";
 import PointsIcons from "./PointsIcons";
 import ScoreCalculator from "../util/ScoreCalculator";
 import ClubIcon from "./ClubIcon";
 
 import "../styles/picks-list.css";
+import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 
 export interface PicksListProps {
     picks: Picks
     live?: Live
-    bootstrap?: Bootstrap
+    bootstrapStatic?: BootstrapStatic
 }
 
 const noIconPerEventTypes = [
@@ -27,7 +26,7 @@ const noIconPerEventTypes = [
 
 export default class PicksList extends React.Component<PicksListProps> {
     getTeamCode(pick: Pick) {
-        const element = BootstrapHelper.getElement(pick.element, this.props.bootstrap);
+        const element = BootstrapHelper.getElement(pick.element, this.props.bootstrapStatic);
         if (element) {
             return element.team_code;
         }
@@ -36,13 +35,13 @@ export default class PicksList extends React.Component<PicksListProps> {
     renderLive(pick: Pick) {
         const liveElement = LiveHelper.getElement(pick.element, this.props.live);
         if (liveElement) {
-            return <PointsIcons explainsArray={liveElement.explain}/>;
+            return <PointsIcons liveElement={liveElement}/>;
         }
         return null;
     }
 
     renderPick(pick: Pick, starter: boolean) {
-        const element = BootstrapHelper.getElement(pick.element, this.props.bootstrap);
+        const element = BootstrapHelper.getElement(pick.element, this.props.bootstrapStatic);
         return (
             <TableRow key={pick.element} className={starter ? "pickslist-starter" : "pickslist-sub"}>
                 <TableCell padding="none">{element ? ScoreCalculator.calculateElementScore(pick, this.props.live): 0}</TableCell>

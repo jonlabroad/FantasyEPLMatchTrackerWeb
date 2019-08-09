@@ -14,13 +14,11 @@ export default class ScoreCalculator {
             return score;
         }
 
-        var liveElements = live.elements[pick.element];
-        if (liveElements) {
-            for (let gwExplain of liveElements.explain) {
-                for (let explain of gwExplain) {
-                    for (let key of Object.keys(explain)) {
-                        score += explain[key].points * pick.multiplier;
-                    }
+        var liveElement = live.elements.find(el => el.id === pick.element);
+        if (liveElement) {
+            for (let gwExplain of liveElement.explain) {
+                for (let explain of gwExplain.stats) {
+                    score += explain.points * pick.multiplier;
                 }
             }
         }

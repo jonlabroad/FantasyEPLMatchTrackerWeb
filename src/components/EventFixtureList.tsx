@@ -1,11 +1,9 @@
 import React from "react";
 import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 import { Box, makeStyles, Typography } from "@material-ui/core";
-import Bootstrap from "../data/fpl/Bootstrap";
 import Fixture from "../data/fpl/Fixture";
 import { Fixtures } from "../data/fpl/Fixtures";
 import ClubIcon from "./ClubIcon";
-import BootstrapHelper from "../util/BootstrapHelper";
 import Live, { Lives } from "../data/fpl/Live";
 import moment from 'moment';
 
@@ -15,7 +13,7 @@ import Picks from "../data/fpl/Picks";
 import PicksHelper from "../util/PicksHelper";
 
 export interface EventFixtureListProps {
-    bootstrap?: Bootstrap
+    bootstrapStatic?: BootstrapStatic
     fixtures?: Fixtures
     live?: Live
     picks: {[key: string]: Picks}
@@ -25,9 +23,10 @@ export interface EventFixtureListProps {
 }
 
 export default class EventFixtureList extends React.Component<EventFixtureListProps> {
-    getFixtures() {
-        return (this.props.live ? this.props.live.fixtures : undefined) ||
-               (this.props.fixtures ? this.props.fixtures : []); 
+    getFixtures(): Fixture[] {
+        return []; // TODO
+        //return (this.props.live ? this.props.live.fixtures : undefined) ||
+        //       (this.props.fixtures ? this.props.fixtures : []); 
     }
     
     renderTimeBox(fixture: Fixture) {
@@ -39,7 +38,7 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
         );
     }
 
-    renderFixtureTeam(teamId: number, bs: Bootstrap, direction: string, homeAway: string) {
+    renderFixtureTeam(teamId: number, bs: BootstrapStatic, direction: string, homeAway: string) {
         const team = bs.teams.find(t => t.id === teamId);
         if (team) {
             return (
@@ -51,7 +50,7 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
         }
     }
     
-    renderFixtures(bs: Bootstrap): JSX.Element[] {
+    renderFixtures(bs: BootstrapStatic): JSX.Element[] {
         const elements: JSX.Element[] = [];
         for (let fixture of this.getFixtures()) {
             elements.push(
@@ -63,7 +62,7 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
                 </Box>
                 <FixtureBpsList
                     teamPicks={PicksHelper.getMatchPicks(this.props.team1, this.props.team2, this.props.gameweek, this.props.picks)}
-                    fixture={fixture} live={this.props.live} bootstrap={this.props.bootstrap}/>
+                    fixture={fixture} live={this.props.live} bootstrapStatic={this.props.bootstrapStatic}/>
             </Box>
             );
         }
@@ -71,7 +70,7 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
         return elements;
     }
     
-    renderScoreOrTime(fixture: Fixture, bs: Bootstrap) {
+    renderScoreOrTime(fixture: Fixture, bs: BootstrapStatic) {
         if (!fixture.started) {
             return this.renderTimeBox(fixture);
         }
@@ -101,15 +100,15 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
     }
 
     render() {
-        const { fixtures, bootstrap } = this.props;
-        if (!fixtures || !bootstrap) {
+        const { fixtures, bootstrapStatic } = this.props;
+        if (!fixtures || !bootstrapStatic) {
             return null;
         }
 
         return (
             <Box display="flex" flexDirection="column" className="fixture-list-container">
                 <Typography className="fixture-list-header" variant="subtitle1">Fixtures</Typography>
-                {this.renderFixtures(bootstrap)}
+                {this.renderFixtures(bootstrapStatic)}
             </Box>
         )
     }

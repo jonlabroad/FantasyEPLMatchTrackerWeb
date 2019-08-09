@@ -5,6 +5,6 @@ export type Lives = {[key: number]: Live};
 
 export default interface Live
 {
-    fixtures: Fixture[];
-    elements: { [key: number]: LiveElement };
+    //fixtures: Fixture[];
+    elements: LiveElement[];
 }

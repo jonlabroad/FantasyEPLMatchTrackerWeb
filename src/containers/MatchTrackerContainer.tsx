@@ -1,19 +1,18 @@
 import React from "react";
 import { TrackerState } from "../types";
 import { Dispatch } from "redux";
-import { RootAction, receiveEntry, receiveBootstrap, receivePicks, receiveLive, receiveEvent, receiveBootstrapStatic, receiveFixtures, setTeams, setGameweek, receiveProcessedPlayers } from "../actions";
-import MockFplClient from "../services/fpl/MockFplClient";
+import { RootAction, receiveEntry, receivePicks, receiveLive, receiveEvent, receiveBootstrapStatic, receiveFixtures, setTeams, setGameweek, receiveProcessedPlayers } from "../actions";
 import { connect } from "react-redux";
 import MatchHeaderContainer from "./MatchHeaderContainer";
 import FplAppBar from "../components/FplAppBar";
 import TrackerTabsContainer from "./TrackerTabsContainer";
-import Bootstrap from "../data/fpl/Bootstrap";
 import Picks from "../data/fpl/Picks";
 import Live from "../data/fpl/Live";
 import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 import { MappedFixtures } from "../data/MappedFixtures";
 import Url from "../util/Url";
 import { ProcessedPlayers } from "../data/ProcessedPlayers";
+import FplClient from "../services/fpl/FplClient";
 
 export interface MatchTrackerContainerProps {
     gameweek: number
@@ -21,7 +20,6 @@ export interface MatchTrackerContainerProps {
 
     setTeams: any
     setGameweek: any
-    receiveBootstrap: any
     receiveBootstrapStatic: any
     receiveEntry: any
     receiveFixtures: any
@@ -44,30 +42,29 @@ export class MatchTrackerContainer extends React.Component<MatchTrackerContainer
         this.props.setTeams(teams);
         this.props.setGameweek(gameweek);
 
-        new MockFplClient().bootstrapStatic().then((bootstrapStatic) => {
+        new FplClient().bootstrapStatic().then((bootstrapStatic) => {
             this.props.receiveBootstrapStatic(bootstrapStatic);
         });
-        new MockFplClient().fixtures().then((fixtures) => {
+        new FplClient().fixtures().then((fixtures) => {
             this.props.receiveFixtures(fixtures);
         });
-        this.props.receiveBootstrap(await new MockFplClient().bootstrap());
         console.log({teams: teams});
         if (teams[0]) {
-            this.props.receiveEntry(await new MockFplClient().entry(teams[0]));
+            this.props.receiveEntry(await new FplClient().entry(teams[0]));
         }
         if (teams[1]) {
-            this.props.receiveEntry(await new MockFplClient().entry(teams[1]));
+            this.props.receiveEntry(await new FplClient().entry(teams[1]));
         }
-        this.props.receiveLive(gameweek, await new MockFplClient().live(gameweek));
-        this.props.receiveEvent(gameweek, await new MockFplClient().event(gameweek));
+        this.props.receiveLive(gameweek, await new FplClient().live(gameweek));
+        //this.props.receiveEvent(gameweek, await new FplClient().event(gameweek));
 
         // TODO get picks for all entries in league!
-        this.props.receivePicks(teams[0], gameweek, await new MockFplClient().picks(teams[0], gameweek));
+        this.props.receivePicks(teams[0], gameweek, await new FplClient().picks(teams[0], gameweek));
         if (teams[1]) {
-            this.props.receivePicks(teams[1], gameweek, await new MockFplClient().picks(teams[1], gameweek));
+            this.props.receivePicks(teams[1], gameweek, await new FplClient().picks(teams[1], gameweek));
         }
 
-        new MockFplClient().processedPlayers(gameweek).then(processedPlayers => this.props.receiveProcessedPlayers(gameweek, processedPlayers));
+        new FplClient().processedPlayers(gameweek).then(processedPlayers => this.props.receiveProcessedPlayers(gameweek, processedPlayers));
     }
     
     render() {
@@ -91,7 +88,6 @@ export function mapStateToProps(state: TrackerState) {
 const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
     setTeams: (teams: number[]) => dispatch(setTeams(teams)),
     setGameweek: (gameweek: number) => dispatch(setGameweek(gameweek)),
-    receiveBootstrap: (bootstrap: Bootstrap) => dispatch(receiveBootstrap(bootstrap)),
     receiveBootstrapStatic: (bootstrapStatic: BootstrapStatic) => dispatch(receiveBootstrapStatic(bootstrapStatic)),
     receiveEntry: (entry: any) => dispatch(receiveEntry(entry)),
     receiveFixtures: (fixtures: MappedFixtures) => dispatch(receiveFixtures(fixtures)),

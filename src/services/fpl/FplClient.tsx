@@ -6,6 +6,7 @@ import { Fixtures } from '../../data/fpl/Fixtures';
 import Entry from '../../data/fpl/Entry';
 import LeaguesH2hStandings from '../../data/fpl/LeaguesH2hStandings';
 import { ProcessedPlayers } from '../../data/ProcessedPlayers';
+import EventStatus from '../../data/fpl/EventStatus';
 
 export default class FplClient implements IFplClient {
     static readonly baseUrl: string = 'https://fkcc5km0gj.execute-api.us-east-1.amazonaws.com/prod';
@@ -59,6 +60,10 @@ export default class FplClient implements IFplClient {
         return await this.get(this.eventUrl(eventId));
     }
 
+    async eventStatus(): Promise<EventStatus> {
+        return await this.get(this.eventStatusUrl());
+    }
+
     async entry(entryId: number): Promise<Entry> {
         const response = await this.get(this.entryUrl(entryId));
         console.log({[entryId]: response});
@@ -66,6 +71,7 @@ export default class FplClient implements IFplClient {
     }
 
     async get(path: string) {
+        console.log(`${FplClient.baseUrl}/${path}`);
         return (await Axios.get(`${FplClient.baseUrl}/${path}`)).data; 
     }
 
@@ -99,6 +105,10 @@ export default class FplClient implements IFplClient {
 
     eventUrl(eventId: number) {
         return `event/${eventId}`;
+    }
+
+    eventStatusUrl() {
+        return `event-status`;
     }
 
     entryEventUrl(entryId: number, eventId: number) {

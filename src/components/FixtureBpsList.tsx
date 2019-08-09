@@ -2,7 +2,6 @@ import React from "react";
 import Live from "../data/fpl/Live";
 import Fixture from "../data/fpl/Fixture";
 import Picks from "../data/fpl/Picks";
-import Bootstrap from "../data/fpl/Bootstrap";
 import Element from "../data/fpl/Element";
 import LiveHelper from "../util/LiveHelper";
 import { Box, Typography, List, ListItem, IconButton } from "@material-ui/core";
@@ -10,12 +9,13 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import StarBorder from '@material-ui/icons/StarBorder';
 import Star from '@material-ui/icons/Star';
+import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 
 export interface FixtureBpsListProps {
     teamPicks: Picks[]
     fixture?: Fixture
     live?: Live
-    bootstrap?: Bootstrap
+    bootstrapStatic?: BootstrapStatic
 }
 
 export interface FixtureBpsListState {
@@ -31,11 +31,11 @@ export default class FixtureBpsList extends React.Component<FixtureBpsListProps,
         }
     }
 
-    getFootballer(elementId: number, bs: Bootstrap) {
+    getFootballer(elementId: number, bs: BootstrapStatic) {
         return bs.elements.find(e => e.id == elementId);
     }
 
-    getClubPlayers(clubId: number, bootstrap: Bootstrap): Element[] {
+    getClubPlayers(clubId: number, bootstrap: BootstrapStatic): Element[] {
         return bootstrap.elements.filter(el => el.team === clubId);
     }
 
@@ -74,7 +74,7 @@ export default class FixtureBpsList extends React.Component<FixtureBpsListProps,
         </Box>
     }
 
-    renderPicks(live: Live, fixture: Fixture, teamPicks: Picks[], bootstrap: Bootstrap): JSX.Element[] {
+    renderPicks(live: Live, fixture: Fixture, teamPicks: Picks[], bootstrap: BootstrapStatic): JSX.Element[] {
         const clubIds = [fixture.team_a, fixture.team_h];
         const clubElements = this.getClubPlayers(clubIds[0], bootstrap);
         const fixtureElements = clubElements.concat(this.getClubPlayers(clubIds[1], bootstrap));
@@ -107,13 +107,13 @@ export default class FixtureBpsList extends React.Component<FixtureBpsListProps,
     }
     
     render() {
-        const {live, fixture, teamPicks, bootstrap} = this.props;
+        const {live, fixture, teamPicks, bootstrapStatic} = this.props;
 
-        if (!live || !fixture || !teamPicks || !bootstrap) {
+        if (!live || !fixture || !teamPicks || !bootstrapStatic) {
             return null;
         }
 
-        const renderedElements = this.renderPicks(live, fixture, teamPicks, bootstrap);
+        const renderedElements = this.renderPicks(live, fixture, teamPicks, bootstrapStatic);
         if (renderedElements.length <= 0) {
             return null;
         }

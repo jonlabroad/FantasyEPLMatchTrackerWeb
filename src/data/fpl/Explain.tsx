@@ -1,6 +1,6 @@
-export interface ScoreExplain
-{
-    points: number;
-    name: string;
-    value: number;
+import { ExplainElement } from "./ExplainElement";
+
+export interface Explain {
+    fixture: number;
+    stats: ExplainElement[];
 }

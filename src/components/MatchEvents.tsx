@@ -8,14 +8,14 @@ import moment from 'moment';
 import MatchEventElement from "./MatchEventElement";
 
 import "../styles/match-events.css"
-import Bootstrap from "../data/fpl/Bootstrap";
+import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 
 export interface MatchEventsProps {
     teams: number[]
     gameweek: number
     picks: {[key: string]: Picks}
     processedPlayers?: ProcessedPlayers
-    bootstrap?: Bootstrap
+    bootstrapStatic?: BootstrapStatic
 }
 
 export default class MatchEvents extends React.Component<MatchEventsProps> {
@@ -44,12 +44,12 @@ export default class MatchEvents extends React.Component<MatchEventsProps> {
             }
         }
 
-        const sortedEvents = events.sort((a, b) => moment(a.dateTime).valueOf() - moment(b.dateTime).valueOf());
+        const sortedEvents = events.sort((a, b) => moment(b.dateTime).valueOf() - moment(a.dateTime).valueOf());
         for (const event of sortedEvents) {
             elements.push(
                 <MatchEventElement
                     event={event}
-                    bootstrap={this.props.bootstrap}
+                    bootstrapStatic={this.props.bootstrapStatic}
                 />
             )
         }

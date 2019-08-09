@@ -1,14 +1,15 @@
 import React from 'react';
 import { makeStyles } from "@material-ui/styles";
 import { IconSelector } from '../util/IconSelector';
-import { Explains } from '../data/fpl/Explains';
 import LiveHelper from '../util/LiveHelper';
-import ScoreExplain from '../data/fpl/ScoreExplain';
 import { PointsIcon } from './PointsIcon';
 import { Box } from '@material-ui/core';
+import { ExplainElement } from '../data/fpl/ExplainElement';
+import { Explain } from '../data/fpl/Explain';
+import LiveElement from '../data/fpl/LiveElement';
 
 export interface PointsIconsProps {
-    explainsArray: Explains[]
+    liveElement: LiveElement
 }
 
 const noIconPerEventTypes = [
@@ -18,24 +19,24 @@ const noIconPerEventTypes = [
 ];
 
 const explainsProcessors: {[key: string]: Function} = {
-    "minutes": (explainType: string, explain: ScoreExplain) => {
-        const type = explain.value >= 60 ? "minutes_60" : explainType;
-        return <PointsIcon explainType={type}/>
+    "minutes": (explainType: string, explain: ExplainElement) => {
+        if (explain.value > 0) {
+            const type = explain.value >= 60 ? "minutes_60" : explainType;
+            return <PointsIcon explainType={type}/>
+        }
+        return null;
     },
 }
 
 export default class PointsIcons extends React.Component<PointsIconsProps> {
-    renderExplain(explain: {[key: string]: ScoreExplain}): JSX.Element[] {
+    renderExplain(explain: ExplainElement): JSX.Element[] {
         const icons = [];
-        for (let explainType of Object.keys(explain)) {
-            const scoreExplain = explain[explainType];
-            if (explainsProcessors[explainType]) {
-                icons.push(explainsProcessors[explainType](explainType, scoreExplain));
-            }
-            else if (!noIconPerEventTypes.includes(explainType)) {
-                for (let i = 0; i < scoreExplain.value; i++) {
-                    icons.push(<PointsIcon explainType={explainType}/>);
-                }
+        if (explainsProcessors[explain.identifier]) {
+            icons.push(explainsProcessors[explain.identifier](explain.identifier, explain));
+        }
+        else if (!noIconPerEventTypes.includes(explain.identifier)) {
+            for (let i = 0; i < explain.value; i++) {
+                icons.push(<PointsIcon explainType={explain.identifier}/>);
             }
         }
         return icons;
@@ -43,9 +44,9 @@ export default class PointsIcons extends React.Component<PointsIconsProps> {
 
     render() {
         const elements = [];
-        for (let explains of this.props.explainsArray) {
-            for (let explain of explains) {
-                elements.push(this.renderExplain(explain));
+        for (let explain of this.props.liveElement.explain) {
+            for (let explainElement of explain.stats) {
+                elements.push(this.renderExplain(explainElement));
             }
         }
         
