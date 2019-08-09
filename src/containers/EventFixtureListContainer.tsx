@@ -21,8 +21,7 @@ export interface EventFixtureListContainerProps {
 
 export class EventFixtureListContainer extends React.Component<EventFixtureListContainerProps> {
     render() {
-        return (null
-            /*
+        return (
         <EventFixtureList
             bootstrapStatic={this.props.bootstrapStatic}
             fixtures={FixturesHelper.getFixtures(this.props.gameweek, this.props.fixtures)}
@@ -32,14 +31,13 @@ export class EventFixtureListContainer extends React.Component<EventFixtureListC
             team2={this.props.teams[1]}
             gameweek={this.props.gameweek}
         />
-        */
         );
     }
 }
 
 export function mapStateToProps(state: TrackerState) {
     return {
-      bootstrap: state.data.bootstrapStatic,
+      bootstrapStatic: state.data.bootstrapStatic,
       fixtures: state.data.fixtures,
       live: state.data.live,
       picks: state.data.picks,

@@ -23,12 +23,6 @@ export interface EventFixtureListProps {
 }
 
 export default class EventFixtureList extends React.Component<EventFixtureListProps> {
-    getFixtures(): Fixture[] {
-        return []; // TODO
-        //return (this.props.live ? this.props.live.fixtures : undefined) ||
-        //       (this.props.fixtures ? this.props.fixtures : []); 
-    }
-    
     renderTimeBox(fixture: Fixture) {
         const kickoffDate = moment(fixture.kickoff_time);
         return (
@@ -40,6 +34,7 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
 
     renderFixtureTeam(teamId: number, bs: BootstrapStatic, direction: string, homeAway: string) {
         const team = bs.teams.find(t => t.id === teamId);
+        console.log({team: team});
         if (team) {
             return (
             <Box className={`club-name-logo club-name-logo-${homeAway}`} display="flex" flexDirection={direction} justifyContent="space-around">
@@ -50,9 +45,10 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
         }
     }
     
-    renderFixtures(bs: BootstrapStatic): JSX.Element[] {
+    renderFixtures(fixtures: Fixtures, bs: BootstrapStatic): JSX.Element[] {
         const elements: JSX.Element[] = [];
-        for (let fixture of this.getFixtures()) {
+        console.log(fixtures);
+        for (let fixture of fixtures) {
             elements.push(
             <Box display="flex" flexDirection="column" className="fixture-list-element-container">
                 <Box display="flex" alignContent="center" alignItems="center" justifyContent="space-around" className="fixture-list-element">
@@ -101,6 +97,7 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
 
     render() {
         const { fixtures, bootstrapStatic } = this.props;
+        console.log({fixtures: fixtures}); console.log(bootstrapStatic);
         if (!fixtures || !bootstrapStatic) {
             return null;
         }
@@ -108,7 +105,7 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
         return (
             <Box display="flex" flexDirection="column" className="fixture-list-container">
                 <Typography className="fixture-list-header" variant="subtitle1">Fixtures</Typography>
-                {this.renderFixtures(bootstrapStatic)}
+                {this.renderFixtures(fixtures, bootstrapStatic)}
             </Box>
         )
     }
