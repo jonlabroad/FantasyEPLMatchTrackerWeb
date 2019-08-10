@@ -1,0 +1,7 @@
+.match-status-strip-container {
+}
+
+.match-status-team-name-container {
+    max-width: 150px;
+    overflow: wrap;
+}

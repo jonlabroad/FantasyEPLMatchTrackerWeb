@@ -31,7 +31,7 @@ export default class MatchEvents extends React.Component<MatchEventsProps> {
     }
     
     renderEvents(): JSX.Element[] {
-        if (!this.props.processedPlayers || !this.props.picks || !this.props.teams) {
+        if (!this.props.processedPlayers || !this.props.processedPlayers.players || !this.props.picks || !this.props.teams) {
             return [];
         }
         

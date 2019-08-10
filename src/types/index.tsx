@@ -6,6 +6,7 @@ import { MappedFixtures } from "../data/MappedFixtures";
 import Entry from "../data/fpl/Entry";
 import { MappedProcessedPlayers } from "../data/ProcessedPlayers";
 import EventStatus from "../data/fpl/EventStatus";
+import { MappedLeagueFixtures } from "../data/LeagueFixtures";
 
 export interface TrackerData {
     entries: {[key: number]: Entry}
@@ -15,12 +16,15 @@ export interface TrackerData {
     live: Lives
     bootstrapStatic?: BootstrapStatic,
     eventStatus?: EventStatus | undefined,
-    processedPlayers?: MappedProcessedPlayers | undefined
+    processedPlayers?: MappedProcessedPlayers | undefined,
+    mappedLeagueFixtures?: MappedLeagueFixtures | undefined
 }
 
 export interface NavigationState {
     selectedTab: number,
     gameweek: number,
+    leagueId: number,
+    team: number,
     teams: number[]
 }
 

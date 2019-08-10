@@ -1,13 +1,17 @@
 export default class Url {
-    public static set(gameweek: number, team: number[]) {
+    public static set(gameweek: number, team?: number, teams?: number[]) {
         const url = new URLSearchParams();
         url.delete("gameweek");
+        url.delete("team");
         url.delete("team1");
         url.delete("team2");
         url.set("gameweek", gameweek.toString());
-        url.set("team1", team[0].toString());
-        if (team.length > 1) {
-            url.set("team2", team[1].toString());
+        if (teams && teams.length >= 2) {
+            url.set("team1", teams[0].toString());
+            url.set("team2", teams[1].toString());
+        }
+        else if (team) {
+            url.set("team", team.toString());
         }
         window.history.pushState("", "", "?" + url.toString());
     }
@@ -25,6 +29,13 @@ export default class Url {
         if (team2) teams.push(parseInt(team2 || "0"));
 
         return teams;
+    }
+
+    public static getTeam(): number | undefined {
+        const url = new URLSearchParams(document.location.search);
+        const team = url.get("team");
+        if (team) return parseInt(team);
+        return undefined;
     }
 
 }

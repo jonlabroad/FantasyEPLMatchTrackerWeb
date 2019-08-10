@@ -8,8 +8,9 @@ export class Score {
 }
 
 export default class ScoreCalculator {
-    public static calculateElementScore(pick?: Pick, live?: Live) {
+    public static calculateElementScore(pick?: Pick, live?: Live, sub?: boolean) {
         var score = 0;
+        sub = !!sub;
         if (!pick || !live) {
             return score;
         }
@@ -18,7 +19,7 @@ export default class ScoreCalculator {
         if (liveElement) {
             for (let gwExplain of liveElement.explain) {
                 for (let explain of gwExplain.stats) {
-                    score += explain.points * pick.multiplier;
+                    score += explain.points * (sub ? 1 : pick.multiplier);
                 }
             }
         }
@@ -30,18 +31,18 @@ export default class ScoreCalculator {
     
     public static calculateTeamScore(picks?: Picks, live?: Live) {
         let score: Score = new Score();
-        if (!picks || !live) {
+        if (!picks || !picks.picks || !live) {
             return score;
         }
 
         for (let i = 0; i < 11; i++) {
             const pick = picks.picks[i];
-            score.startingScore += this.calculateElementScore(pick, live);
+            score.startingScore += this.calculateElementScore(pick, live, false);
         }
         
         for (let i = 11; i < 15; i++) {
             const pick = picks.picks[i];
-            score.subScore += this.calculateElementScore(pick, live);
+            score.subScore += this.calculateElementScore(pick, live, true);
         }
         score.startingScore -= picks != null && picks.entry_history != null ? picks.entry_history.event_transfers_cost : 0;
         return score;

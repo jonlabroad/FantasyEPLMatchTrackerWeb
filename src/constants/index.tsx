@@ -4,6 +4,9 @@ export type TEST = typeof TEST;
 export const SET_GAMEWEEK = 'SET_GAMEWEEK';
 export type SET_GAMEWEEK = typeof SET_GAMEWEEK;
 
+export const SET_TEAM = 'SET_TEAM';
+export type SET_TEAM = typeof SET_TEAM;
+
 export const SET_TEAMS = 'SET_TEAMS';
 export type SET_TEAMS = typeof SET_TEAMS;
 
@@ -30,6 +33,9 @@ export type RECEIVE_EVENT = typeof RECEIVE_EVENT;
 
 export const RECEIVE_PROCESSED_PLAYERS = 'RECEIVE_PROCESSED_PLAYERS';
 export type RECEIVE_PROCESSED_PLAYERS = typeof RECEIVE_PROCESSED_PLAYERS;
+
+export const RECEIVE_LEAGUE_FIXTURES = 'RECEIVE_LEAGUE_FIXTURES';
+export type RECEIVE_LEAGUE_FIXTURES = typeof RECEIVE_LEAGUE_FIXTURES;
 
 export const TAB_SELECT = 'TAB_SELECT';
 export type TAB_SELECT = typeof TAB_SELECT;

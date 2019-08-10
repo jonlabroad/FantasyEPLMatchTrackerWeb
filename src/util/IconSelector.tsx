@@ -14,6 +14,7 @@ export class IconSelector {
         yellow_cards: "038-red-card.svg",
         red_card: "037-hand.svg",
         red_cards: "037-hand.svg",
+        penalty_miss: "013-goal.svg",
         penalty_missed: "013-goal.svg",
         penalties_missed: "013-goal.svg",
         goals_conceded: "027-game.svg",

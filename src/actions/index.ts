@@ -5,6 +5,7 @@ import { BootstrapStatic } from '../data/fpl/BootstrapStatic';
 import { MappedFixtures } from '../data/MappedFixtures';
 import { ProcessedPlayers } from '../data/ProcessedPlayers';
 import EventStatus from '../data/fpl/EventStatus';
+import { LeagueFixtures } from '../data/LeagueFixtures';
 
 export interface Test {
     type: constants.TEST;
@@ -37,6 +38,18 @@ export function setTeams(teams: number[]): SetTeams {
     return {
         type: constants.SET_TEAMS,
         teams: teams
+    }
+};
+
+export interface SetTeam {
+    type: constants.SET_TEAM;
+    team: number;
+}
+export type SetTeamAction = SetTeam;
+export function setTeam(team: number): SetTeam {
+    return {
+        type: constants.SET_TEAM,
+        team: team
     }
 };
 
@@ -146,6 +159,20 @@ export function receiveProcessedPlayers(gameweek: number, processedPlayers: Proc
     }
 };
 
+export interface ReceiveLeagueFixtures {
+    type: constants.RECEIVE_LEAGUE_FIXTURES;
+    fixtures: LeagueFixtures;
+    leagueId: number;
+}
+export type ReceiveLeagueFixturesAction = ReceiveLeagueFixtures;
+export function receiveLeagueFixtures(leagueId: number, fixtures: LeagueFixtures): ReceiveLeagueFixtures {
+    return {
+        type: constants.RECEIVE_LEAGUE_FIXTURES,
+        leagueId: leagueId,
+        fixtures: fixtures
+    }
+};
+
 export interface TabSelect {
     type: constants.TAB_SELECT;
     index: number;
@@ -162,6 +189,7 @@ export type RootAction =
 TestAction |
 SetGameweek |
 SetTeams |
+SetTeam |
 ReceiveBootstrapStatic |
 ReceiveEntry |
 ReceiveFixtures |
@@ -169,6 +197,7 @@ ReceivePicks |
 ReceiveLive |
 ReceiveEvent |
 ReceiveProcessedPlayers |
+ReceiveLeagueFixtures |
 TabSelect |
 ReceiveEventStatus
 ;

@@ -18,24 +18,30 @@ export default class MatchEventElement extends React.Component<MatchEventElement
     isImportant(event: MatchEvent) {
         if (event.type === MatchEventType.GOAL ||
             event.type === MatchEventType.ASSIST ||
+            event.type === MatchEventType.PENALTY_MISS ||
+            event.type === MatchEventType.PENALTY_SAVES ||
             event.type === MatchEventType.BONUS) {
             return true;
         }
 
         return false;
     }
+
+    isNeg(event: MatchEvent) {
+        return event.number < 0;
+    }
     
     render() {
         const { event } = this.props;
 
         const isImportant = this.isImportant(event);
-console.log({event: event});
+        const isNeg = this.isNeg(event);
         return (
             <Box display="flex" flexDirection="row" className={`match-event ${isImportant ? "important-event" : ""}`}>
                 <MatchEventTypeIcon eventType={event.typeString} />
                 <MatchEventDate dateString={event.dateTime} isImportant={isImportant}/>
                 <Box display="flex" flexDirection="column">
-                    <Typography variant="subtitle1" className="match-event-type-text">{`${MatchEventUtil.matchEventToString(event.type)}${isImportant ? "!" : ""}`}</Typography>
+                    <Typography variant="subtitle1" className="match-event-type-text">{`${MatchEventUtil.matchEventToString(event.type)}${isNeg ? " removed" : ""}${isImportant ? "!" : ""}`}</Typography>
                     <Typography variant="body1" className="match-event-name-text">{event.footballerName}</Typography>
                 </Box>
                 <MatchEventPhoto element={BootstrapHelper.getElement(event.footballerId, this.props.bootstrapStatic)}/>

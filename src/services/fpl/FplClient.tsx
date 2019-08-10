@@ -82,6 +82,10 @@ export default class FplClient implements IFplClient {
         return await this.get(this.processedPlayersUrl(eventId));
     }
 
+    async leagueFixtures(leagueId: number): Promise<any> {
+        return await this.get(this.leagueFixturesUrl(leagueId));
+    }
+
     historyUrl(entryId: number) {
         return `${this.entryUrl(entryId)}/history`;
     }
@@ -124,5 +128,9 @@ export default class FplClient implements IFplClient {
 
     processedPlayersUrl(eventId: number) {
         return `processed/players/${eventId}`;
+    }
+
+    leagueFixturesUrl(leagueId: number) {
+        return `processed/league/${leagueId}/fixtures`;
     }
 }

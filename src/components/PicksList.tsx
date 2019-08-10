@@ -54,7 +54,7 @@ export default class PicksList extends React.Component<PicksListProps> {
         const element = BootstrapHelper.getElement(pick.element, this.props.bootstrapStatic);
         return (
             <TableRow key={pick.element} className={starter ? "pickslist-starter" : "pickslist-sub"}>
-                <TableCell padding="none">{element ? ScoreCalculator.calculateElementScore(pick, this.props.live): 0}</TableCell>
+                <TableCell padding="none">{element ? ScoreCalculator.calculateElementScore(pick, this.props.live, !starter): 0}</TableCell>
                 <TableCell padding="none" className="club-icon-cell"><ClubIcon teamCode={this.getTeamCode(pick)}/></TableCell>
                 <TableCell padding="none" className="club-captain-cell">{this.getCaptain(pick)}</TableCell>
                 <TableCell padding="none">{element ? element.web_name : pick.element}</TableCell>
@@ -73,7 +73,7 @@ export default class PicksList extends React.Component<PicksListProps> {
     }
     
     render() {
-        if (!this.props.picks) {
+        if (!this.props.picks || !this.props.picks.picks) {
             return null;
         }
 
