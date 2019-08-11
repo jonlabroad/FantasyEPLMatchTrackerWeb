@@ -1,8 +1,8 @@
 import { TrackerState } from "../types";
-import { TEST, RECEIVE_ENTRY, TAB_SELECT, RECEIVE_PICKS, RECEIVE_LIVE, RECEIVE_EVENT, RECEIVE_BOOTSTRAPSTATIC, RECEIVE_FIXTURES, SET_GAMEWEEK, SET_TEAMS, RECEIVE_PROCESSED_PLAYERS, RECEIVE_LEAGUE_FIXTURES, SET_TEAM } from "../constants";
+import { TEST, RECEIVE_ENTRY, TAB_SELECT, RECEIVE_PICKS, RECEIVE_LIVE, RECEIVE_EVENT, RECEIVE_BOOTSTRAPSTATIC, RECEIVE_FIXTURES, SET_GAMEWEEK, SET_TEAMS, RECEIVE_PROCESSED_PLAYERS, RECEIVE_LEAGUE_FIXTURES, SET_TEAM, RECEIVE_STANDINGS_H2H } from "../constants";
 import { Reducer } from "redux";
 import Url from "../util/Url";
-import { ReceiveLeagueFixturesAction } from "../actions";
+import { ReceiveLeagueFixturesAction, ReceiveStandingsH2h, ReceiveStandingsH2hAction } from "../actions";
 
 export const initialState: TrackerState = {
     data: {
@@ -12,7 +12,8 @@ export const initialState: TrackerState = {
         events: {},
         bootstrapStatic: undefined,
         fixtures: {},
-        processedPlayers: {}
+        processedPlayers: {},
+        mappedLeagueH2hStandings: {}
     },
     nav: {
         selectedTab: 0,
@@ -32,6 +33,7 @@ export const trackerReducer: Reducer<TrackerState> = (state = initialState, acti
             Url.set(action.gameweek, state.nav.team);
             return { ...state, nav: { ...state.nav, gameweek: action.gameweek }};
         case SET_TEAM:
+            Url.set(state.nav.gameweek, action.team);
             return { ...state, nav: { ...state.nav, team: action.team }};
         case SET_TEAMS:
             return { ...state, nav: { ...state.nav, teams: action.teams }};
@@ -74,7 +76,14 @@ export const trackerReducer: Reducer<TrackerState> = (state = initialState, acti
         case RECEIVE_LEAGUE_FIXTURES:
             {
                 const typedAction = action as ReceiveLeagueFixturesAction;
-                let newState = { ...state, data: { ...state.data, mappedLeagueFixtures: { ...state.data.mappedLeagueFixtures, ...{[typedAction.leagueId]: typedAction.fixtures} }}};
+                let newState = { ...state, data: { ...state.data, mappedLeagueFixtures: { ...state.data.mappedLeagueFixtures, ...{ [typedAction.leagueId]: typedAction.fixtures } } } };
+                return newState;
+            }
+        case RECEIVE_STANDINGS_H2H:
+            {
+                console.log({rcvStandings: action});
+                const typedAction = action as ReceiveStandingsH2hAction;
+                let newState = { ...state, data: { ...state.data, mappedLeagueH2hStandings: { ...state.data.mappedLeagueH2hStandings, ...{ [typedAction.leagueId]: typedAction.standings } } } } as TrackerState;
                 return newState;
             }
         case TAB_SELECT:

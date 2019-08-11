@@ -1,7 +1,7 @@
 import React from "react";
 import { TrackerState } from "../types";
 import { Dispatch } from "redux";
-import { RootAction, receiveEntry, receivePicks, receiveLive, receiveEvent, receiveBootstrapStatic, receiveFixtures, setTeams, setGameweek, receiveProcessedPlayers, receiveLeagueFixtures, setTeam } from "../actions";
+import { RootAction, receiveEntry, receivePicks, receiveLive, receiveEvent, receiveBootstrapStatic, receiveFixtures, setTeams, setGameweek, receiveProcessedPlayers, receiveLeagueFixtures, setTeam, receiveStandingsH2h } from "../actions";
 import { connect } from "react-redux";
 import MatchHeaderContainer from "./MatchHeaderContainer";
 import FplAppBar from "../components/FplAppBar";
@@ -13,14 +13,23 @@ import { MappedFixtures } from "../data/MappedFixtures";
 import Url from "../util/Url";
 import { ProcessedPlayers } from "../data/ProcessedPlayers";
 import FplClient from "../services/fpl/FplClient";
-import { LeagueFixtures } from "../data/LeagueFixtures";
+import { LeagueFixtures, MappedLeagueFixtures } from "../data/LeagueFixtures";
 import MatchStatusContainer from "./MatchStripContainer";
 import StateHelper from "../util/StateHelper";
+import FplAppBarContainer from "./FplAppBarContainer";
+import LeaguesH2hStandings from "../data/fpl/LeaguesH2hStandings";
+import Entry from "../data/fpl/Entry";
+import PicksHelper from "../util/PicksHelper";
 
 export interface MatchTrackerContainerProps {
     gameweek: number
     teams: number[]
+    team: number
     leagueId: number
+    fixtures: MappedFixtures
+    mappedLeagueFixtures?: MappedLeagueFixtures
+    entries: {[key: number]: Entry}
+    picks: {[key: string]: Picks}
 
     setTeams: any
     setTeam: any
@@ -33,30 +42,36 @@ export interface MatchTrackerContainerProps {
     receiveEvent: any
     receiveProcessedPlayers: any
     receiveLeagueFixtures: any
+    receiveLeaguesH2hStandings: any
 }
 
-export class MatchTrackerContainer extends React.Component<MatchTrackerContainerProps, any> {
+export interface MatchTrackerContainerState {
+    retrievingData: boolean
+}
+
+export class MatchTrackerContainer extends React.Component<MatchTrackerContainerProps, MatchTrackerContainerState> {
+    constructor(props: MatchTrackerContainerProps) {
+        super(props);
+        this.state = {
+            retrievingData: false
+        };
+    }
+    
     async requestInitialData(teamId: number, gameweek: number, leagueId: number) {
         const fplClient = new FplClient();
+        var promises = [];
 
-        fplClient.bootstrapStatic().then(bs => this.props.receiveBootstrapStatic(bs));
-        StateHelper.requestLive(gameweek).then(live => this.props.receiveLive(gameweek, live));
-        fplClient.fixtures().then(fixtures => this.props.receiveFixtures(fixtures));
-
-        new FplClient().processedPlayers(gameweek).then(processedPlayers => {this.props.receiveProcessedPlayers(gameweek, processedPlayers)});
-        new FplClient().leagueFixtures(leagueId).then(async fixtures => {
+        promises.push(fplClient.bootstrapStatic().then(bs => this.props.receiveBootstrapStatic(bs)));
+        promises.push(StateHelper.requestLive(gameweek).then(live => this.props.receiveLive(gameweek, live)));
+        promises.push(fplClient.fixtures().then(fixtures => this.props.receiveFixtures(fixtures)));
+        promises.push(fplClient.leaguesH2hStandings(leagueId).then(standings => this.props.receiveLeaguesH2hStandings(leagueId, standings)));
+        promises.push(new FplClient().processedPlayers(gameweek).then(processedPlayers => {this.props.receiveProcessedPlayers(gameweek, processedPlayers)}));
+        promises.push(new FplClient().leagueFixtures(leagueId).then(async fixtures => {
             await this.findOpponent(gameweek, teamId, fixtures);
         
             this.props.receiveLeagueFixtures(leagueId, fixtures);
-            for (let fixture of fixtures[gameweek]) {
-                const teams: number[] = [fixture.entry_1_entry || 0, fixture.entry_2_entry || 0];
-                for (let team of teams) {
-                    if (team > 0) {
-                        //StateHelper.requestPicks(team, gameweek).then(picks => this.props.receivePicks(team, gameweek, picks));
-                    }
-                }
-            }
-        });
+        }));
+        await Promise.all(promises);
     }
     
     async findOpponent(gameweek: number, teamId: number, fixtures: LeagueFixtures) {
@@ -74,8 +89,12 @@ export class MatchTrackerContainer extends React.Component<MatchTrackerContainer
         const teams = [team1, team2];
         this.props.setTeams(teams);
         for (var team of teams) {
-            this.props.receiveEntry(await new FplClient().entry(team));
-            this.props.receivePicks(team, gameweek, await new FplClient().picks(team, gameweek));
+            if (!this.props.entries[team]) {
+                this.props.receiveEntry(await new FplClient().entry(team));
+            }
+            if (!PicksHelper.getPicks(team, this.props.gameweek, this.props.picks)) {
+                this.props.receivePicks(team, gameweek, await new FplClient().picks(team, gameweek));
+            }
         }
     }
     
@@ -87,16 +106,47 @@ export class MatchTrackerContainer extends React.Component<MatchTrackerContainer
         this.props.setTeams([teamId, teamId]);
         this.props.receiveEntry(await new FplClient().entry(teamId));
 
-        const leagueId = 22356;
+        const leagueId = this.props.leagueId;
 
         this.props.setGameweek(gameweek);
-        this.requestInitialData(teamId, gameweek, leagueId);
+        this.requestInitialData(teamId, gameweek, leagueId).then(() => this.setState({retrievingData: false}));
     }
     
+    async componentDidUpdate() {
+        this.stateUpdates();
+    }
+
+    async stateUpdates() {
+        const fplClient = new FplClient();
+        var promises: Promise<any>[] = [];
+        if (!this.state.retrievingData) {
+            console.log("Get some data");
+            if (!this.props.fixtures[this.props.gameweek]) {
+                console.log("Get fixtures");
+                this.setState({retrievingData: true});
+                promises.push(fplClient.fixtures().then(fixtures => {
+                    this.props.receiveFixtures(fixtures);
+                }));
+            }
+            console.log([this.props.team, this.props.teams]);
+            if (!this.props.teams.includes(this.props.team) && this.props.mappedLeagueFixtures) {
+                console.log("Setup teams");
+                this.setState({retrievingData: true});
+                promises.push(this.findOpponent(this.props.gameweek, this.props.team, this.props.mappedLeagueFixtures[this.props.leagueId]));
+            }
+            if (promises.length > 0) {
+                Promise.all(promises).then(() => this.setState({retrievingData: false}));
+            }
+        }
+        else {
+            console.log("Already getting your data!!!");
+        }
+    }
+
     render() {
         return (
         <div>
-            <FplAppBar/>
+            <FplAppBarContainer/>
             <MatchHeaderContainer/>
             <MatchStatusContainer/>
             <TrackerTabsContainer/>
@@ -106,10 +156,16 @@ export class MatchTrackerContainer extends React.Component<MatchTrackerContainer
 }
 
 export function mapStateToProps(state: TrackerState) {
+    console.log({state: state});
     return {
         gameweek: state.nav.gameweek,
+        team: state.nav.team,
         teams: state.nav.teams,
-        leagueId: state.nav.leagueId
+        leagueId: state.nav.leagueId,
+        fixtures: state.data.fixtures,
+        mappedLeagueFixtures: state.data.mappedLeagueFixtures,
+        picks: state.data.picks,
+        entries: state.data.entries
     };
 }
 
@@ -124,7 +180,8 @@ const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
     receiveLive: (gameweek: number, live: Live) => dispatch(receiveLive(gameweek, live)),
     receiveEvent: (gameweek: number, event: Event) => dispatch(receiveEvent(gameweek, event)),
     receiveProcessedPlayers: (gameweek: number, processedPlayers: ProcessedPlayers) => dispatch(receiveProcessedPlayers(gameweek, processedPlayers)),
-    receiveLeagueFixtures: (leagueId: number, leagueFixtures: LeagueFixtures) => dispatch(receiveLeagueFixtures(leagueId, leagueFixtures))
+    receiveLeagueFixtures: (leagueId: number, leagueFixtures: LeagueFixtures) => dispatch(receiveLeagueFixtures(leagueId, leagueFixtures)),
+    receiveLeaguesH2hStandings: (leagueId: number, standings: LeaguesH2hStandings) => dispatch(receiveStandingsH2h(leagueId, standings))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MatchTrackerContainer);

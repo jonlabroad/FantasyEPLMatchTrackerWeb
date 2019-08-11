@@ -6,6 +6,7 @@ import { MappedFixtures } from '../data/MappedFixtures';
 import { ProcessedPlayers } from '../data/ProcessedPlayers';
 import EventStatus from '../data/fpl/EventStatus';
 import { LeagueFixtures } from '../data/LeagueFixtures';
+import LeaguesH2hStandings from '../data/fpl/LeaguesH2hStandings';
 
 export interface Test {
     type: constants.TEST;
@@ -173,6 +174,20 @@ export function receiveLeagueFixtures(leagueId: number, fixtures: LeagueFixtures
     }
 };
 
+export interface ReceiveStandingsH2h {
+    type: constants.RECEIVE_STANDINGS_H2H;
+    standings: LeaguesH2hStandings;
+    leagueId: number;
+}
+export type ReceiveStandingsH2hAction = ReceiveStandingsH2h;
+export function receiveStandingsH2h(leagueId: number, standings: LeaguesH2hStandings): ReceiveStandingsH2h {
+    return {
+        type: constants.RECEIVE_STANDINGS_H2H,
+        leagueId: leagueId,
+        standings: standings
+    }
+};
+
 export interface TabSelect {
     type: constants.TAB_SELECT;
     index: number;
@@ -198,6 +213,7 @@ ReceiveLive |
 ReceiveEvent |
 ReceiveProcessedPlayers |
 ReceiveLeagueFixtures |
+ReceiveStandingsH2h |
 TabSelect |
 ReceiveEventStatus
 ;

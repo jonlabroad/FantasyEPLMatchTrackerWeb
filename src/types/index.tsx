@@ -7,6 +7,7 @@ import Entry from "../data/fpl/Entry";
 import { MappedProcessedPlayers } from "../data/ProcessedPlayers";
 import EventStatus from "../data/fpl/EventStatus";
 import { MappedLeagueFixtures } from "../data/LeagueFixtures";
+import LeaguesH2hStandings, { MappedLeaguesH2hStandings } from "../data/fpl/LeaguesH2hStandings";
 
 export interface TrackerData {
     entries: {[key: number]: Entry}
@@ -17,7 +18,8 @@ export interface TrackerData {
     bootstrapStatic?: BootstrapStatic,
     eventStatus?: EventStatus | undefined,
     processedPlayers?: MappedProcessedPlayers | undefined,
-    mappedLeagueFixtures?: MappedLeagueFixtures | undefined
+    mappedLeagueFixtures?: MappedLeagueFixtures | undefined,
+    mappedLeagueH2hStandings: MappedLeaguesH2hStandings | undefined
 }
 
 export interface NavigationState {

@@ -1,3 +1,5 @@
+export type MappedLeaguesH2hStandings = {[key: number]: LeaguesH2hStandings};
+
 export interface League {
     id: number;
     name: string;
@@ -12,7 +14,7 @@ export interface League {
     ko_rounds?: any;
 }
 
-export interface Result {
+export interface StandingsEntry {
     entry: number;
     entry_name: string;
     joined_time: Date;
@@ -20,20 +22,14 @@ export interface Result {
     player_last_name: string;
 }
 
-export interface NewEntries {
-    has_next: boolean;
-    page: number;
-    results: Result[];
-}
-
 export interface Standings {
     has_next: boolean;
     page: number;
-    results: any[];
+    results: StandingsEntry[];
 }
 
 export default interface LeaguesH2hStandings {
     league: League;
-    new_entries: NewEntries;
+    new_entries: Standings;
     standings: Standings;
 }

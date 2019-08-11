@@ -103,7 +103,7 @@ export default class FplClient implements IFplClient {
     }
 
     leaguesH2hStandingsUrl(leagueId: number, page: number = 1) {
-        return `leagues-h2h/${leagueId}/standings/page_new_entries=${page}&page_standings=${page}`;
+        return `processed/league/${leagueId}/standings`;
     }
 
     eventUrl(eventId: number) {

@@ -8,7 +8,6 @@ export interface MatchEventPhotoProps {
 }
 
 export const MatchEventPhoto: React.SFC<MatchEventPhotoProps> = (props) => {
-    console.log({props: props});
     return (
     <Box display="flex" alignItems="center" justifyItems="center" className="match-event-photo">
         <ElementPhoto element={props.element} />

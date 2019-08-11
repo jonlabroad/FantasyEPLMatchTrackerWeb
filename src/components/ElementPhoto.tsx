@@ -22,7 +22,6 @@ export const ElementPhoto: React.SFC<ElementPhotoProps> = (props) => {
 
     var photoSuffix = getPhotoId(props.element);
     var photoUrl = photoRoot + photoSuffix;
-    console.log(photoUrl);
     photoUrl = photoUrl.replace(".jpg", ".png");
     return (
     <img
