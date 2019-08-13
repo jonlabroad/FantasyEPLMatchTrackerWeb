@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, TableRow, TableHead, TableCell, TableBody, Box, Typography } from "@material-ui/core";
+import { Table, TableRow, TableHead, TableCell, TableBody, Box, Typography, Hidden } from "@material-ui/core";
 import Picks from "../data/fpl/Picks";
 import Pick from "../data/fpl/Pick";
 import BootstrapHelper from "../util/BootstrapHelper";
@@ -55,7 +55,7 @@ export default class PicksList extends React.Component<PicksListProps> {
         return (
             <TableRow key={pick.element} className={starter ? "pickslist-starter" : "pickslist-sub"}>
                 <TableCell padding="none">{element ? ScoreCalculator.calculateElementScore(pick, this.props.live, !starter): 0}</TableCell>
-                <TableCell padding="none" className="club-icon-cell"><ClubIcon teamCode={this.getTeamCode(pick)}/></TableCell>
+                <TableCell padding="none" className="hidden-xs club-icon-cell"><ClubIcon teamCode={this.getTeamCode(pick)}/></TableCell>
                 <TableCell padding="none" className="club-captain-cell">{this.getCaptain(pick)}</TableCell>
                 <TableCell padding="none">{element ? element.web_name : pick.element}</TableCell>
                 <TableCell padding="none">{element ? BootstrapHelper.getPosition(element.element_type) : pick.position}</TableCell>

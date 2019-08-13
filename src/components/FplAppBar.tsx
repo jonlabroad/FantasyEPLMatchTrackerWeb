@@ -6,12 +6,17 @@ import Themes from '../presentation/Themes';
 import { StandingsEntry, MappedLeaguesH2hStandings } from '../data/fpl/LeaguesH2hStandings';
 
 import "../styles/app-bar.css"
+import Entry from '../data/fpl/Entry';
+import GlobalConfig from '../config/GlobalConfig';
+import H2hLeague from '../data/fpl/H2hLeague';
 
 export interface FplAppBarProps {
     selectedTeam: number,
     leagueId: number,
     mappedStandings?: MappedLeaguesH2hStandings
     onTeamSelect: any
+    onLeagueSelect: any
+    entries: {[key: number]: Entry}
 }
 
 export default class FplAppBar extends React.Component<FplAppBarProps, {}> {
@@ -39,10 +44,39 @@ export default class FplAppBar extends React.Component<FplAppBarProps, {}> {
         );
     }
 
+    renderLeagueSelect(): JSX.Element | null {
+        const { entries, selectedTeam, leagueId } = this.props;
+        const leaguesToShow: H2hLeague[] = [];
+        if (entries && entries[selectedTeam]) {
+            const entry = entries[selectedTeam];
+            for (var possibleLeague of GlobalConfig.Leagues) {
+                var league = entry.leagues.h2h.find(l => l.id === possibleLeague);
+                if (league) {
+                    leaguesToShow.push(league);
+                }
+            }
+        }
+
+        if (leaguesToShow.length <= 1) {
+            return null;
+        }
+
+        return (
+            <div className="league-selector-container">
+                <Select
+                    className="league-selector"
+                    value={leagueId}
+                    onChange={this.props.onLeagueSelect}
+                >
+                    {leaguesToShow.map(league => <MenuItem value={league.id}>{league.name}</MenuItem>)}
+                </Select>
+            </div>
+            );
+    }
+
     render() {
 
         return (
-            <div className="fpl-app-bar">
                 <AppBar color="primary" position="static">
                     <Toolbar>
                         <Box className="app-bar-toolbox" display="flex" justifyContent="space-between">
@@ -51,11 +85,13 @@ export default class FplAppBar extends React.Component<FplAppBarProps, {}> {
                                     FPL Matchtracker
                                 </Typography>
                             </div>
-                            {this.renderTeamSelect()}
+                            <Box display="flex" flexDirection="column">
+                                {this.renderLeagueSelect()}
+                                {this.renderTeamSelect()}
+                            </Box>
                         </Box>
                     </Toolbar>
                 </AppBar>
-            </div>
         );
     }
 }

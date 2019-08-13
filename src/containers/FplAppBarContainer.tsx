@@ -1,36 +1,31 @@
-import React, { ChangeEvent } from "react";
+import React from "react";
 import { Dispatch } from "redux";
 import { TrackerState } from "../types";
-import { RootAction, tabSelect, receiveLeagueFixtures, receivePicks, receiveLive, setTeam } from "../actions";
+import { RootAction, setTeam, setLeague } from "../actions";
 import { connect } from "react-redux";
-import TrackerTabs from "../components/TrackerTabs";
-import PicksHelper from "../util/PicksHelper";
-import PicksList from "../components/PicksList";
-import Live, { Lives } from "../data/fpl/Live";
-import LiveHelper from "../util/LiveHelper";
-import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
-import { LeagueFixtures, MappedLeagueFixtures } from "../data/LeagueFixtures";
-import Picks from "../data/fpl/Picks";
-import StateHelper from "../util/StateHelper";
-import MatchStatusStrip from "../components/MatchStatusStrip";
-import { returnStatement } from "@babel/types";
 import { MappedLeaguesH2hStandings } from "../data/fpl/LeaguesH2hStandings";
 import FplAppBar from "../components/FplAppBar";
+import Entry from "../data/fpl/Entry";
 
 export interface FplAppBarContainerProps {
     leagueId: number
     selectedTeam: number
 
+    entries: {[key: number]: Entry};
     mappedLeagueH2hStandings?: MappedLeaguesH2hStandings
     setTeam: any
+    setLeague: any
 }
 
 export class FplAppBarContainer extends React.Component<FplAppBarContainerProps> {
     onTeamSelect(event: any) {
-        console.log(event.target.value);
         this.props.setTeam(event.target.value);
     }
-    
+
+    onLeagueSelect(event: any) {
+        this.props.setLeague(event.target.value);
+    }
+
     render() {
         const { mappedLeagueH2hStandings, leagueId, selectedTeam} = this.props;
         return (
@@ -39,6 +34,8 @@ export class FplAppBarContainer extends React.Component<FplAppBarContainerProps>
             mappedStandings={mappedLeagueH2hStandings}
             leagueId={leagueId}
             onTeamSelect={this.onTeamSelect.bind(this)}
+            entries={this.props.entries}
+            onLeagueSelect={this.onLeagueSelect.bind(this)}
         />
         );
     }
@@ -48,12 +45,14 @@ export function mapStateToProps(state: TrackerState) {
     return {
         leagueId: state.nav.leagueId,
         mappedLeagueH2hStandings: state.data.mappedLeagueH2hStandings,
-        selectedTeam: state.nav.team
+        selectedTeam: state.nav.team,
+        entries: state.data.entries
     }
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
     setTeam: (teamId: number) => dispatch(setTeam(teamId)),
+    setLeague: (leagueId: number) => dispatch(setLeague(leagueId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FplAppBarContainer);

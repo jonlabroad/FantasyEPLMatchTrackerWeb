@@ -10,6 +10,9 @@ export type SET_TEAM = typeof SET_TEAM;
 export const SET_TEAMS = 'SET_TEAMS';
 export type SET_TEAMS = typeof SET_TEAMS;
 
+export const SET_LEAGUE = 'SET_LEAGUE';
+export type SET_LEAGUE = typeof SET_LEAGUE;
+
 export const RECEIVE_EVENT_STATUS = 'RECEIVE_EVENT_STATUS';
 export type RECEIVE_EVENT_STATUS = typeof RECEIVE_EVENT_STATUS;
 

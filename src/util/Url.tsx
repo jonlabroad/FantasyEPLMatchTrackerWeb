@@ -1,23 +1,24 @@
 export default class Url {
-    public static set(gameweek: number, team?: number, teams?: number[]) {
+    public static set(gameweek: number, team: number, league: number) {
         const url = new URLSearchParams();
         url.delete("gameweek");
         url.delete("team");
-        url.delete("team1");
-        url.delete("team2");
+        url.delete("league");
         url.set("gameweek", gameweek.toString());
-        if (teams && teams.length >= 2) {
-            url.set("team1", teams[0].toString());
-            url.set("team2", teams[1].toString());
-        }
-        else if (team) {
-            url.set("team", team.toString());
-        }
+        url.set("team", team.toString());
+        console.log(league);
+        url.set("league", league.toString());
         window.history.pushState("", "", "?" + url.toString());
     }
 
     public static getGameweek(): string | null {
         return new URLSearchParams(document.location.search).get("gameweek");
+    }
+
+    public static getLeague(): number | null {
+        const url = new URLSearchParams(document.location.search);
+        const leagueVal = url.get("league");
+        return leagueVal ? parseInt(leagueVal) : null;
     }
 
     public static getTeams(): number[] {

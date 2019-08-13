@@ -54,6 +54,18 @@ export function setTeam(team: number): SetTeam {
     }
 };
 
+export interface SetLeague {
+    type: constants.SET_LEAGUE;
+    league: number;
+}
+export type SetLeagueAction = SetLeague;
+export function setLeague(league: number): SetLeague {
+    return {
+        type: constants.SET_LEAGUE,
+        league: league
+    }
+};
+
 export interface ReceiveEventStatus {
     type: constants.RECEIVE_EVENT_STATUS;
     eventStatus: EventStatus;
@@ -205,6 +217,7 @@ TestAction |
 SetGameweek |
 SetTeams |
 SetTeam |
+SetLeague |
 ReceiveBootstrapStatic |
 ReceiveEntry |
 ReceiveFixtures |

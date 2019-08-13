@@ -1,5 +1,5 @@
 .match-header-container {
-    padding: 15px 0 15px 0;
+    padding: 15px 3px 15px 3px;
 }
 
 .header-score {
@@ -10,5 +10,25 @@
 }
 
 .header-score > * {
-    padding: 0 5px 0 2px;
+    padding: 0 5px 0 5px;
+}
+
+@media only screen and (max-width: 600px)
+{
+    .header-score {
+        width: 100%;
+    }
+
+    .team-selector-container {
+        max-width: 150px;
+    }
+
+    .league-selector-container {
+        max-width: 150px;
+    }
+
+    .league-selector {
+        width: 100%;
+    }
+
 }

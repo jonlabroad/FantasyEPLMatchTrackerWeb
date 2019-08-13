@@ -1,7 +1,7 @@
 import React from "react";
 import { TrackerState } from "../types";
 import { Dispatch } from "redux";
-import { RootAction, receiveEntry, receivePicks, receiveLive, receiveEvent, receiveBootstrapStatic, receiveFixtures, setTeams, setGameweek, receiveProcessedPlayers, receiveLeagueFixtures, setTeam, receiveStandingsH2h } from "../actions";
+import { RootAction, receiveEntry, receivePicks, receiveLive, receiveEvent, receiveBootstrapStatic, receiveFixtures, setTeams, setGameweek, receiveProcessedPlayers, receiveLeagueFixtures, setTeam, receiveStandingsH2h, setLeague } from "../actions";
 import { connect } from "react-redux";
 import MatchHeaderContainer from "./MatchHeaderContainer";
 import FplAppBar from "../components/FplAppBar";
@@ -33,6 +33,7 @@ export interface MatchTrackerContainerProps {
 
     setTeams: any
     setTeam: any
+    setLeague: any
     setGameweek: any
     receiveBootstrapStatic: any
     receiveEntry: any
@@ -101,12 +102,12 @@ export class MatchTrackerContainer extends React.Component<MatchTrackerContainer
     async componentDidMount() {
         const gameweek = parseInt(Url.getGameweek() || "1");
         let teamId = Url.getTeam() || 55385;
-        
+        const leagueId = Url.getLeague() || this.props.leagueId;
+
         this.props.setTeam(teamId);
+        this.props.setLeague(leagueId);
         this.props.setTeams([teamId, teamId]);
         this.props.receiveEntry(await new FplClient().entry(teamId));
-
-        const leagueId = this.props.leagueId;
 
         this.props.setGameweek(gameweek);
         this.requestInitialData(teamId, gameweek, leagueId).then(() => this.setState({retrievingData: false}));
@@ -128,8 +129,22 @@ export class MatchTrackerContainer extends React.Component<MatchTrackerContainer
                     this.props.receiveFixtures(fixtures);
                 }));
             }
+
+            // No league fixtures for this league?
+            console.log({leagueId: this.props.leagueId});
+            console.log({leagueFixtures: this.props.mappedLeagueFixtures});
+            console.log(this.props.teams);
+            if (this.props.mappedLeagueFixtures && !this.props.mappedLeagueFixtures[this.props.leagueId]) {
+                this.setState({retrievingData: true});
+                promises.push(fplClient.leagueFixtures(this.props.leagueId).then(fixtures => {
+                    this.props.receiveLeagueFixtures(this.props.leagueId, fixtures);
+                }));
+            }
+
+            // Get teams opponent from the league fixtures
             console.log([this.props.team, this.props.teams]);
-            if (!this.props.teams.includes(this.props.team) && this.props.mappedLeagueFixtures) {
+            if ((!this.props.teams.includes(this.props.team) || this.props.teams.length < 2) && 
+                (this.props.mappedLeagueFixtures && this.props.mappedLeagueFixtures[this.props.leagueId])) {
                 console.log("Setup teams");
                 this.setState({retrievingData: true});
                 promises.push(this.findOpponent(this.props.gameweek, this.props.team, this.props.mappedLeagueFixtures[this.props.leagueId]));
@@ -171,6 +186,7 @@ export function mapStateToProps(state: TrackerState) {
 
 const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
     setTeam: (team: number) => dispatch(setTeam(team)),
+    setLeague: (league: number) => dispatch(setLeague(league)),
     setTeams: (teams: number[]) => dispatch(setTeams(teams)),
     setGameweek: (gameweek: number) => dispatch(setGameweek(gameweek)),
     receiveBootstrapStatic: (bootstrapStatic: BootstrapStatic) => dispatch(receiveBootstrapStatic(bootstrapStatic)),

@@ -15,11 +15,23 @@ export interface League {
 }
 
 export interface StandingsEntry {
+    id: number;
+    division: number;
     entry: number;
     entry_name: string;
     joined_time: Date;
     player_first_name: string;
     player_last_name: string;
+    last_rank: number;
+    matches_lost: number;
+    matches_drawn: number;
+    matches_played: number;
+    matches_won: number;
+    player_name: string;
+    points_for: number;
+    rank: number;
+    rank_sort: number;
+    total: number;
 }
 
 export interface Standings {

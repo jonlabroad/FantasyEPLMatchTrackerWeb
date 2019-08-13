@@ -38,28 +38,24 @@ export default class MatchHeader extends React.Component<MatchHeaderProps> {
         }
 
         return (
-            <Grid className="match-header-container" container spacing={3}>
-                <Grid item xs={12}>
-                    <Grid container spacing={3} justify="center" alignItems="center">
-                        <Grid item xs={2}>
-                            <TeamHeaderElement entry={this.props.entry1}/>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <Box display="flex" flexDirection="column" alignContent="center" alignItems="center">
-                                <HeaderScore score1={score1} score2={score2}/>
-                                <Box display="flex" flexDirection="row" alignContent="center" alignItems="center">
-                                <IconButton id="decrementGameweek" size="small" onClick={this.props.decrementGameweekClick}><ArrowBackIos/></IconButton>
-                                <Typography variant="subtitle2">{`Gameweek ${this.props.gameweek}`}</Typography>
-                                <IconButton id="incrementGameweek" size="small" onClick={this.props.incrementGameweekClick}><ArrowForwardIos/></IconButton>
-                                </Box>
-                            </Box>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <TeamHeaderElement entry={this.props.entry2}/>
-                        </Grid>
-                    </Grid>
+            <Box className="match-header-container" display="flex" justifyContent="center" justifyItems="center" alignItems="center">
+                <Grid item xs={3} sm={2}>
+                    <TeamHeaderElement entry={this.props.entry1} />
                 </Grid>
-            </Grid>
+                <Grid item xs={6} sm={2}>
+                    <Box display="flex" flexDirection="column" alignContent="center" alignItems="center">
+                        <HeaderScore score1={score1} score2={score2} />
+                        <Box display="flex" flexDirection="row" alignContent="center" alignItems="center">
+                            <IconButton id="decrementGameweek" size="small" onClick={this.props.decrementGameweekClick}><ArrowBackIos /></IconButton>
+                            <Typography variant="subtitle2">{`Gameweek ${this.props.gameweek}`}</Typography>
+                            <IconButton id="incrementGameweek" size="small" onClick={this.props.incrementGameweekClick}><ArrowForwardIos /></IconButton>
+                        </Box>
+                    </Box>
+                </Grid>
+                <Grid item xs={3} sm={2}>
+                    <TeamHeaderElement entry={this.props.entry2} />
+                </Grid>
+            </Box>
         );
     }
 }

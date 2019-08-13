@@ -15,7 +15,7 @@ export default class TrackerTabs extends React.Component<TrackerTabsProps> {
     render() {
         return (
             <Grid container className="tracker-tabs-container" justify="center">
-                <Grid item xs={8}>
+                <Grid item xs={12} sm={8}>
                 <AppBar className="tracker-tabs-appbar" position="static" color="default">
                     <Tabs
                         value={this.props.currentTab}
