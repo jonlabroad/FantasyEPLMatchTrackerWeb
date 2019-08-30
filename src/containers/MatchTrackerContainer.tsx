@@ -1,6 +1,6 @@
 import React from "react";
 import { TrackerState } from "../types";
-import { Dispatch } from "redux";
+import { Dispatch, Action } from "redux";
 import { RootAction, receiveEntry, receivePicks, receiveLive, receiveEvent, receiveBootstrapStatic, receiveFixtures, setTeams, setGameweek, receiveProcessedPlayers, receiveLeagueFixtures, setTeam, receiveStandingsH2h, setLeague } from "../actions";
 import { connect } from "react-redux";
 import MatchHeaderContainer from "./MatchHeaderContainer";
@@ -184,7 +184,7 @@ export function mapStateToProps(state: TrackerState) {
     };
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
+const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => ({
     setTeam: (team: number) => dispatch(setTeam(team)),
     setLeague: (league: number) => dispatch(setLeague(league)),
     setTeams: (teams: number[]) => dispatch(setTeams(teams)),

@@ -1,12 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import { TrackerState } from "../types";
-import { RootAction, setGameweek } from "../actions";
-import { Dispatch } from "redux";
+import { RootAction, setGameweek, updateGameweekData } from "../actions";
+import { Dispatch, AnyAction } from "redux";
 import MatchHeader from "../components/MatchHeader";
 import PicksHelper from "../util/PicksHelper";
 import Live from "../data/fpl/Live";
 import LiveHelper from "../util/LiveHelper";
+import { ThunkDispatch } from "redux-thunk";
 
 export interface MatchHeaderContainerProps {
     teams: number[]
@@ -17,14 +18,20 @@ export interface MatchHeaderContainerProps {
     live?: {[key: string]: Live};
 
     setGameweek: any;
+    updateGameweekData: any;
 }
 
 export class MatchHeaderContainer extends React.Component<MatchHeaderContainerProps, {}> {
     incrementGameweek(event: any, increment: number){
-        this.props.setGameweek(this.props.gameweek + 1);    }
+        const newGameweek = this.props.gameweek + 1;
+        this.props.setGameweek(newGameweek);
+        this.props.updateGameweekData(newGameweek);
+    }
 
     decrementGameweek(event: any) {
-        this.props.setGameweek(this.props.gameweek - 1);
+        const newGameweek = this.props.gameweek - 1;
+        this.props.setGameweek(newGameweek);
+        this.props.updateGameweekData(newGameweek);
     }
     
     render() {
@@ -54,8 +61,9 @@ export function mapStateToProps(state: TrackerState) {
     };
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
-    setGameweek: (gameweek: number) => dispatch(setGameweek(gameweek))
+const mapDispatchToProps = (dispatch: any) => ({
+    setGameweek: (gameweek: number) => dispatch(setGameweek(gameweek)),
+    updateGameweekData: (gameweek: number, team: number) => dispatch(updateGameweekData(gameweek, team))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MatchHeaderContainer);

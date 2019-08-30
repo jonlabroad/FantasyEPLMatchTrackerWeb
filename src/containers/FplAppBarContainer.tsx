@@ -1,5 +1,5 @@
 import React from "react";
-import { Dispatch } from "redux";
+import { Dispatch, Action } from "redux";
 import { TrackerState } from "../types";
 import { RootAction, setTeam, setLeague } from "../actions";
 import { connect } from "react-redux";
@@ -50,7 +50,7 @@ export function mapStateToProps(state: TrackerState) {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
+const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => ({
     setTeam: (teamId: number) => dispatch(setTeam(teamId)),
     setLeague: (leagueId: number) => dispatch(setLeague(leagueId)),
 });

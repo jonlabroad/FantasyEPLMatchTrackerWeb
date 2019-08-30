@@ -7,6 +7,9 @@ import { ProcessedPlayers } from '../data/ProcessedPlayers';
 import EventStatus from '../data/fpl/EventStatus';
 import { LeagueFixtures } from '../data/LeagueFixtures';
 import LeaguesH2hStandings from '../data/fpl/LeaguesH2hStandings';
+import { Dispatch, AnyAction } from 'redux';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { TrackerState } from '../types';
 
 export interface Test {
     type: constants.TEST;
@@ -212,6 +215,18 @@ export function tabSelect(index: number): TabSelect {
     }
 };
 
+export interface UpdateGameweekData {
+    gameweek: number,
+    team: number
+}
+export type UpdateGameweekDataAction = UpdateGameweekData;
+export function updateGameweekData(gameweek: number, team: number): any {
+    return async (dispatch: ThunkDispatch<{}, {}, any>, getState: any) => {
+        const state = getState() as TrackerState;
+        console.log(`Get gameweek data for team ${state.nav.team} !!!`);
+    }
+}
+
 export type RootAction =
 TestAction |
 SetGameweek |
@@ -228,5 +243,6 @@ ReceiveProcessedPlayers |
 ReceiveLeagueFixtures |
 ReceiveStandingsH2h |
 TabSelect |
-ReceiveEventStatus
+ReceiveEventStatus |
+UpdateGameweekData
 ;

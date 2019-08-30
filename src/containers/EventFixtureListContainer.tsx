@@ -9,6 +9,7 @@ import LiveHelper from "../util/LiveHelper";
 import Live, { Lives } from "../data/fpl/Live";
 import Picks from "../data/fpl/Picks";
 import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
+import { Action } from "redux";
 
 export interface EventFixtureListContainerProps {
     gameweek: number
@@ -45,7 +46,7 @@ export function mapStateToProps(state: TrackerState) {
     };
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
+const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventFixtureListContainer);

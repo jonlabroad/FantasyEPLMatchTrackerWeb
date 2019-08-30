@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from "react";
-import { Dispatch } from "redux";
+import { Dispatch, Action } from "redux";
 import { TrackerState } from "../types";
 import { RootAction, tabSelect } from "../actions";
 import { connect } from "react-redux";
@@ -40,7 +40,7 @@ export function mapStateToProps(state: TrackerState) {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
+const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => ({
     tabChanged: (index: number) => dispatch(tabSelect(index)),
 });
 

@@ -1,16 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, combineReducers } from 'redux';
+import thunk, { ThunkMiddleware } from 'redux-thunk';
+import { createStore, combineReducers, applyMiddleware, AnyAction } from 'redux';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { initialState, trackerReducer } from './reducers';
 import { Provider } from 'react-redux';
 import { TrackerState } from './types';
+import { RootAction } from './actions';
 
 const store = createStore(
     trackerReducer,
     initialState as any,
+    applyMiddleware(thunk as ThunkMiddleware<any, AnyAction>)
 )
 
 ReactDOM.render(

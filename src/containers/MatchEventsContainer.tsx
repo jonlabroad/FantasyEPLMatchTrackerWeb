@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { MappedProcessedPlayers } from "../data/ProcessedPlayers";
 import Picks from "../data/fpl/Picks";
 import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
+import { Action } from "redux";
 
 export interface MatchEventContainerProps {
     gameweek: number
@@ -39,7 +40,7 @@ export function mapStateToProps(state: TrackerState) {
     };
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
+const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => ({
     //setTeams: (teams: number[]) => dispatch(setTeams(teams)),
 });
 

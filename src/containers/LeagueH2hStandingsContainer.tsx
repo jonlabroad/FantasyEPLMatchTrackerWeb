@@ -4,6 +4,7 @@ import { TrackerState } from "../types";
 import { RootAction } from "../actions";
 import { connect } from "react-redux";
 import LeagueH2hStandingsList from "../components/LeagueH2hStandingsList";
+import { Action } from "redux";
 
 export interface LeagueH2hStandingsContainerProps {
     
@@ -29,7 +30,7 @@ export function mapStateToProps(state: TrackerState) {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
+const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => ({
 
 });
 

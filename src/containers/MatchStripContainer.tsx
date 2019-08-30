@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from "react";
-import { Dispatch } from "redux";
+import { Dispatch, Action } from "redux";
 import { TrackerState } from "../types";
 import { RootAction, tabSelect, receiveLeagueFixtures, receivePicks, receiveLive } from "../actions";
 import { connect } from "react-redux";
@@ -64,7 +64,7 @@ export function mapStateToProps(state: TrackerState) {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
+const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => ({
     receiveLeagueFixtures: (leagueId: number, fixtures: LeagueFixtures) => dispatch(receiveLeagueFixtures(leagueId, fixtures)),
     receivePicks: (entryId: number, gameweek: number, picks: Picks) => dispatch(receivePicks(entryId, gameweek, picks)),
     receiveLive: (gameweek: number, live: Live) => dispatch(receiveLive(gameweek, live)),
