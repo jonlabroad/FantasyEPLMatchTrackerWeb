@@ -10,6 +10,8 @@ import LeaguesH2hStandings from '../data/fpl/LeaguesH2hStandings';
 import { Dispatch, AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { TrackerState } from '../types';
+import FplClient from '../services/fpl/FplClient';
+import PicksHelper from '../util/PicksHelper';
 
 export interface Test {
     type: constants.TEST;
@@ -220,10 +222,76 @@ export interface UpdateGameweekData {
     team: number
 }
 export type UpdateGameweekDataAction = UpdateGameweekData;
-export function updateGameweekData(gameweek: number, team: number): any {
+export function updateGameweekData(gameweek?: number, team?: number, leagueId?: number): any {
     return async (dispatch: ThunkDispatch<{}, {}, any>, getState: any) => {
         const state = getState() as TrackerState;
-        console.log(`Get gameweek data for team ${state.nav.team} !!!`);
+
+        gameweek = gameweek ? gameweek : state.nav.gameweek;
+        team = team ? team : state.nav.team;
+        leagueId = leagueId ? leagueId : state.nav.leagueId;
+
+        const fplClient = new FplClient();
+        if (!state.data.bootstrapStatic) {
+            fplClient.bootstrapStatic().then(bs => {
+                dispatch(receiveBootstrapStatic(bs));
+            });
+        }
+
+        if (!state.data.live || !state.data.live[gameweek]) {
+            fplClient.live(gameweek).then(live => {
+                dispatch(receiveLive(gameweek || 0, live));
+            });
+        }
+
+        var fixtures = state.data.fixtures[gameweek];
+        if (!fixtures) {
+            fplClient.fixtures().then(allFixtures => {
+                fixtures = allFixtures[gameweek || 0];
+                dispatch(receiveFixtures(allFixtures));    
+            });
+        }
+
+        // No league fixtures for this league?
+        console.log({mappedLeagueFixtures: state.data.mappedLeagueFixtures});
+        var leagueFixtures = state.data.mappedLeagueFixtures ? state.data.mappedLeagueFixtures[leagueId] : undefined;
+        console.log({test1: leagueFixtures});
+        if (!leagueFixtures) {
+            console.log("Get league fixtures");
+            leagueFixtures = await fplClient.leagueFixtures(leagueId);
+            dispatch(receiveLeagueFixtures(leagueId, leagueFixtures));
+        }
+        
+        console.log({leagueFixtures: leagueFixtures});
+        if (leagueFixtures) {
+            // Get teams opponent from the league fixtures
+            var teams = state.nav.teams;
+            var otherTeam: number | undefined = team;
+            var team1: number = team;
+            var team2: number = team;
+            const fixture = leagueFixtures[gameweek].find(fixture => fixture.entry_1_entry === team || fixture.entry_2_entry === team);
+            if (fixture) {
+                otherTeam = fixture.entry_1_entry === team ? fixture.entry_2_entry : fixture.entry_1_entry;
+                team1 = fixture.entry_1_entry === team ? team : otherTeam || team;
+                team2 = fixture.entry_2_entry === team ? team : otherTeam || team;
+            }
+            teams = [team1, team2];
+            console.log({teams: teams});
+            dispatch(setTeams(teams));
+            for (var teamId of teams) {
+                if (!state.data.entries[teamId]) {
+                    fplClient.entry(teamId).then(entry => {
+                        dispatch(receiveEntry(entry));
+                    });
+                }
+                if (!PicksHelper.getPicks(teamId, gameweek, state.data.picks)) {
+                    const thisTeamId = teamId;
+                    fplClient.picks(teamId, gameweek).then(picks => {
+                        dispatch(receivePicks(thisTeamId, gameweek || 0, picks));
+                    });
+                    
+                }
+            }
+        }
     }
 }
 

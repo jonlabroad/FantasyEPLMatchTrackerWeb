@@ -63,7 +63,7 @@ export function mapStateToProps(state: TrackerState) {
 
 const mapDispatchToProps = (dispatch: any) => ({
     setGameweek: (gameweek: number) => dispatch(setGameweek(gameweek)),
-    updateGameweekData: (gameweek: number, team: number) => dispatch(updateGameweekData(gameweek, team))
+    updateGameweekData: (gameweek: number) => dispatch(updateGameweekData(gameweek))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MatchHeaderContainer);

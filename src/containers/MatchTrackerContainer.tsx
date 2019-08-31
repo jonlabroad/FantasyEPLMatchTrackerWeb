@@ -1,7 +1,7 @@
 import React from "react";
 import { TrackerState } from "../types";
 import { Dispatch, Action } from "redux";
-import { RootAction, receiveEntry, receivePicks, receiveLive, receiveEvent, receiveBootstrapStatic, receiveFixtures, setTeams, setGameweek, receiveProcessedPlayers, receiveLeagueFixtures, setTeam, receiveStandingsH2h, setLeague } from "../actions";
+import { RootAction, receiveEntry, receivePicks, receiveLive, receiveEvent, receiveBootstrapStatic, receiveFixtures, setTeams, setGameweek, receiveProcessedPlayers, receiveLeagueFixtures, setTeam, receiveStandingsH2h, setLeague, updateGameweekData } from "../actions";
 import { connect } from "react-redux";
 import MatchHeaderContainer from "./MatchHeaderContainer";
 import FplAppBar from "../components/FplAppBar";
@@ -44,6 +44,7 @@ export interface MatchTrackerContainerProps {
     receiveProcessedPlayers: any
     receiveLeagueFixtures: any
     receiveLeaguesH2hStandings: any
+    updateGameweekData: any
 }
 
 export interface MatchTrackerContainerState {
@@ -110,11 +111,12 @@ export class MatchTrackerContainer extends React.Component<MatchTrackerContainer
         this.props.receiveEntry(await new FplClient().entry(teamId));
 
         this.props.setGameweek(gameweek);
-        this.requestInitialData(teamId, gameweek, leagueId).then(() => this.setState({retrievingData: false}));
+        this.props.updateGameweekData(gameweek, teamId, leagueId);
+        //this.requestInitialData(teamId, gameweek, leagueId).then(() => this.setState({retrievingData: false}));
     }
     
     async componentDidUpdate() {
-        this.stateUpdates();
+        //this.stateUpdates();
     }
 
     async stateUpdates() {
@@ -197,7 +199,8 @@ const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => ({
     receiveEvent: (gameweek: number, event: Event) => dispatch(receiveEvent(gameweek, event)),
     receiveProcessedPlayers: (gameweek: number, processedPlayers: ProcessedPlayers) => dispatch(receiveProcessedPlayers(gameweek, processedPlayers)),
     receiveLeagueFixtures: (leagueId: number, leagueFixtures: LeagueFixtures) => dispatch(receiveLeagueFixtures(leagueId, leagueFixtures)),
-    receiveLeaguesH2hStandings: (leagueId: number, standings: LeaguesH2hStandings) => dispatch(receiveStandingsH2h(leagueId, standings))
+    receiveLeaguesH2hStandings: (leagueId: number, standings: LeaguesH2hStandings) => dispatch(receiveStandingsH2h(leagueId, standings)),
+    updateGameweekData: (gameweek: number, team: number, leagueId: number) => dispatch(updateGameweekData(gameweek, team, leagueId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MatchTrackerContainer);

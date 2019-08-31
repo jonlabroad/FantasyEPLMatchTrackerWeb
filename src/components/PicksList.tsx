@@ -77,6 +77,8 @@ export default class PicksList extends React.Component<PicksListProps> {
             return null;
         }
 
+        console.log({picks: this.props.picks});
+
         return (
         <div className="pickslist-container">
             <Table size="small">
