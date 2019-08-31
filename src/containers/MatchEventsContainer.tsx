@@ -41,7 +41,7 @@ export function mapStateToProps(state: TrackerState) {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => ({
-    //setTeams: (teams: number[]) => dispatch(setTeams(teams)),
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MatchEventsContainer);

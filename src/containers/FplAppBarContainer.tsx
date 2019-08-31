@@ -1,7 +1,7 @@
 import React from "react";
 import { Dispatch, Action } from "redux";
 import { TrackerState } from "../types";
-import { RootAction, setTeam, setLeague } from "../actions";
+import { RootAction, setTeam, setLeague, updateGameweekData } from "../actions";
 import { connect } from "react-redux";
 import { MappedLeaguesH2hStandings } from "../data/fpl/LeaguesH2hStandings";
 import FplAppBar from "../components/FplAppBar";
@@ -15,15 +15,20 @@ export interface FplAppBarContainerProps {
     mappedLeagueH2hStandings?: MappedLeaguesH2hStandings
     setTeam: any
     setLeague: any
+    updateGameweekData: any
 }
 
 export class FplAppBarContainer extends React.Component<FplAppBarContainerProps> {
     onTeamSelect(event: any) {
-        this.props.setTeam(event.target.value);
+        const team = event.target.value;
+        this.props.setTeam(team);
+        this.props.updateGameweekData(undefined, team, undefined);
     }
 
     onLeagueSelect(event: any) {
-        this.props.setLeague(event.target.value);
+        const league = event.target.value;
+        this.props.setLeague(league);
+        this.props.updateGameweekData(undefined, undefined, league);
     }
 
     render() {
@@ -53,6 +58,7 @@ export function mapStateToProps(state: TrackerState) {
 const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => ({
     setTeam: (teamId: number) => dispatch(setTeam(teamId)),
     setLeague: (leagueId: number) => dispatch(setLeague(leagueId)),
+    updateGameweekData: (gameweek: number, team: number, league: number) => dispatch(updateGameweekData(gameweek, team, league))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FplAppBarContainer);

@@ -32,9 +32,13 @@ export default class MatchEvents extends React.Component<MatchEventsProps> {
     
     renderEvents(): JSX.Element[] {
         if (!this.props.processedPlayers || !this.props.processedPlayers.players || !this.props.picks || !this.props.teams) {
+            console.log("Not enough info");
+            console.log({props: this.props});
             return [];
         }
         
+        console.log(this.props.processedPlayers);
+
         const elements: JSX.Element[] =  [];
         const events: MatchEvent[] = [];
         for (let elementIdStr of Object.keys(this.props.processedPlayers.players)) {

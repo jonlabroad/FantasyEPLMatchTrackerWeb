@@ -231,37 +231,49 @@ export function updateGameweekData(gameweek?: number, team?: number, leagueId?: 
         leagueId = leagueId ? leagueId : state.nav.leagueId;
 
         const fplClient = new FplClient();
+
+        if (leagueId) {
+            const theLeagueId = leagueId;
+            if (!state.data.mappedLeagueH2hStandings || !state.data.mappedLeagueH2hStandings[leagueId]) {
+                fplClient.leaguesH2hStandings(leagueId).then(standings => 
+                    dispatch(receiveStandingsH2h(theLeagueId, standings)));
+            }
+        }
+
         if (!state.data.bootstrapStatic) {
             fplClient.bootstrapStatic().then(bs => {
                 dispatch(receiveBootstrapStatic(bs));
             });
         }
 
-        if (!state.data.live || !state.data.live[gameweek]) {
-            fplClient.live(gameweek).then(live => {
-                dispatch(receiveLive(gameweek || 0, live));
-            });
-        }
+        if (gameweek) {
+            if (!state.data.live || !state.data.live[gameweek]) {
+                fplClient.live(gameweek).then(live => {
+                    dispatch(receiveLive(gameweek || 0, live));
+                });
+            }
 
-        var fixtures = state.data.fixtures[gameweek];
-        if (!fixtures) {
-            fplClient.fixtures().then(allFixtures => {
-                fixtures = allFixtures[gameweek || 0];
-                dispatch(receiveFixtures(allFixtures));    
-            });
+            var fixtures = state.data.fixtures[gameweek];
+            if (!fixtures) {
+                fplClient.fixtures().then(allFixtures => {
+                    fixtures = allFixtures[gameweek || 0];
+                    dispatch(receiveFixtures(allFixtures));    
+                });
+            }
+
+            if (!state.data.processedPlayers || !state.data.processedPlayers[gameweek]) {
+                fplClient.processedPlayers(gameweek).then(processedPlayers => 
+                    dispatch(receiveProcessedPlayers(gameweek || 0, processedPlayers)));
+            }
         }
 
         // No league fixtures for this league?
-        console.log({mappedLeagueFixtures: state.data.mappedLeagueFixtures});
         var leagueFixtures = state.data.mappedLeagueFixtures ? state.data.mappedLeagueFixtures[leagueId] : undefined;
-        console.log({test1: leagueFixtures});
         if (!leagueFixtures) {
-            console.log("Get league fixtures");
             leagueFixtures = await fplClient.leagueFixtures(leagueId);
             dispatch(receiveLeagueFixtures(leagueId, leagueFixtures));
         }
         
-        console.log({leagueFixtures: leagueFixtures});
         if (leagueFixtures) {
             // Get teams opponent from the league fixtures
             var teams = state.nav.teams;
@@ -275,7 +287,6 @@ export function updateGameweekData(gameweek?: number, team?: number, leagueId?: 
                 team2 = fixture.entry_2_entry === team ? team : otherTeam || team;
             }
             teams = [team1, team2];
-            console.log({teams: teams});
             dispatch(setTeams(teams));
             for (var teamId of teams) {
                 if (!state.data.entries[teamId]) {

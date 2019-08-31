@@ -74,6 +74,7 @@ export const trackerReducer: Reducer<TrackerState> = (state = initialState, acti
         case RECEIVE_PROCESSED_PLAYERS:
             {
                 let newState = { ...state, data: { ...state.data, processedPlayers: { ...state.data.processedPlayers, ...{[action.gameweek]: action.processedPlayers} }}};
+                console.log({processedState: newState});
                 return newState;
             }
         case RECEIVE_LEAGUE_FIXTURES:
