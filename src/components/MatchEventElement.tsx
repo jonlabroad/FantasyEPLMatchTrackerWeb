@@ -40,11 +40,11 @@ export default class MatchEventElement extends React.Component<MatchEventElement
             <Box display="flex" flexDirection="row" className={`match-event ${isImportant ? "important-event" : ""}`}>
                 <MatchEventTypeIcon eventType={event.typeString} />
                 <MatchEventDate dateString={event.dateTime} isImportant={isImportant}/>
+                <MatchEventPhoto element={BootstrapHelper.getElement(event.footballerId, this.props.bootstrapStatic)}/>
                 <Box display="flex" flexDirection="column">
                     <Typography variant="subtitle1" className="match-event-type-text">{`${MatchEventUtil.matchEventToString(event.type)}${isNeg ? " removed" : ""}${isImportant ? "!" : ""}`}</Typography>
                     <Typography variant="body1" className="match-event-name-text">{event.footballerName}</Typography>
                 </Box>
-                <MatchEventPhoto element={BootstrapHelper.getElement(event.footballerId, this.props.bootstrapStatic)}/>
             </Box>
         );
     }

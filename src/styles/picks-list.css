@@ -33,6 +33,7 @@
 
 .club-icon-container {
     display: flex;
+    justify-content: center;
 
     padding: 3px 0 3px 0;
 }

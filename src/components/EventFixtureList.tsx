@@ -36,7 +36,7 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
         const team = bs.teams.find(t => t.id === teamId);
         if (team) {
             return (
-            <Box className={`club-name-logo club-name-logo-${homeAway}`} display="flex" flexDirection={direction} justifyContent="space-around">
+            <Box className={`club-name-logo club-name-logo-${homeAway}`} display="flex" flexDirection={direction} flexWrap={'wrap'} justifyContent="space-around">
                 <Typography className={`club-name ${homeAway}`} variant="button">{team.short_name}</Typography>
                 <ClubIcon teamCode={team.code} size="25px"/>
             </Box>

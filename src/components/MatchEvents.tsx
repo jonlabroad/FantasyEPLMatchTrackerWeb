@@ -32,13 +32,9 @@ export default class MatchEvents extends React.Component<MatchEventsProps> {
     
     renderEvents(): JSX.Element[] {
         if (!this.props.processedPlayers || !this.props.processedPlayers.players || !this.props.picks || !this.props.teams) {
-            console.log("Not enough info");
-            console.log({props: this.props});
             return [];
         }
         
-        console.log(this.props.processedPlayers);
-
         const elements: JSX.Element[] =  [];
         const events: MatchEvent[] = [];
         for (let elementIdStr of Object.keys(this.props.processedPlayers.players)) {
@@ -62,10 +58,14 @@ export default class MatchEvents extends React.Component<MatchEventsProps> {
     }
 
     render() {
+        const eventElements = this.renderEvents();
+        const header = eventElements.length > 0 ? 
+            <Typography className="fixture-list-header" variant="subtitle1">Match Commentary</Typography> :
+            null;
 
         return (
         <Box className="match-events" display="flex" flexDirection="column" justifyItems="center" justifyContent="center">
-            <Typography variant="h6" className="match-events-header">Match Commentary</Typography>
+            {header}
             {this.renderEvents()}
         </Box>
         );

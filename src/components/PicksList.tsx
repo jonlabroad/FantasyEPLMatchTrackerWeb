@@ -11,11 +11,16 @@ import ClubIcon from "./ClubIcon";
 
 import "../styles/picks-list.css";
 import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
+import { Fixtures } from "../data/fpl/Fixtures";
+import FixturesHelper from "../util/FixturesHelper";
+import Element from "../data/fpl/Element";
+import ElementFixtureStatusIcon from "./ElementFixtureStatusIcon";
 
 export interface PicksListProps {
     picks: Picks
     live?: Live
     bootstrapStatic?: BootstrapStatic
+    fixtures?: Fixtures
 }
 
 const noIconPerEventTypes = [
@@ -42,6 +47,22 @@ export default class PicksList extends React.Component<PicksListProps> {
         return "";
     }
 
+    renderFixtureStatus(element?: Element, fixtures?: Fixtures): JSX.Element[] {
+        if (!element) {
+            return [];
+        }
+
+        const fixtureStatuses = FixturesHelper.getElementFixtureStatus(element.id, this.props.bootstrapStatic, fixtures);
+        if (!fixtureStatuses) {
+            return [];
+        }
+        return fixtureStatuses.map(fixtureStatus => {
+            return <ElementFixtureStatusIcon
+                status={fixtureStatus}
+            />
+        });
+    }
+
     renderLive(pick: Pick) {
         const liveElement = LiveHelper.getElement(pick.element, this.props.live);
         if (liveElement) {
@@ -54,11 +75,12 @@ export default class PicksList extends React.Component<PicksListProps> {
         const element = BootstrapHelper.getElement(pick.element, this.props.bootstrapStatic);
         return (
             <TableRow key={pick.element} className={starter ? "pickslist-starter" : "pickslist-sub"}>
-                <TableCell padding="none">{element ? ScoreCalculator.calculateElementScore(pick, this.props.live, !starter): 0}</TableCell>
-                <TableCell padding="none" className="hidden-xs club-icon-cell"><ClubIcon teamCode={this.getTeamCode(pick)}/></TableCell>
-                <TableCell padding="none" className="club-captain-cell">{this.getCaptain(pick)}</TableCell>
+                <TableCell padding="none" align="center">{element ? ScoreCalculator.calculateElementScore(pick, this.props.live, !starter): 0}</TableCell>
+                <TableCell padding="none" align="center" className="hidden-xs"><ClubIcon teamCode={this.getTeamCode(pick)}/></TableCell>
+                <TableCell padding="none" align="center">{this.renderFixtureStatus(element, this.props.fixtures)}</TableCell>
+                <TableCell padding="none" align="center" className="club-captain-cell">{this.getCaptain(pick)}</TableCell>
                 <TableCell padding="none">{element ? element.web_name : pick.element}</TableCell>
-                <TableCell padding="none">{element ? BootstrapHelper.getPosition(element.element_type) : pick.position}</TableCell>
+                <TableCell padding="none" align="center">{element ? BootstrapHelper.getPosition(element.element_type) : pick.position}</TableCell>
                 <TableCell padding="none">{this.renderLive(pick)}</TableCell>
             </TableRow>
         );
@@ -77,25 +99,24 @@ export default class PicksList extends React.Component<PicksListProps> {
             return null;
         }
 
-        console.log({picks: this.props.picks});
-
         return (
         <div className="pickslist-container">
             <Table size="small">
                 <TableHead className="pickslist-header">
                     <TableRow>
-                        <TableCell padding="none">Pts</TableCell>
-                        <TableCell padding="none">Club</TableCell>
-                        <TableCell padding="none">Cpt</TableCell>
+                        <TableCell padding="none" align="center">Pts</TableCell>
+                        <TableCell padding="none" align="center">Club</TableCell>
+                        <TableCell padding="none" align="center">Fixtures</TableCell>
+                        <TableCell padding="none" align="center">Cpt</TableCell>
                         <TableCell padding="none">Name</TableCell>
-                        <TableCell padding="none">Pos</TableCell>
+                        <TableCell padding="none" align="center">Pos</TableCell>
                         <TableCell padding="none">Activity</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    <TableRow><TableCell padding="none" colSpan={6}><Typography className="starters-header" variant="subtitle1">Starting 11</Typography></TableCell></TableRow>
+                    <TableRow><TableCell padding="none" colSpan={7}><Typography className="starters-header" variant="subtitle1">Starting 11</Typography></TableCell></TableRow>
                     {this.renderPicks(0, 11, true)}
-                    <TableRow><TableCell padding="none" colSpan={6}><Typography className="subs-header" variant="subtitle1">Subs</Typography></TableCell></TableRow>
+                    <TableRow><TableCell padding="none" colSpan={7}><Typography className="subs-header" variant="subtitle1">Subs</Typography></TableCell></TableRow>
                     {this.renderPicks(11, 15, false)}
                 </TableBody>
             </Table>

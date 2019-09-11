@@ -1,5 +1,13 @@
+/*
+.match-event * {
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+}
+*/
+
 .match-event {
-    height: 75px;
+    height: 80px;
 
     padding-top: 10px;
     padding-bottom: 10px;
@@ -32,10 +40,11 @@
 
 .match-event-photo img {
     height: 80px;
+    padding-right: 10px;
 }
 
 .match-event-type-text {
-    width: 150px;
+    /*width: 150px;*/
 
     font-size: 18px !important;
 }
