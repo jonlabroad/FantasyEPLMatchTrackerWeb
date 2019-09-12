@@ -47,20 +47,28 @@ export default class PicksList extends React.Component<PicksListProps> {
         return "";
     }
 
-    renderFixtureStatus(element?: Element, fixtures?: Fixtures): JSX.Element[] {
+    renderFixtureStatus(element?: Element, fixtures?: Fixtures): JSX.Element | null {
         if (!element) {
-            return [];
+            return null;
         }
 
+        const elementFixtures = FixturesHelper.getElementFixtures(element.id, this.props.bootstrapStatic, fixtures);
         const fixtureStatuses = FixturesHelper.getElementFixtureStatus(element.id, this.props.bootstrapStatic, fixtures);
-        if (!fixtureStatuses) {
-            return [];
+        if (!elementFixtures || !fixtureStatuses) {
+            return null;
         }
-        return fixtureStatuses.map(fixtureStatus => {
-            return <ElementFixtureStatusIcon
-                status={fixtureStatus}
-            />
-        });
+        return (
+            <Box display="flex" alignContent="center" alignItems="center" justifyContent="center" justifyItems="center" className="element-fixture-status-container">
+                {fixtureStatuses.map((fixtureStatus, i) => {
+                    return <ElementFixtureStatusIcon
+                        element={element}
+                        status={fixtureStatus}
+                        fixture={elementFixtures[i]}
+                        bootstrap={this.props.bootstrapStatic}
+                    />
+                })}
+            </Box>
+        );
     }
 
     renderLive(pick: Pick) {
@@ -106,7 +114,7 @@ export default class PicksList extends React.Component<PicksListProps> {
                     <TableRow>
                         <TableCell padding="none" align="center">Pts</TableCell>
                         <TableCell padding="none" align="center">Club</TableCell>
-                        <TableCell padding="none" align="center">Fixtures</TableCell>
+                        <TableCell padding="none" align="center">Status</TableCell>
                         <TableCell padding="none" align="center">Cpt</TableCell>
                         <TableCell padding="none">Name</TableCell>
                         <TableCell padding="none" align="center">Pos</TableCell>

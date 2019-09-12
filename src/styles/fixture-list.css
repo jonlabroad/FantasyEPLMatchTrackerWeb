@@ -33,7 +33,10 @@
     margin-left: 5px;
     margin-right: 5px;
     min-width: 65px;
-    max-height: 27px;
+}
+
+.fixture-time-box > * {
+    line-height: 20px !important;
 }
 
 .fixture-list-element-score {

@@ -11,6 +11,9 @@ import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 import "../styles/match-header.css";
 import Entry from "../data/fpl/Entry";
 import LeaguesH2hStandings from "../data/fpl/LeaguesH2hStandings";
+import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
+import BootstrapHelper from "../util/BootstrapHelper";
+import moment from "moment";
 
 export interface MatchHeaderProps {
     entry1: Entry;
@@ -20,6 +23,8 @@ export interface MatchHeaderProps {
     live?: Live;
     gameweek: number;
     standings?: LeaguesH2hStandings;
+    event?: Event
+    bootstrap?: BootstrapStatic;
 
     incrementGameweekClick: any;
     decrementGameweekClick: any;
@@ -27,7 +32,7 @@ export interface MatchHeaderProps {
 
 export default class MatchHeader extends React.Component<MatchHeaderProps> {
     render() {
-        const { entry1, entry2, picks1, picks2, live, standings } = this.props;
+        const { entry1, entry2, picks1, picks2, live, standings, bootstrap } = this.props;
 
         let score1 = new Score();
         let score2 = new Score();
@@ -48,6 +53,17 @@ export default class MatchHeader extends React.Component<MatchHeaderProps> {
             standing2 = standings.standings.results.find(e => e.entry === entry2.id);
         }
 
+        let deadlineTime = "";
+        if (bootstrap) {
+            const event = bootstrap.events.find(ev => ev.id === this.props.gameweek);
+            if (event) {
+                if (!event.is_current && !event.finished) {
+                    const deadlineDate = moment(event.deadline_time);
+                    deadlineTime = `Deadline: ${deadlineDate.format('ddd M/DD k:mm')}`;
+                }
+            }
+        }
+
         return (
             <Box className="match-header-container" display="flex" justifyContent="center" justifyItems="center" alignItems="center">
                 <Grid item xs={3} sm={2}>
@@ -61,6 +77,7 @@ export default class MatchHeader extends React.Component<MatchHeaderProps> {
                             <Typography variant="subtitle2">{`Gameweek ${this.props.gameweek}`}</Typography>
                             <IconButton id="incrementGameweek" size="small" onClick={this.props.incrementGameweekClick}><ArrowForwardIos /></IconButton>
                         </Box>
+                        <Typography variant="h6">{`${deadlineTime}`}</Typography>
                     </Box>
                 </Grid>
                 <Grid item xs={3} sm={2}>

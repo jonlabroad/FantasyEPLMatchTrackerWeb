@@ -9,6 +9,7 @@ import Live from "../data/fpl/Live";
 import LiveHelper from "../util/LiveHelper";
 import { ThunkDispatch } from "redux-thunk";
 import { MappedLeaguesH2hStandings } from "../data/fpl/LeaguesH2hStandings";
+import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 
 export interface MatchHeaderContainerProps {
     teams: number[]
@@ -19,6 +20,7 @@ export interface MatchHeaderContainerProps {
     live?: {[key: string]: Live};
     leagueId: number;
     mappedStandings?: MappedLeaguesH2hStandings;
+    bootstrap?: BootstrapStatic;
 
     setGameweek: any;
     updateGameweekData: any;
@@ -47,6 +49,7 @@ export class MatchHeaderContainer extends React.Component<MatchHeaderContainerPr
             picks2={PicksHelper.getPicks(this.props.teams[1], this.props.gameweek, this.props.picks)}
             live={LiveHelper.getLive(this.props.gameweek, this.props.live)}
             standings={this.props.mappedStandings ? this.props.mappedStandings[this.props.leagueId]: undefined}
+            bootstrap={this.props.bootstrap}
 
             incrementGameweekClick={this.incrementGameweek.bind(this)}
             decrementGameweekClick={this.decrementGameweek.bind(this)}
@@ -63,6 +66,7 @@ export function mapStateToProps(state: TrackerState) {
       picks: state.data.picks,
       live: state.data.live,
       leagueId: state.nav.leagueId,
+      bootstrap: state.data.bootstrapStatic,
       mappedStandings: state.data.mappedLeagueH2hStandings
     };
 }

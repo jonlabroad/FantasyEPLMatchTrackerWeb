@@ -26,7 +26,8 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
     renderTimeBox(fixture: Fixture) {
         const kickoffDate = moment(fixture.kickoff_time);
         return (
-        <Box className="fixture-time-box" display="flex" alignContent="center" alignItems="center" justifyContent="center">
+        <Box className="fixture-time-box" display="flex" flexDirection="column" alignContent="center" alignItems="center" justifyContent="center">
+            <Typography variant="overline">{kickoffDate.format("ddd M/DD")}</Typography>
             <Typography variant="overline">{kickoffDate.format("hh:mm a")}</Typography>
         </Box>
         );
