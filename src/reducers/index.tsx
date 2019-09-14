@@ -40,9 +40,8 @@ export const trackerReducer: Reducer<TrackerState> = (state = initialState, acti
             Url.set(state.nav.gameweek, state.nav.team, action.league, state.nav.differentialsOnly);
             return { ...state, nav: { ...state.nav, teams: [state.nav.team], leagueId: action.league }};
         case SET_DIFFERENTIALS:
-            console.log({diff: action});
-                Url.set(state.nav.gameweek, state.nav.team, state.nav.leagueId, action.differentials);
-                return { ...state, nav: { ...state.nav, differentialsOnly: action.differentials }};
+            Url.set(state.nav.gameweek, state.nav.team, state.nav.leagueId, action.differentials);
+            return { ...state, nav: { ...state.nav, differentialsOnly: action.differentials }};
         case SET_TEAMS:
             return { ...state, nav: { ...state.nav, teams: action.teams }};
         case RECEIVE_BOOTSTRAPSTATIC:

@@ -31,7 +31,7 @@ export default class ElementFixtureStatusIcon extends React.Component<ElementFix
                 iconClass = 'fixture-status-finished';
                 break;
         }
-        console.log(iconClass);
+
         return (
             <Tooltip title={FixturesHelper.getElementFixtureText(this.props.element, this.props.fixture, this.props.bootstrap)}>
                 <div className={`element-fixture-status ${iconClass}`}></div>

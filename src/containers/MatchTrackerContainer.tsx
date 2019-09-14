@@ -89,7 +89,7 @@ export class MatchTrackerContainer extends React.Component<MatchTrackerContainer
 }
 
 export function mapStateToProps(state: TrackerState) {
-    console.log({state: state});
+
     return {
         gameweek: state.nav.gameweek,
         team: state.nav.team,

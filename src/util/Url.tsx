@@ -7,7 +7,6 @@ export default class Url {
         url.delete("diff");
         url.set("gameweek", gameweek.toString());
         url.set("team", team.toString());
-        console.log(league);
         url.set("league", league.toString());
         url.set("diff", differentials.toString());
 
@@ -45,7 +44,7 @@ export default class Url {
     public static getDifferentials(): boolean | undefined {
         const url = new URLSearchParams(document.location.search);
         const diff = url.get("diff");
-        if (diff) return (!!diff);
+        if (diff) return (diff.toLowerCase() === 'true');
         return undefined;
     }
 
