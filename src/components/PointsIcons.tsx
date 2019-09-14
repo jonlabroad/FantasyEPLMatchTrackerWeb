@@ -36,7 +36,7 @@ export default class PointsIcons extends React.Component<PointsIconsProps> {
         }
         else if (!noIconPerEventTypes.includes(explain.identifier)) {
             for (let i = 0; i < explain.value; i++) {
-                icons.push(<PointsIcon explainType={explain.identifier}/>);
+                icons.push(<PointsIcon key={`${explain.identifier}${i}`} explainType={explain.identifier}/>);
             }
         }
         return icons;

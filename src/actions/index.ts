@@ -12,6 +12,7 @@ import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { TrackerState } from '../types';
 import FplClient from '../services/fpl/FplClient';
 import PicksHelper from '../util/PicksHelper';
+import LeagueFixturesHelper from '../util/LeagueFixturesHelper';
 
 export interface Test {
     type: constants.TEST;
@@ -255,7 +256,30 @@ export function updateGameweekData(gameweek?: number, team?: number, leagueId?: 
         if (!state.data.bootstrapStatic) {
             fplClient.bootstrapStatic().then(bs => {
                 dispatch(receiveBootstrapStatic(bs));
+                dispatch(updateGameweekData(gameweek, team, leagueId));
             });
+        }
+        else if (gameweek) {
+            // Check if the current event is a future event
+            const currEvent = state.data.bootstrapStatic.events.find(ev => ev.is_current);
+            if (currEvent && currEvent.id !== gameweek && !currEvent.finished) {
+                const lastEvent = state.data.bootstrapStatic.events.find(ev => currEvent.is_previous);
+                if (lastEvent) {
+                    const teams = LeagueFixturesHelper.getTeams(team, lastEvent.id, leagueFixtures);
+                    for (let teamId of teams) {
+                        // Get the current event's pick lists
+                        if (!PicksHelper.getPicks(teamId, lastEvent.id, state.data.picks)) {
+                            const thisTeamId = teamId;
+                            fplClient.picks(teamId, lastEvent.id).then(picks => {
+                                if (picks) {
+                                    dispatch(receivePicks(thisTeamId, lastEvent.id || 0, picks));
+                                    dispatch(receivePicks(thisTeamId, gameweek || 0, picks));
+                                }
+                            });
+                        }
+                    }
+                }
+            }
         }
 
         if (gameweek) {
@@ -284,21 +308,22 @@ export function updateGameweekData(gameweek?: number, team?: number, leagueId?: 
         if (!leagueFixtures) {
             leagueFixtures = await fplClient.leagueFixtures(leagueId);
             dispatch(receiveLeagueFixtures(leagueId, leagueFixtures));
+            if (leagueFixtures) {
+                dispatch(updateGameweekData(gameweek, team, leagueId));
+            }
         }
         
-        if (leagueFixtures) {
+        if (leagueFixtures && gameweek && state.data.bootstrapStatic) {
             // Get teams opponent from the league fixtures
-            var teams = state.nav.teams;
-            var otherTeam: number | undefined = team;
-            var team1: number = team;
-            var team2: number = team;
-            const fixture = leagueFixtures[gameweek].find(fixture => fixture.entry_1_entry === team || fixture.entry_2_entry === team);
-            if (fixture) {
-                otherTeam = fixture.entry_1_entry === team ? fixture.entry_2_entry : fixture.entry_1_entry;
-                team1 = fixture.entry_1_entry === team ? team : otherTeam || team;
-                team2 = fixture.entry_2_entry === team ? team : otherTeam || team;
+            const teams = LeagueFixturesHelper.getTeams(team, gameweek, leagueFixtures);
+            
+            // Check if the current event is a future event
+            let picksGameweek = gameweek;
+            const currEvent = state.data.bootstrapStatic.events.find(ev => ev.is_current);
+            if (currEvent && currEvent.id < gameweek) {
+                picksGameweek = currEvent.id;
             }
-            teams = [team1, team2];
+
             dispatch(setTeams(teams));
             for (var teamId of teams) {
                 if (!state.data.entries[teamId]) {
@@ -306,12 +331,18 @@ export function updateGameweekData(gameweek?: number, team?: number, leagueId?: 
                         dispatch(receiveEntry(entry));
                     });
                 }
-                if (!PicksHelper.getPicks(teamId, gameweek, state.data.picks)) {
+                const teamPicks = PicksHelper.getPicks(teamId, picksGameweek, state.data.picks);
+                if (!teamPicks) {
                     const thisTeamId = teamId;
-                    fplClient.picks(teamId, gameweek).then(picks => {
-                        dispatch(receivePicks(thisTeamId, gameweek || 0, picks));
+                    fplClient.picks(teamId, picksGameweek).then(picks => {
+                        if (picks) {
+                            dispatch(receivePicks(thisTeamId, gameweek || 0, picks));
+                            dispatch(receivePicks(thisTeamId, picksGameweek || 0, picks));
+                        }
                     });
-                    
+                }
+                else {
+                    dispatch(receivePicks(teamId, gameweek || 0, teamPicks));
                 }
             }
         }

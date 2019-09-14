@@ -38,7 +38,7 @@ export default class FplAppBar extends React.Component<FplAppBarProps, {}> {
                 value={selectedTeam}
                 onChange={this.props.onTeamSelect}
             >
-                {standings.standings.results.map(entry => <MenuItem value={entry.entry}>{entry.entry_name}</MenuItem>)}
+                {standings.standings.results.map(entry => <MenuItem key={entry.id} value={entry.entry}>{entry.entry_name}</MenuItem>)}
             </Select>
         </div>
         );
@@ -68,7 +68,7 @@ export default class FplAppBar extends React.Component<FplAppBarProps, {}> {
                     value={leagueId}
                     onChange={this.props.onLeagueSelect}
                 >
-                    {leaguesToShow.map(league => <MenuItem value={league.id}>{league.name}</MenuItem>)}
+                    {leaguesToShow.map(league => <MenuItem key={league.id} value={league.id}>{league.name}</MenuItem>)}
                 </Select>
             </div>
             );

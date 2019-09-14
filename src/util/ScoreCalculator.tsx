@@ -23,9 +23,6 @@ export default class ScoreCalculator {
                 }
             }
         }
-        else {
-            console.log(`ScoreCalculator:Element ${pick.element} has no Live data!`);
-        }
         return score;
     }
     

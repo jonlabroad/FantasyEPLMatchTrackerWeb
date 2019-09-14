@@ -49,13 +49,14 @@ export default class EventFixtureList extends React.Component<EventFixtureListPr
         const elements: JSX.Element[] = [];
         for (let fixture of fixtures) {
             elements.push(
-            <Box display="flex" flexDirection="column" className="fixture-list-element-container">
+            <Box key={fixture.id} display="flex" flexDirection="column" className="fixture-list-element-container">
                 <Box display="flex" alignContent="center" alignItems="center" justifyContent="space-around" className="fixture-list-element">
                     {this.renderFixtureTeam(fixture.team_a, bs, "row", "away")}
                     {this.renderScoreOrTime(fixture, bs)}
                     {this.renderFixtureTeam(fixture.team_h, bs, "row-reverse", "home")}
                 </Box>
                 <FixtureBpsList
+                    key={fixture.id}
                     teamPicks={PicksHelper.getMatchPicks(this.props.team1, this.props.team2, this.props.gameweek, this.props.picks)}
                     fixture={fixture} live={this.props.live} bootstrapStatic={this.props.bootstrapStatic}/>
             </Box>

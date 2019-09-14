@@ -14,7 +14,7 @@ export interface LeagueH2hStandingsListProps {
 export default class LeagueH2hStandingsList extends React.Component<LeagueH2hStandingsListProps> {
     renderLine(standing: StandingsEntry) {
         return (
-        <TableRow className={this.props.teams.includes(standing.entry) ? "standing-current-team" : ""}>
+        <TableRow key={standing.id} className={this.props.teams.includes(standing.entry) ? "standing-current-team" : ""}>
             <TableCell padding="none" align="center">{standing.rank}</TableCell>
             <TableCell padding="none" style={{cursor: "pointer"}} onClick={() => this.props.onTeamClick(standing.entry)}><Link>{standing.entry_name}</Link></TableCell>
             <Hidden smDown><TableCell padding="none">{standing.player_name}</TableCell></Hidden>

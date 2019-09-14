@@ -10,7 +10,7 @@ export default interface IFplClient {
     event(eventId: number): Promise<any>;
     entryEvent(entryId: number, eventId: number): Promise<any>;
     entry(entryId: number): Promise<Entry>;
-    picks(entryId: number, gameweek: number): Promise<Picks>;
+    picks(entryId: number, gameweek: number): Promise<Picks | undefined>;
     live(eventId: number): Promise<Live>;
     fixtures(eventId: number): Promise<MappedFixtures>;
     history(entryId: number): Promise<any>;

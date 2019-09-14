@@ -48,6 +48,7 @@ export default class MatchEvents extends React.Component<MatchEventsProps> {
         for (const event of sortedEvents) {
             elements.push(
                 <MatchEventElement
+                    key={`${event.footballerId} ${event.dateTime} ${event.type}`}
                     event={event}
                     bootstrapStatic={this.props.bootstrapStatic}
                 />

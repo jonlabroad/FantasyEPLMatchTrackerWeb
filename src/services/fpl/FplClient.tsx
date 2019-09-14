@@ -76,8 +76,12 @@ export default class FplClient implements IFplClient {
         return (await Axios.get(`${FplClient.baseUrl}/${path}`)).data; 
     }
 
-    async picks(entryId: number, gameweek: number): Promise<Picks> {
-        return await this.get(this.picksUrl(entryId, gameweek));
+    async picks(entryId: number, gameweek: number): Promise<Picks | undefined> {
+        const picks = await this.get(this.picksUrl(entryId, gameweek)) as Picks;
+        if (!picks.picks) {
+            return undefined;
+        }
+        return picks;
     }
 
     async processedPlayers(eventId: number): Promise<ProcessedPlayers> {
