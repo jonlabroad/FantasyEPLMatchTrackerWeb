@@ -1,4 +1,5 @@
 import Picks from "../data/fpl/Picks";
+import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 
 export default class PicksHelper {
     public static getPicks(entryId: number, gameweek: number, picksData: any): Picks | undefined {
@@ -19,5 +20,18 @@ export default class PicksHelper {
             picks.push(picks2);
         }
         return picks;
+    }
+
+    public static getPicksGameweek(selectedGameweek: number, bootstrap?: BootstrapStatic) {
+        if (!bootstrap) {
+            return selectedGameweek;
+        }
+
+        let picksGameweek = selectedGameweek;
+        const currEvent = bootstrap.events.find(ev => ev.is_current);
+        if (currEvent && currEvent.id < selectedGameweek) {
+            picksGameweek = currEvent.id;
+        }
+        return picksGameweek;
     }
 }

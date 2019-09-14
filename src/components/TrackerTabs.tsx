@@ -3,6 +3,7 @@ import { AppBar, Tabs, Tab, Grid } from "@material-ui/core";
 import MatchTab from "./MatchTab";
 import TeamsTab from "./TeamsTab";
 import MatchTabContainer from "../containers/MatchTabContainer";
+import TeamsTabContainer from "../containers/TeamsTabContainer";
 
 export interface TrackerTabsProps {
     currentTab: number;
@@ -30,7 +31,7 @@ export default class TrackerTabs extends React.Component<TrackerTabsProps> {
                 <MatchTabContainer index={0}>
                     
                 </MatchTabContainer>
-                <TeamsTab currentTab={this.props.currentTab} index={1}></TeamsTab>
+                <TeamsTabContainer currentTab={this.props.currentTab} index={1}></TeamsTabContainer>
             </Grid>
         );
     }
