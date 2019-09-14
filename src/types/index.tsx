@@ -27,7 +27,8 @@ export interface NavigationState {
     gameweek: number,
     leagueId: number,
     team: number,
-    teams: number[]
+    teams: number[],
+    differentialsOnly: boolean
 }
 
 export interface TrackerState {

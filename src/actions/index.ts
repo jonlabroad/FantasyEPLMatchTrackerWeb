@@ -71,6 +71,18 @@ export function setLeague(league: number): SetLeague {
     }
 };
 
+export interface SetDifferentials {
+    type: constants.SET_DIFFERENTIALS;
+    differentials: boolean;
+}
+export type SetDifferentialsAction = SetDifferentials;
+export function setDifferentials(diff: boolean): SetDifferentials {
+    return {
+        type: constants.SET_DIFFERENTIALS,
+        differentials: diff
+    }
+};
+
 export interface ReceiveEventStatus {
     type: constants.RECEIVE_EVENT_STATUS;
     eventStatus: EventStatus;
@@ -312,6 +324,7 @@ SetGameweek |
 SetTeams |
 SetTeam |
 SetLeague |
+SetDifferentials |
 ReceiveBootstrapStatic |
 ReceiveEntry |
 ReceiveFixtures |

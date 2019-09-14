@@ -13,6 +13,9 @@ export type SET_TEAMS = typeof SET_TEAMS;
 export const SET_LEAGUE = 'SET_LEAGUE';
 export type SET_LEAGUE = typeof SET_LEAGUE;
 
+export const SET_DIFFERENTIALS = 'SET_DIFFERENTIALS';
+export type SET_DIFFERENTIALS = typeof SET_DIFFERENTIALS;
+
 export const RECEIVE_EVENT_STATUS = 'RECEIVE_EVENT_STATUS';
 export type RECEIVE_EVENT_STATUS = typeof RECEIVE_EVENT_STATUS;
 

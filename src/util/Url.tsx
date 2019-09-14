@@ -1,13 +1,16 @@
 export default class Url {
-    public static set(gameweek: number, team: number, league: number) {
+    public static set(gameweek: number, team: number, league: number, differentials: boolean) {
         const url = new URLSearchParams();
         url.delete("gameweek");
         url.delete("team");
         url.delete("league");
+        url.delete("diff");
         url.set("gameweek", gameweek.toString());
         url.set("team", team.toString());
         console.log(league);
         url.set("league", league.toString());
+        url.set("diff", differentials.toString());
+
         window.history.pushState("", "", "?" + url.toString());
     }
 
@@ -36,6 +39,13 @@ export default class Url {
         const url = new URLSearchParams(document.location.search);
         const team = url.get("team");
         if (team) return parseInt(team);
+        return undefined;
+    }
+
+    public static getDifferentials(): boolean | undefined {
+        const url = new URLSearchParams(document.location.search);
+        const diff = url.get("diff");
+        if (diff) return (!!diff);
         return undefined;
     }
 

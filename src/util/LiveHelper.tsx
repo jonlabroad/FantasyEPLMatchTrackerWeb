@@ -8,7 +8,7 @@ export default class LiveHelper {
     }
 
     public static getElement(elementId: number, live?: Live): LiveElement | undefined {
-        if (live) {
+        if (live && live.elements) {
             return live.elements.find(el => el.id === elementId);
         }
         return undefined;

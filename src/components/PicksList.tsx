@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, TableRow, TableHead, TableCell, TableBody, Box, Typography, Hidden } from "@material-ui/core";
+import { Table, TableRow, TableHead, TableCell, TableBody, Box, Typography, Hidden, Checkbox, Switch, FormLabel } from "@material-ui/core";
 import Picks from "../data/fpl/Picks";
 import Pick from "../data/fpl/Pick";
 import BootstrapHelper from "../util/BootstrapHelper";
@@ -15,9 +15,13 @@ import { Fixtures } from "../data/fpl/Fixtures";
 import FixturesHelper from "../util/FixturesHelper";
 import Element from "../data/fpl/Element";
 import ElementFixtureStatusIcon from "./ElementFixtureStatusIcon";
+import DifferentialsFinder from "../util/DifferentialsFinder";
 
 export interface PicksListProps {
+    differentialsOnly: boolean
+    
     picks: Picks
+    otherPicks?: Picks
     live?: Live
     bootstrapStatic?: BootstrapStatic
     fixtures?: Fixtures
@@ -97,7 +101,10 @@ export default class PicksList extends React.Component<PicksListProps> {
     renderPicks(start: number, end: number, starters: boolean): JSX.Element[] {
         const elements: JSX.Element[] = [];
         for (let pick of this.props.picks.picks.slice(start, end)) {
-            elements.push(this.renderPick(pick, starters));
+            const differential = !this.props.differentialsOnly || DifferentialsFinder.isDifferential(pick.element, this.props.picks, this.props.otherPicks);
+            if (differential) {
+                elements.push(this.renderPick(pick, starters));
+            }
         }
         return elements;
     }

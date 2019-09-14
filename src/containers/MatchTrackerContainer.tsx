@@ -1,7 +1,7 @@
 import React from "react";
 import { TrackerState } from "../types";
 import { Dispatch, Action } from "redux";
-import { RootAction, receiveEntry, receivePicks, receiveLive, receiveEvent, receiveBootstrapStatic, receiveFixtures, setTeams, setGameweek, receiveProcessedPlayers, receiveLeagueFixtures, setTeam, receiveStandingsH2h, setLeague, updateGameweekData } from "../actions";
+import { RootAction, receiveEntry, receivePicks, receiveLive, receiveEvent, receiveBootstrapStatic, receiveFixtures, setTeams, setGameweek, receiveProcessedPlayers, receiveLeagueFixtures, setTeam, receiveStandingsH2h, setLeague, updateGameweekData, setDifferentials } from "../actions";
 import { connect } from "react-redux";
 import MatchHeaderContainer from "./MatchHeaderContainer";
 import FplAppBar from "../components/FplAppBar";
@@ -35,6 +35,7 @@ export interface MatchTrackerContainerProps {
     setTeam: any
     setLeague: any
     setGameweek: any
+    setDifferentials: any
     receiveBootstrapStatic: any
     receiveEntry: any
     receiveFixtures: any
@@ -62,11 +63,13 @@ export class MatchTrackerContainer extends React.Component<MatchTrackerContainer
     async componentDidMount() {
         const gameweek = parseInt(Url.getGameweek() || "1");
         let teamId = Url.getTeam() || 55385;
+        let differentials = Url.getDifferentials() || false;
         const leagueId = Url.getLeague() || this.props.leagueId;
 
         this.props.setTeam(teamId);
         this.props.setLeague(leagueId);
         this.props.setTeams([teamId, teamId]);
+        this.props.setDifferentials(differentials);
         this.props.receiveEntry(await new FplClient().entry(teamId));
 
         this.props.setGameweek(gameweek);
@@ -104,6 +107,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => ({
     setLeague: (league: number) => dispatch(setLeague(league)),
     setTeams: (teams: number[]) => dispatch(setTeams(teams)),
     setGameweek: (gameweek: number) => dispatch(setGameweek(gameweek)),
+    setDifferentials: (diff: boolean) => dispatch(setDifferentials(diff)),
     receiveBootstrapStatic: (bootstrapStatic: BootstrapStatic) => dispatch(receiveBootstrapStatic(bootstrapStatic)),
     receiveEntry: (entry: any) => dispatch(receiveEntry(entry)),
     receiveFixtures: (fixtures: MappedFixtures) => dispatch(receiveFixtures(fixtures)),

@@ -42,6 +42,7 @@ export function mapStateToProps(state: TrackerState) {
 
 const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => ({
     tabChanged: (index: number) => dispatch(tabSelect(index)),
+    
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TrackerTabsContainer);

@@ -1,5 +1,5 @@
 import { TrackerState } from "../types";
-import { TEST, RECEIVE_ENTRY, TAB_SELECT, RECEIVE_PICKS, RECEIVE_LIVE, RECEIVE_EVENT, RECEIVE_BOOTSTRAPSTATIC, RECEIVE_FIXTURES, SET_GAMEWEEK, SET_TEAMS, RECEIVE_PROCESSED_PLAYERS, RECEIVE_LEAGUE_FIXTURES, SET_TEAM, RECEIVE_STANDINGS_H2H, SET_LEAGUE } from "../constants";
+import { TEST, RECEIVE_ENTRY, TAB_SELECT, RECEIVE_PICKS, RECEIVE_LIVE, RECEIVE_EVENT, RECEIVE_BOOTSTRAPSTATIC, RECEIVE_FIXTURES, SET_GAMEWEEK, SET_TEAMS, RECEIVE_PROCESSED_PLAYERS, RECEIVE_LEAGUE_FIXTURES, SET_TEAM, RECEIVE_STANDINGS_H2H, SET_LEAGUE, SET_DIFFERENTIALS } from "../constants";
 import { Reducer } from "redux";
 import Url from "../util/Url";
 import { ReceiveLeagueFixturesAction, ReceiveStandingsH2h, ReceiveStandingsH2hAction } from "../actions";
@@ -20,7 +20,8 @@ export const initialState: TrackerState = {
         gameweek: 1,
         team: 55385,
         teams: [55385, 55385],
-        leagueId: 22356
+        leagueId: 22356,
+        differentialsOnly: false
     }
 };
 
@@ -30,14 +31,18 @@ export const trackerReducer: Reducer<TrackerState> = (state = initialState, acti
     }
     switch (action.type) {
         case SET_GAMEWEEK:
-            Url.set(action.gameweek, state.nav.team, state.nav.leagueId);
+            Url.set(action.gameweek, state.nav.team, state.nav.leagueId, state.nav.differentialsOnly);
             return { ...state, nav: { ...state.nav, teams: [state.nav.team], gameweek: action.gameweek }};
         case SET_TEAM:
-            Url.set(state.nav.gameweek, action.team, state.nav.leagueId);
+            Url.set(state.nav.gameweek, action.team, state.nav.leagueId, state.nav.differentialsOnly);
             return { ...state, nav: { ...state.nav, team: action.team }};
         case SET_LEAGUE:
-            Url.set(state.nav.gameweek, state.nav.team, action.league);
+            Url.set(state.nav.gameweek, state.nav.team, action.league, state.nav.differentialsOnly);
             return { ...state, nav: { ...state.nav, teams: [state.nav.team], leagueId: action.league }};
+        case SET_DIFFERENTIALS:
+            console.log({diff: action});
+                Url.set(state.nav.gameweek, state.nav.team, state.nav.leagueId, action.differentials);
+                return { ...state, nav: { ...state.nav, differentialsOnly: action.differentials }};
         case SET_TEAMS:
             return { ...state, nav: { ...state.nav, teams: action.teams }};
         case RECEIVE_BOOTSTRAPSTATIC:
