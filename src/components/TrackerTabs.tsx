@@ -1,9 +1,12 @@
 import React, { ChangeEvent } from "react";
-import { AppBar, Tabs, Tab, Grid } from "@material-ui/core";
+import { AppBar, Tabs, Tab, Grid} from "@material-ui/core";
 import MatchTab from "./MatchTab";
 import TeamsTab from "./TeamsTab";
 import MatchTabContainer from "../containers/MatchTabContainer";
 import TeamsTabContainer from "../containers/TeamsTabContainer";
+
+import '../styles/tracker.css'
+import { MappedEntryHistory } from "../data/fpl/EntryHistory";
 
 export interface TrackerTabsProps {
     currentTab: number;
@@ -28,10 +31,8 @@ export default class TrackerTabs extends React.Component<TrackerTabsProps> {
                     </Tabs>
                 </AppBar>
                 </Grid>
-                <MatchTabContainer index={0}>
-                    
-                </MatchTabContainer>
-                <TeamsTabContainer currentTab={this.props.currentTab} index={1}></TeamsTabContainer>
+                <MatchTabContainer index={0} />
+                <TeamsTabContainer index={1} />
             </Grid>
         );
     }

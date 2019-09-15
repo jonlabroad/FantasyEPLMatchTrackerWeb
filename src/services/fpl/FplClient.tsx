@@ -9,6 +9,8 @@ import { ProcessedPlayers } from '../../data/ProcessedPlayers';
 import EventStatus from '../../data/fpl/EventStatus';
 import { LeagueFixtures } from '../../data/LeagueFixtures';
 import Picks from '../../data/fpl/Picks';
+import EntryHistory from '../../data/fpl/EntryHistory';
+import Live from '../../data/fpl/Live';
 
 export default class FplClient implements IFplClient {
     static readonly baseUrl: string = 'https://fkcc5km0gj.execute-api.us-east-1.amazonaws.com/prod';
@@ -24,11 +26,11 @@ export default class FplClient implements IFplClient {
         return await this.get(`bootstrap-static`);
     }
 
-    async live(eventId: number) {
+    async live(eventId: number): Promise<Live> {
         return await this.get(`${this.eventUrl(eventId)}/live`);
     }
 
-    async history(entryId: number) {
+    async history(entryId: number): Promise<EntryHistory> {
         return await this.get(this.historyUrl(entryId));
     }
 
@@ -72,7 +74,6 @@ export default class FplClient implements IFplClient {
     }
 
     async get(path: string) {
-        console.log(`${FplClient.baseUrl}/${path}`);
         return (await Axios.get(`${FplClient.baseUrl}/${path}`)).data; 
     }
 

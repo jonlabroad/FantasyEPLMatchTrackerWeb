@@ -17,6 +17,6 @@ const useStyles = makeStyles(theme => ({
 export const PointsIcon: React.SFC<PointsIconProps> = (props) => {
     const classes = useStyles();
     return (
-        <img className={classes.img} src={`icon/${IconSelector.getIcon(props.explainType)}`}/>
+        <img className={classes.img} alt={props.explainType} src={`icon/${IconSelector.getIcon(props.explainType)}`}/>
     );
 }

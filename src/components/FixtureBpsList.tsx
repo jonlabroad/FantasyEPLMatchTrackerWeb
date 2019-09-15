@@ -63,7 +63,7 @@ export default class FixtureBpsList extends React.Component<FixtureBpsListProps,
         if (rank === 2) numStars = 2;
         if (rank === 3) numStars = 1;
         for (let i = 0; i < numStars; i++) {
-            stars.push(<div className="bonus-star-container">
+            stars.push(<div key={`bonus-${i}`}className="bonus-star-container">
                 {onTeam ? <Star className="bonus-star-filled" style={styles.largeIcon}/> :
                           <StarBorder className="bonus-star" style={styles.largeIcon}/>}
             </div>);
@@ -94,7 +94,7 @@ export default class FixtureBpsList extends React.Component<FixtureBpsListProps,
             const elementOnTeam2 = !!(teamPicks[1] && teamPicks[1].picks.find(p => p.element == fixtureStats.element.id));
             if (this.state.displayAll || (elementOnTeam1 || elementOnTeam2)) {
                 renderElements.push((
-                <Box className="bps-table-element" display="flex" flexDirection="row" justifyContent="center">
+                <Box key={`${i}`} className="bps-table-element" display="flex" flexDirection="row" justifyContent="center">
                     {this.renderStars(rank, elementOnTeam1, true)}
                     <Typography variant="body2" className="bps-element-name">{fixtureStats.element.web_name}</Typography>
                     <Typography variant="body2" className="bps-element-bps">{elementBps}</Typography>

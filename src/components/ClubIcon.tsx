@@ -12,7 +12,7 @@ export default class ClubIcon extends React.Component<ClubIconProps> {
             return null;
         }
         return (
-            <div className="club-icon-container"><img className="club-icon" width={sizeProp} height={sizeProp} src={`https://platform-static-files.s3.amazonaws.com/premierleague/badges/t${this.props.teamCode}.png`}/></div>
+            <img className="club-icon" alt={`${this.props.teamCode}`} width={sizeProp} height={sizeProp} src={`https://platform-static-files.s3.amazonaws.com/premierleague/badges/t${this.props.teamCode}.png`}/>
         );
     }
 }

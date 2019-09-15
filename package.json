@@ -3,19 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.2.1",
-    "@material-ui/icons": "^4.2.1",
+    "@material-ui/core": "^4.4.2",
+    "@material-ui/icons": "^4.4.1",
     "@types/jest": "24.0.15",
     "@types/node": "12.6.8",
     "@types/react": "16.8.23",
     "@types/react-dom": "16.8.5",
     "axios": "^0.19.0",
-    "linq": "^3.2.0",
+    "linq": "^3.2.1",
     "moment": "^2.24.0",
-    "query-string": "^6.8.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-redux": "^7.1.0",
+    "query-string": "^6.8.3",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-redux": "^7.1.1",
     "react-scripts": "3.0.1",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
@@ -45,10 +45,10 @@
     ]
   },
   "devDependencies": {
-    "@types/material-ui": "^0.21.6",
+    "@types/material-ui": "^0.21.7",
     "@types/moment": "^2.13.0",
     "@types/query-string": "^6.3.0",
-    "@types/react-redux": "^7.1.1",
-    "@types/redux": "^3.6.0"
+    "@types/react-redux": "^7.1.2",
+    "@types/redux": "^3.6.31"
   }
 }

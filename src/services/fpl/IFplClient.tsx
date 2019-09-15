@@ -4,6 +4,7 @@ import Picks from "../../data/fpl/Picks";
 import { MappedFixtures } from "../../data/MappedFixtures";
 import LeaguesH2hStandings from "../../data/fpl/LeaguesH2hStandings";
 import { ProcessedPlayers } from "../../data/ProcessedPlayers";
+import EntryHistory from "../../data/fpl/EntryHistory";
 
 export default interface IFplClient {
     bootstrapStatic(): Promise<any>;
@@ -12,6 +13,7 @@ export default interface IFplClient {
     entry(entryId: number): Promise<Entry>;
     picks(entryId: number, gameweek: number): Promise<Picks | undefined>;
     live(eventId: number): Promise<Live>;
+    history(entryId: number): Promise<EntryHistory>;
     fixtures(eventId: number): Promise<MappedFixtures>;
     history(entryId: number): Promise<any>;
     leaguesH2hMatches(leagueId: number): Promise<any>;

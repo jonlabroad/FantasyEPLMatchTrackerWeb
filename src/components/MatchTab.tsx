@@ -6,10 +6,8 @@ import MatchEventsContainer from "../containers/MatchEventsContainer";
 import LeagueH2hStandingsContainer from "../containers/LeagueH2hStandingsContainer";
 
 export interface MatchTabProps {
-    currentTab: number;
     gameweek: number;
     teams: number[]
-    index: number;
     differentialsOnly: boolean
 
     onDifferentialsChange: any
@@ -30,11 +28,8 @@ export default class MatchTab extends React.Component<MatchTabProps> {
     }
     
     render() {
-        if (this.props.currentTab !== this.props.index) {
-            return null;
-        }
         return (
-            <Grid container justify="center" spacing={2} className="match-tab">
+            <Grid container justify="center" spacing={2} className="tracker-tab match-tab">
                 <Hidden smDown><Grid item xs={1}></Grid></Hidden>
                 <Grid item xs={12} sm={10}>{this.renderDifferentialsSelector()}</Grid>
                 <Hidden smDown><Grid item xs={1}></Grid></Hidden>

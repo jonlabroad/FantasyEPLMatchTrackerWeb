@@ -26,12 +26,14 @@ export class MatchTabContainer extends React.Component<MatchTabContainerProps> {
     }
     
     render() {
+        if (this.props.currentTab !== this.props.index) {
+            return null;
+        }
+
         return (
             <MatchTab
-                currentTab={this.props.currentTab}
                 gameweek={this.props.gameweek}
                 teams={this.props.teams}
-                index={this.props.index}
                 differentialsOnly={this.props.differentials}
             
                 onDifferentialsChange={this.onDifferentialsChange.bind(this)}

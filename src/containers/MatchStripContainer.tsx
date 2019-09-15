@@ -1,19 +1,13 @@
-import React, { ChangeEvent } from "react";
+import React from "react";
 import { Dispatch, Action } from "redux";
 import { TrackerState } from "../types";
-import { RootAction, tabSelect, receiveLeagueFixtures, receivePicks, receiveLive } from "../actions";
+import { receiveLeagueFixtures, receivePicks, receiveLive } from "../actions";
 import { connect } from "react-redux";
-import TrackerTabs from "../components/TrackerTabs";
-import PicksHelper from "../util/PicksHelper";
-import PicksList from "../components/PicksList";
 import Live, { Lives } from "../data/fpl/Live";
-import LiveHelper from "../util/LiveHelper";
 import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 import { LeagueFixtures, MappedLeagueFixtures } from "../data/LeagueFixtures";
 import Picks from "../data/fpl/Picks";
-import StateHelper from "../util/StateHelper";
 import MatchStatusStrip from "../components/MatchStatusStrip";
-import { returnStatement } from "@babel/types";
 
 export interface MatchStatusContainerProps {
     gameweek: number,

@@ -7,12 +7,13 @@ import { ProcessedPlayers } from '../data/ProcessedPlayers';
 import EventStatus from '../data/fpl/EventStatus';
 import { LeagueFixtures } from '../data/LeagueFixtures';
 import LeaguesH2hStandings from '../data/fpl/LeaguesH2hStandings';
-import { Dispatch, AnyAction } from 'redux';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { ThunkDispatch } from 'redux-thunk';
 import { TrackerState } from '../types';
 import FplClient from '../services/fpl/FplClient';
 import PicksHelper from '../util/PicksHelper';
 import LeagueFixturesHelper from '../util/LeagueFixturesHelper';
+import EntryHistory from '../data/fpl/EntryHistory';
+import EntryHistoryHelper from '../util/EntryHistoryHelper';
 
 export interface Test {
     type: constants.TEST;
@@ -218,6 +219,20 @@ export function receiveStandingsH2h(leagueId: number, standings: LeaguesH2hStand
     }
 };
 
+export interface ReceiveEntryHistory {
+    type: constants.RECEIVE_ENTRY_HISTORY;
+    history: EntryHistory;
+    entryId: number;
+}
+export type ReceiveEntryHistoryAction = ReceiveEntryHistory;
+export function receiveEntryHistory(entryId: number, value: EntryHistory): ReceiveEntryHistory {
+    return {
+        type: constants.RECEIVE_ENTRY_HISTORY,
+        entryId: entryId,
+        history: value
+    }
+};
+
 export interface TabSelect {
     type: constants.TAB_SELECT;
     index: number;
@@ -326,15 +341,15 @@ export function updateGameweekData(gameweek?: number, team?: number, leagueId?: 
 
             dispatch(setTeams(teams));
             for (var teamId of teams) {
-                if (!state.data.entries[teamId]) {
-                    fplClient.entry(teamId).then(entry => {
+                const thisTeamId = teamId;
+                if (!state.data.entries[thisTeamId]) {
+                    fplClient.entry(thisTeamId).then(entry => {
                         dispatch(receiveEntry(entry));
                     });
                 }
-                const teamPicks = PicksHelper.getPicks(teamId, picksGameweek, state.data.picks);
+                const teamPicks = PicksHelper.getPicks(thisTeamId, picksGameweek, state.data.picks);
                 if (!teamPicks) {
-                    const thisTeamId = teamId;
-                    fplClient.picks(teamId, picksGameweek).then(picks => {
+                    fplClient.picks(thisTeamId, picksGameweek).then(picks => {
                         if (picks) {
                             dispatch(receivePicks(thisTeamId, gameweek || 0, picks));
                             dispatch(receivePicks(thisTeamId, picksGameweek || 0, picks));
@@ -342,7 +357,16 @@ export function updateGameweekData(gameweek?: number, team?: number, leagueId?: 
                     });
                 }
                 else {
-                    dispatch(receivePicks(teamId, gameweek || 0, teamPicks));
+                    dispatch(receivePicks(thisTeamId, gameweek || 0, teamPicks));
+                }
+
+                const history = EntryHistoryHelper.getHistory(thisTeamId, state.data.history);
+                if (!history) {
+                    fplClient.history(thisTeamId).then(hist => {
+                        if (hist) {
+                            dispatch(receiveEntryHistory(thisTeamId, hist));
+                        }
+                    })
                 }
             }
         }
@@ -365,6 +389,7 @@ ReceiveEvent |
 ReceiveProcessedPlayers |
 ReceiveLeagueFixtures |
 ReceiveStandingsH2h |
+ReceiveEntryHistory |
 TabSelect |
 ReceiveEventStatus |
 UpdateGameweekData
