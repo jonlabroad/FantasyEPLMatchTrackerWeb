@@ -9,6 +9,7 @@ import '../styles/team-info.css';
 import EntryHistory from "../data/fpl/EntryHistory";
 import { TeamHistoryTable } from "./TeamHistoryTable";
 import { TeamPastSeasonHistory } from "./TeamPastSeasonHistory";
+import PointsHistoryChart from "./PointsHistoryChart";
 
 export interface TeamsTabProps {
     bootstrap?: BootstrapStatic
@@ -27,7 +28,7 @@ export default class TeamsTab extends React.Component<TeamsTabProps> {
 
         return (
             <Grid container justify="center" spacing={2} className="tracker-tab teams-tab">
-                <Grid item xs={3}></Grid>
+                <Grid item xs={1}></Grid>
                 <Grid item xs={3}>
                     <TeamTabInfo 
                         bootstrap={bootstrap}
@@ -35,6 +36,9 @@ export default class TeamsTab extends React.Component<TeamsTabProps> {
                         history={history[0]}
                         picks={picks[0]}
                     />
+                </Grid>
+                <Grid item xs={4}>
+                    <PointsHistoryChart history={history} />
                 </Grid>
                 <Grid item xs={3}>
                     <TeamTabInfo 
@@ -44,7 +48,7 @@ export default class TeamsTab extends React.Component<TeamsTabProps> {
                         picks={picks[1]}
                     />
                 </Grid>
-                <Grid item xs={3}></Grid>
+                <Grid item xs={1}></Grid>
 
                 <Grid item xs={1}></Grid>
                 <Grid item xs={5}>

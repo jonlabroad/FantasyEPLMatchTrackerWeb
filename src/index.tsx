@@ -7,8 +7,6 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { initialState, trackerReducer } from './reducers';
 import { Provider } from 'react-redux';
-import { TrackerState } from './types';
-import { RootAction } from './actions';
 
 const store = createStore(
     trackerReducer,
