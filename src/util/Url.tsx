@@ -1,16 +1,24 @@
 export default class Url {
-    public static set(gameweek: number, team: number, league: number, differentials: boolean) {
+    public static set(gameweek: number, team: number, league: number, differentials: boolean, tab: number) {
         const url = new URLSearchParams();
         url.delete("gameweek");
         url.delete("team");
         url.delete("league");
         url.delete("diff");
+        url.delete("tab");
         url.set("gameweek", gameweek.toString());
         url.set("team", team.toString());
         url.set("league", league.toString());
         url.set("diff", differentials.toString());
+        url.set("tab", tab.toString());
 
         window.history.pushState("", "", "?" + url.toString());
+    }
+
+    public static getSelectedTab(): number | null {
+        const url = new URLSearchParams(document.location.search);
+        const val = url.get("tab");
+        return val ? parseInt(val) : null;
     }
 
     public static getGameweek(): string | null {

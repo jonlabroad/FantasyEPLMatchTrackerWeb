@@ -11,6 +11,10 @@ import { LeagueFixtures } from '../../data/LeagueFixtures';
 import Picks from '../../data/fpl/Picks';
 import EntryHistory from '../../data/fpl/EntryHistory';
 import Live from '../../data/fpl/Live';
+import GameweekTimeline from '../../data/GameweekTimeline';
+import CacheHelper from '../../util/CacheHelper';
+import { BootstrapStatic } from '../../data/fpl/BootstrapStatic';
+import { CacheExpiryType } from '../../data/CacheData';
 
 export default class FplClient implements IFplClient {
     static readonly baseUrl: string = 'https://fkcc5km0gj.execute-api.us-east-1.amazonaws.com/prod';
@@ -23,7 +27,13 @@ export default class FplClient implements IFplClient {
     }
 
     async bootstrapStatic() {
-        return await this.get(`bootstrap-static`);
+        var cached = CacheHelper.getCached<BootstrapStatic>('bootstrap-static');
+        if (!cached) {
+            var newData = await this.get(`bootstrap-static`);
+            CacheHelper.setCache<BootstrapStatic>("bootstrap-static", CacheExpiryType.DAILY, newData);
+            return newData;
+        }
+        return cached;
     }
 
     async live(eventId: number): Promise<Live> {
@@ -31,11 +41,23 @@ export default class FplClient implements IFplClient {
     }
 
     async history(entryId: number): Promise<EntryHistory> {
-        return await this.get(this.historyUrl(entryId));
+        const url = this.historyUrl(entryId);
+        var cached = CacheHelper.getCached<EntryHistory>(url);
+        if (!cached) {
+            var newData = await this.get(this.historyUrl(entryId));
+            CacheHelper.setCache<EntryHistory>(url, CacheExpiryType.DAILY, newData);
+            return newData;
+        }
+        return cached;
     }
 
     async fixtures(eventId?: number): Promise<MappedFixtures> {
-        const fixtures: Fixtures = await this.get(this.fixtureUrl(eventId));
+        const key = this.fixtureUrl(eventId);
+        var fixtures = CacheHelper.getCached<Fixtures>(key);
+        if (!fixtures) {
+            fixtures = await this.get(this.fixtureUrl(eventId)) as Fixtures;
+        }
+        
         if (eventId) {
             return {[eventId]: fixtures};
         }
@@ -78,11 +100,17 @@ export default class FplClient implements IFplClient {
     }
 
     async picks(entryId: number, gameweek: number): Promise<Picks | undefined> {
-        const picks = await this.get(this.picksUrl(entryId, gameweek)) as Picks;
-        if (!picks.picks) {
-            return undefined;
+        const url = this.picksUrl(entryId, gameweek)
+        var cached = CacheHelper.getCached<Picks>(url);
+        if (!cached) {
+            var newData = await this.get(url);
+            if (!newData.picks) {
+                return undefined;
+            }
+            CacheHelper.setCache<Picks>(url, CacheExpiryType.DAILY, newData);
+            return newData;
         }
-        return picks;
+        return cached;
     }
 
     async processedPlayers(eventId: number): Promise<ProcessedPlayers> {
@@ -90,7 +118,18 @@ export default class FplClient implements IFplClient {
     }
 
     async leagueFixtures(leagueId: number): Promise<LeagueFixtures> {
-        return await this.get(this.leagueFixturesUrl(leagueId));
+        const key = this.leagueFixturesUrl(leagueId);
+        var cached = CacheHelper.getCached<LeagueFixtures>(key);
+        if (!cached) {
+            const newData = await this.get(this.leagueFixturesUrl(leagueId));
+            CacheHelper.setCache(key, CacheExpiryType.DAILY, newData);
+            return newData;
+        }
+        return cached;
+    }
+
+    async gameweekTimeline(gameweek: number): Promise<GameweekTimeline> {
+        return await this.get(this.gameweekTimelineUrl(gameweek));
     }
 
     historyUrl(entryId: number) {
@@ -139,5 +178,9 @@ export default class FplClient implements IFplClient {
 
     leagueFixturesUrl(leagueId: number) {
         return `processed/league/${leagueId}/fixtures`;
+    }
+
+    gameweekTimelineUrl(gameweek: number) {
+        return `processed/players/${gameweek}/timeline`;
     }
 }

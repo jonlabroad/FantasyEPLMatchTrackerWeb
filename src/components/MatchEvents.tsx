@@ -19,6 +19,10 @@ export interface MatchEventsProps {
 }
 
 export default class MatchEvents extends React.Component<MatchEventsProps> {
+    shouldComponentUpdate(newProps: MatchEventsProps): boolean {
+        return !!(newProps.bootstrapStatic && newProps.processedPlayers);
+    }
+
     teamHasElement(teamId?: number, elementId?: number) {
         if (!teamId || !elementId) {
             return false;

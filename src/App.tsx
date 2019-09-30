@@ -17,7 +17,7 @@ export default class App extends React.Component<any, {}> {
     return (
       <React.Fragment>
         <Helmet>
-          <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css"/>
+          {/*<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css"/>*/}
           <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
         </Helmet>
         <MuiThemeProvider theme={Themes.mainTheme}>

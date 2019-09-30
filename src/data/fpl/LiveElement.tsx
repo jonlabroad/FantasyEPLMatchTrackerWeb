@@ -7,6 +7,8 @@ export default interface LiveElement
     id: number;
     explain: Explain[];
     stats: LiveElementStats;
+
+    score: number; // Only for predictions diffs!
 }
 
 

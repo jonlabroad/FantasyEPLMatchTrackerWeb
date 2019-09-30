@@ -14,6 +14,9 @@ import PicksHelper from '../util/PicksHelper';
 import LeagueFixturesHelper from '../util/LeagueFixturesHelper';
 import EntryHistory from '../data/fpl/EntryHistory';
 import EntryHistoryHelper from '../util/EntryHistoryHelper';
+import GameweekTimeline from '../data/GameweekTimeline';
+import ActionKeyGenerator from '../util/ActionKeyGenerator';
+import { isRequestInProgress } from '../reducers';
 
 export interface Test {
     type: constants.TEST;
@@ -22,6 +25,18 @@ export type TestAction = Test;
 export function test(): Test {
     return {
         type: constants.TEST
+    }
+};
+
+export interface ApiRequestInProgress {
+    type: constants.API_REQUEST_IN_PROGRESS;
+    key: string;
+}
+export type ApiRequestInProgressAction = ApiRequestInProgress;
+export function apiRequestInProgress(key: string): ApiRequestInProgress {
+    return {
+        type: constants.API_REQUEST_IN_PROGRESS,
+        key: key
     }
 };
 
@@ -82,6 +97,18 @@ export function setDifferentials(diff: boolean): SetDifferentials {
     return {
         type: constants.SET_DIFFERENTIALS,
         differentials: diff
+    }
+};
+
+export interface DrawerOpenClose {
+    type: constants.DRAWER_OPEN_CLOSE;
+    open: boolean;
+}
+export type DrawerOpenCloseAction = DrawerOpenClose;
+export function drawerOpenClose(open: boolean): DrawerOpenClose {
+    return {
+        type: constants.DRAWER_OPEN_CLOSE,
+        open: open
     }
 };
 
@@ -233,6 +260,20 @@ export function receiveEntryHistory(entryId: number, value: EntryHistory): Recei
     }
 };
 
+export interface ReceiveGameweekTimeline {
+    type: constants.RECEIVE_GAMEWEEK_TIMELINE;
+    value: GameweekTimeline;
+    gameweek: number;
+}
+export type ReceiveGameweekTimelineAction = ReceiveGameweekTimeline;
+export function receiveGameweekTimeline(gw: number, value: GameweekTimeline): ReceiveGameweekTimeline {
+    return {
+        type: constants.RECEIVE_GAMEWEEK_TIMELINE,
+        gameweek: gw,
+        value: value
+    }
+};
+
 export interface TabSelect {
     type: constants.TAB_SELECT;
     index: number;
@@ -262,7 +303,9 @@ export function updateGameweekData(gameweek?: number, team?: number, leagueId?: 
 
         if (leagueId) {
             const theLeagueId = leagueId;
-            if (!state.data.mappedLeagueH2hStandings || !state.data.mappedLeagueH2hStandings[leagueId]) {
+            const standingsKey = ActionKeyGenerator.receiveStandingsH2h(leagueId);
+            if (!state.data.mappedLeagueH2hStandings || !state.data.mappedLeagueH2hStandings[leagueId] && !isRequestInProgress(getState(), standingsKey)) {
+                dispatch(apiRequestInProgress(standingsKey));
                 fplClient.leaguesH2hStandings(leagueId).then(standings => 
                     dispatch(receiveStandingsH2h(theLeagueId, standings)));
             }
@@ -285,12 +328,15 @@ export function updateGameweekData(gameweek?: number, team?: number, leagueId?: 
                         // Get the current event's pick lists
                         if (!PicksHelper.getPicks(teamId, lastEvent.id, state.data.picks)) {
                             const thisTeamId = teamId;
-                            fplClient.picks(teamId, lastEvent.id).then(picks => {
-                                if (picks) {
-                                    dispatch(receivePicks(thisTeamId, lastEvent.id || 0, picks));
-                                    dispatch(receivePicks(thisTeamId, gameweek || 0, picks));
-                                }
-                            });
+                            const key = ActionKeyGenerator.receivePicks(gameweek || 0, thisTeamId);
+                            if (!isRequestInProgress(getState(), key)) {        
+                                fplClient.picks(teamId, lastEvent.id).then(picks => {
+                                    if (picks) {
+                                        dispatch(receivePicks(thisTeamId, lastEvent.id || 0, picks));
+                                        dispatch(receivePicks(thisTeamId, gameweek || 0, picks));
+                                    }
+                                });
+                            }
                         }
                     }
                 }
@@ -298,23 +344,41 @@ export function updateGameweekData(gameweek?: number, team?: number, leagueId?: 
         }
 
         if (gameweek) {
-            if (!state.data.live || !state.data.live[gameweek]) {
+            const liveKey = ActionKeyGenerator.receiveLive(gameweek);
+            if (!state.data.live || !state.data.live[gameweek] && !isRequestInProgress(getState(), liveKey)) {
+                dispatch(apiRequestInProgress(liveKey));
                 fplClient.live(gameweek).then(live => {
                     dispatch(receiveLive(gameweek || 0, live));
                 });
             }
 
             var fixtures = state.data.fixtures[gameweek];
-            if (!fixtures) {
+            const key = ActionKeyGenerator.receiveFixtures();
+            if (!fixtures && !isRequestInProgress(getState(), key)) {
+                dispatch(apiRequestInProgress(key));
                 fplClient.fixtures().then(allFixtures => {
                     fixtures = allFixtures[gameweek || 0];
-                    dispatch(receiveFixtures(allFixtures));    
+                    dispatch(receiveFixtures(allFixtures));
                 });
             }
 
-            if (!state.data.processedPlayers || !state.data.processedPlayers[gameweek]) {
+            const procKey = ActionKeyGenerator.receiveProcessedPlayers(gameweek);
+            if (!state.data.processedPlayers || !state.data.processedPlayers[gameweek] && !isRequestInProgress(getState(), procKey)) {
+                dispatch(apiRequestInProgress(procKey));
                 fplClient.processedPlayers(gameweek).then(processedPlayers => 
                     dispatch(receiveProcessedPlayers(gameweek || 0, processedPlayers)));
+            }
+
+            if (!state.data.mappedGameweekTimelines || !state.data.mappedGameweekTimelines[gameweek]) {
+                const key = ActionKeyGenerator.receiveTimeline(gameweek || 0);
+                if (!isRequestInProgress(getState(), key)) {
+                    dispatch(apiRequestInProgress(key));
+                    fplClient.gameweekTimeline(gameweek).then(timeline => {
+                        if (timeline) {
+                            dispatch(receiveGameweekTimeline(gameweek || 0, timeline));
+                        }
+                    });
+                }
             }
         }
 
@@ -342,26 +406,34 @@ export function updateGameweekData(gameweek?: number, team?: number, leagueId?: 
             dispatch(setTeams(teams));
             for (var teamId of teams) {
                 const thisTeamId = teamId;
-                if (!state.data.entries[thisTeamId]) {
+                const key = ActionKeyGenerator.receiveEntry(thisTeamId);
+                if (!state.data.entries[thisTeamId] && !isRequestInProgress(getState(), key)) {
+                    dispatch(apiRequestInProgress(key));
                     fplClient.entry(thisTeamId).then(entry => {
                         dispatch(receiveEntry(entry));
                     });
                 }
                 const teamPicks = PicksHelper.getPicks(thisTeamId, picksGameweek, state.data.picks);
                 if (!teamPicks) {
-                    fplClient.picks(thisTeamId, picksGameweek).then(picks => {
-                        if (picks) {
-                            dispatch(receivePicks(thisTeamId, gameweek || 0, picks));
-                            dispatch(receivePicks(thisTeamId, picksGameweek || 0, picks));
-                        }
-                    });
+                    const key = ActionKeyGenerator.receivePicks(gameweek || 0, thisTeamId);
+                    if (!isRequestInProgress(getState(), key)) {
+                        dispatch(apiRequestInProgress(key));
+                        fplClient.picks(thisTeamId, picksGameweek).then(picks => {
+                            if (picks) {
+                                dispatch(receivePicks(thisTeamId, gameweek || 0, picks));
+                                dispatch(receivePicks(thisTeamId, picksGameweek || 0, picks));
+                            }
+                        });
+                    }
                 }
                 else {
                     dispatch(receivePicks(thisTeamId, gameweek || 0, teamPicks));
                 }
 
                 const history = EntryHistoryHelper.getHistory(thisTeamId, state.data.history);
-                if (!history) {
+                const histKey = ActionKeyGenerator.receiveHistory(thisTeamId);
+                if (!history && !isRequestInProgress(getState(), histKey)) {
+                    dispatch(apiRequestInProgress(histKey));
                     fplClient.history(thisTeamId).then(hist => {
                         if (hist) {
                             dispatch(receiveEntryHistory(thisTeamId, hist));
@@ -375,11 +447,13 @@ export function updateGameweekData(gameweek?: number, team?: number, leagueId?: 
 
 export type RootAction =
 TestAction |
+ApiRequestInProgress |
 SetGameweek |
 SetTeams |
 SetTeam |
 SetLeague |
 SetDifferentials |
+DrawerOpenClose |
 ReceiveBootstrapStatic |
 ReceiveEntry |
 ReceiveFixtures |

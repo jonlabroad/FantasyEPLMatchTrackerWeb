@@ -2,7 +2,7 @@ import { LeagueFixtures } from "../data/LeagueFixtures";
 
 export default class LeagueFixturesHelper {
     public static getTeams(teamId: number, gameweek: number, leagueFixtures?: LeagueFixtures): number[] {
-        if (!leagueFixtures) {
+        if (!leagueFixtures || !leagueFixtures[gameweek]) {
             return [teamId];
         }
         // Get teams opponent from the league fixtures

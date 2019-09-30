@@ -34,6 +34,10 @@ const noIconPerEventTypes = [
 ];
 
 export default class PicksList extends React.Component<PicksListProps> {
+    shouldComponentUpdate(newProps: PicksListProps): boolean {
+        return !!newProps.picks && !!newProps.picks.picks;
+    }
+
     getTeamCode(pick: Pick) {
         const element = BootstrapHelper.getElement(pick.element, this.props.bootstrapStatic);
         if (element) {
@@ -88,7 +92,7 @@ export default class PicksList extends React.Component<PicksListProps> {
         const element = BootstrapHelper.getElement(pick.element, this.props.bootstrapStatic);
         return (
             <TableRow key={pick.element} className={starter ? "pickslist-starter" : "pickslist-sub"}>
-                <TableCell padding="none" align="center">{element ? ScoreCalculator.calculateElementScore(pick, this.props.live, !starter): 0}</TableCell>
+                <TableCell padding="none" align="center">{pick && this.props.live ? ScoreCalculator.calculateElementScore(pick, this.props.live.elements, !starter): 0}</TableCell>
                 <TableCell padding="none" align="center" className="hidden-xs"><div className="club-icon-container"><ClubIcon teamCode={this.getTeamCode(pick)}/></div></TableCell>
                 <TableCell padding="none" align="center">{this.renderFixtureStatus(element, this.props.fixtures)}</TableCell>
                 <TableCell padding="none" align="center" className="club-captain-cell">{this.getCaptain(pick)}</TableCell>
@@ -111,10 +115,6 @@ export default class PicksList extends React.Component<PicksListProps> {
     }
     
     render() {
-        if (!this.props.picks || !this.props.picks.picks) {
-            return null;
-        }
-
         return (
         <div className="pickslist-container">
             <Table size="small">

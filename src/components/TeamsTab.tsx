@@ -19,6 +19,10 @@ export interface TeamsTabProps {
 }
 
 export default class TeamsTab extends React.Component<TeamsTabProps> {
+    shouldComponentUpdate(newProps: TeamsTabProps): boolean {
+        return !!newProps.bootstrap;
+    }
+    
     render() {
         const { bootstrap, entries, picks, history } = this.props;
 
@@ -28,8 +32,8 @@ export default class TeamsTab extends React.Component<TeamsTabProps> {
 
         return (
             <Grid container justify="center" spacing={2} className="tracker-tab teams-tab">
-                <Grid item xs={1}></Grid>
-                <Grid item xs={3}>
+                <Hidden xsDown><Grid item xs={1}></Grid></Hidden>
+                <Grid item xs={6} sm={3}>
                     <TeamTabInfo 
                         bootstrap={bootstrap}
                         entry={entries[0]}
@@ -37,10 +41,10 @@ export default class TeamsTab extends React.Component<TeamsTabProps> {
                         picks={picks[0]}
                     />
                 </Grid>
-                <Grid item xs={4}>
-                    <PointsHistoryChart history={history} />
-                </Grid>
-                <Grid item xs={3}>
+                <Hidden xsDown><Grid item xs={4}>
+                    <PointsHistoryChart teams={entries} history={history} />
+                </Grid></Hidden>
+                <Grid item xs={6} sm={3}>
                     <TeamTabInfo 
                         bootstrap={bootstrap}
                         entry={entries[1]}
@@ -48,31 +52,35 @@ export default class TeamsTab extends React.Component<TeamsTabProps> {
                         picks={picks[1]}
                     />
                 </Grid>
-                <Grid item xs={1}></Grid>
+                <Hidden xsDown><Grid item xs={1}></Grid></Hidden>
 
-                <Grid item xs={1}></Grid>
-                <Grid item xs={5}>
+                <Hidden smUp>
+                    <Grid item xs={12}>
+                        <PointsHistoryChart teams={entries} history={history} />
+                    </Grid>
+                </Hidden>
+
+                <Hidden xsDown><Grid item xs={1}></Grid></Hidden>
+                <Grid item xs={6} sm={5}>
                     <TeamHistoryTable 
                         history={history[0]}
                     />
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item xs={6} sm={5}>
                     <TeamHistoryTable 
                         history={history[1]}
                     />
                 </Grid>
-                <Grid item xs={1}></Grid>
+                <Hidden xsDown><Grid item xs={1}></Grid></Hidden>
 
-                <Grid item xs={3}></Grid>
-                <Grid item xs={3}>
+                <Hidden xsDown><Grid item xs={1} sm={3}></Grid></Hidden>
+                <Grid item xs={6} sm={3}>
                     <TeamPastSeasonHistory history={history[0]} />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={6} sm={3}>
                     <TeamPastSeasonHistory history={history[1]} />
                 </Grid>
-                <Grid item xs={3}></Grid>
-
-                
+                <Hidden xsDown><Grid item xs={1} sm={3}></Grid></Hidden>
             </Grid>
         );
     }

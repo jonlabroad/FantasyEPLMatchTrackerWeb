@@ -1,6 +1,5 @@
 import Picks from "../data/fpl/Picks";
-import Live, { Lives } from "../data/fpl/Live";
-import { Events } from "../data/state/Events";
+import { Lives } from "../data/fpl/Live";
 import { BootstrapStatic } from "../data/fpl/BootstrapStatic";
 import { MappedFixtures } from "../data/MappedFixtures";
 import Entry from "../data/fpl/Entry";
@@ -9,10 +8,12 @@ import EventStatus from "../data/fpl/EventStatus";
 import { MappedLeagueFixtures } from "../data/LeagueFixtures";
 import { MappedLeaguesH2hStandings } from "../data/fpl/LeaguesH2hStandings";
 import { MappedEntryHistory } from "../data/fpl/EntryHistory";
+import { MappedGameweekTimelines } from "../data/GameweekTimeline";
+import { MappedMatchEvents } from "../data/state/MatchEvents";
 
 export interface TrackerData {
     entries: {[key: number]: Entry}
-    events: Events
+    events: MappedMatchEvents
     fixtures: MappedFixtures
     picks: {[key: string]: Picks}
     live: Lives
@@ -21,7 +22,10 @@ export interface TrackerData {
     eventStatus?: EventStatus | undefined,
     processedPlayers?: MappedProcessedPlayers | undefined,
     mappedLeagueFixtures?: MappedLeagueFixtures | undefined,
-    mappedLeagueH2hStandings: MappedLeaguesH2hStandings | undefined
+    mappedLeagueH2hStandings: MappedLeaguesH2hStandings | undefined,
+    mappedGameweekTimelines: MappedGameweekTimelines,
+
+    actionsInProgress: Set<string>
 }
 
 export interface NavigationState {
@@ -30,7 +34,8 @@ export interface NavigationState {
     leagueId: number,
     team: number,
     teams: number[],
-    differentialsOnly: boolean
+    differentialsOnly: boolean,
+    drawerOpen: boolean
 }
 
 export interface TrackerState {

@@ -7,6 +7,7 @@ import TeamsTabContainer from "../containers/TeamsTabContainer";
 
 import '../styles/tracker.css'
 import { MappedEntryHistory } from "../data/fpl/EntryHistory";
+import BetaTabContainer from "../containers/BetaTabContainer";
 
 export interface TrackerTabsProps {
     currentTab: number;
@@ -28,11 +29,13 @@ export default class TrackerTabs extends React.Component<TrackerTabsProps> {
                     >
                     <Tab label="Match"/>
                     <Tab label="Teams"/>
+                    <Tab label="Beta"/>
                     </Tabs>
                 </AppBar>
                 </Grid>
                 <MatchTabContainer index={0} />
                 <TeamsTabContainer index={1} />
+                <BetaTabContainer index={2} />
             </Grid>
         );
     }

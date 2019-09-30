@@ -12,6 +12,10 @@ export interface LeagueH2hStandingsListProps {
 }
 
 export default class LeagueH2hStandingsList extends React.Component<LeagueH2hStandingsListProps> {
+    shouldComponentUpdate(newProps: LeagueH2hStandingsListProps): boolean {
+        return !!newProps.standings;
+    }
+
     renderLine(standing: StandingsEntry) {
         return (
         <TableRow key={standing.id} className={this.props.teams.includes(standing.entry) ? "standing-current-team" : ""}>

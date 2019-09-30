@@ -10,15 +10,5 @@ export default class Themes {
                 main: '#ff2882'
             }
         },
-        overrides: {
-            MuiSelect: {
-                root: {
-                    color: "#f5f5f5 !important",
-                },
-                icon: {
-                    color: "white"
-                }
-            }
-        }
     });
 }

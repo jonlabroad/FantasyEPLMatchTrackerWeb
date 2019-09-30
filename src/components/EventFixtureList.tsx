@@ -23,6 +23,10 @@ export interface EventFixtureListProps {
 }
 
 export default class EventFixtureList extends React.Component<EventFixtureListProps> {
+    shouldComponentUpdate(newProps: EventFixtureListProps): boolean {
+        return !!(newProps.fixtures && newProps.bootstrapStatic);
+    }
+
     renderTimeBox(fixture: Fixture) {
         const kickoffDate = moment(fixture.kickoff_time);
         return (
